@@ -1,6 +1,10 @@
 # Build and dependency directories
-/node_modules
+node_modules/
 /dist
+
+# Runtime directories (created by Docker)
+/components
+/styles
 
 # Docker volumes
 /data

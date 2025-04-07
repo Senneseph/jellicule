@@ -1,9 +1,12 @@
-const WebSocket = require('ws');
+// Use Bun's built-in modules
 const fs = require('fs');
 const path = require('path');
 
+// Bun has built-in WebSocket support
+const { WebSocketServer } = require('ws');
+
 // Create a WebSocket server
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocketServer({ port: 8080 });
 
 console.log('WebSocket server started on port 8080');
 

@@ -1,5 +1,9 @@
+// Use Bun's built-in modules
 const fs = require('fs');
 const path = require('path');
+
+// Bun-specific optimizations
+const { file } = Bun;
 
 try {
   // Create dist directory if it doesn't exist
