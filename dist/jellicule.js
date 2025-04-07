@@ -1,14 +1,14 @@
 /**
  * Jellicule UI Components Library
  * Version: 1.0.0
- * Built: 2025-04-07T01:28:58.014Z
+ * Built: 2025-04-07T02:10:28.084Z
  */
 
 (function(global) {
   'use strict';
 
   // Component classes
-const ActivityViewport extends HTMLElement {
+  const ActivityViewport = class extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -57,7 +57,7 @@ const ActivityViewport extends HTMLElement {
 
 // For standalone use: customElements.define('activity-viewport', ActivityViewport);
 
-const ActivityBar extends HTMLElement {
+const ActivityBar = class extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -119,7 +119,7 @@ const ActivityBar extends HTMLElement {
 
 // For standalone use: customElements.define('activity-bar', ActivityBar);
 
-const Activity extends HTMLElement {
+const Activity = class extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -203,10 +203,10 @@ const Activity extends HTMLElement {
         activity.selected = false;
       });
     }
-    
+
     // Select this activity
     this.selected = true;
-    
+
     // Dispatch a custom event
     this.dispatchEvent(new CustomEvent('activity-selected', {
       bubbles: true,
@@ -218,7 +218,7 @@ const Activity extends HTMLElement {
 
 // For standalone use: customElements.define('activity', Activity);
 
-const ActivityResizeButton extends HTMLElement {
+const ActivityResizeButton = class extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -272,26 +272,26 @@ const ActivityResizeButton extends HTMLElement {
 
   _handleMouseDown(event) {
     event.preventDefault();
-    
+
     const activityBar = this.closest('activity-bar');
     if (!activityBar) return;
-    
+
     const orientation = activityBar.orientation;
     const isHorizontal = orientation === 'left' || orientation === 'right';
-    
+
     const startPos = isHorizontal ? event.clientX : event.clientY;
     const startSize = isHorizontal ? activityBar.offsetWidth : activityBar.offsetHeight;
-    
+
     const handleMouseMove = (moveEvent) => {
       moveEvent.preventDefault();
-      
+
       const currentPos = isHorizontal ? moveEvent.clientX : moveEvent.clientY;
       const diff = currentPos - startPos;
-      
+
       const newSize = orientation === 'right' || orientation === 'bottom'
         ? startSize - diff
         : startSize + diff;
-      
+
       if (newSize > 30) {
         if (isHorizontal) {
           activityBar.style.width = `${newSize}px`;
@@ -300,12 +300,12 @@ const ActivityResizeButton extends HTMLElement {
         }
       }
     };
-    
+
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-    
+
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   }
