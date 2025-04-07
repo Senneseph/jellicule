@@ -43,14 +43,16 @@ The project includes a WebSocket-based hot-reload development environment that a
 docker-compose up -d
 ```
 
-This will start Docker containers that:
-1. Serve the example directory
-2. Run a WebSocket server for real-time updates
-3. Watch for changes to the components and automatically rebuild
+This will start a single Docker container that:
+1. Serves the Progressive Web App (PWA)
+2. Runs a WebSocket server for real-time updates
+3. Watches for changes to the components and automatically rebuilds
+4. Provides a health check endpoint to monitor build status
+5. Serves metadata and documentation
 
 Any changes you make to the components will automatically trigger a rebuild and update all connected browsers in real-time.
 
-Open your browser to http://localhost:7327/ to see the example.
+Open your browser to http://localhost:7327/ to see the PWA.
 
 To stop the development environment:
 ```bash
@@ -67,7 +69,7 @@ If port 7327 is already in use, you can change it in the docker-compose.yaml fil
 
 ```yaml
 ports:
-  - "7328:80"  # Change 7327 to any available port
+  - "7328:7327"  # Change 7327 to any available port
 ```
 
 ### Component Not Rendering

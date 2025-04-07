@@ -40,10 +40,13 @@ Let the UI be data-driven. Assign generic components for representing the most c
 
 ```
 /
+├── api-service/      # API service for backend functionality
 ├── components/       # Web components
 ├── dist/            # Built library files
 ├── files/           # Source files for components and styles
+├── mcp-service/     # Master Control Program service
 ├── meta/            # Documentation and specifications
+├── openapi-service/ # OpenAPI service for API documentation
 ├── pwa-service/     # Progressive Web App
 ├── service/         # Server configuration and scripts
 └── styles/          # CSS styles
