@@ -1,13 +1,13 @@
 // Import all web components
 import '../../components/layout/ActivityViewport/activity-viewport.js';
 import '../../components/layout/ActivityBar/activity-bar.js';
-import '../../components/activity.js';
-import '../../components/activity-resizebutton.js';
-import '../../components/main-content.js';
-import '../../components/header.js';
-import '../../components/sidebar.js';
-import '../../components/footer.js';
-import '../../components/content.js';
+import '../../components/layout/Activity/activity.js';
+import '../../components/layout/ActivityResizebutton/activity-resizebutton.js';
+import '../../components/layout/MainContent/main-content.js';
+import '../../components/layout/Header/header.js';
+import '../../components/layout/Sidebar/sidebar.js';
+import '../../components/layout/Footer/footer.js';
+import '../../components/layout/Content/content.js';
 
 // Initialize any global functionality
 document.addEventListener('DOMContentLoaded', () => {

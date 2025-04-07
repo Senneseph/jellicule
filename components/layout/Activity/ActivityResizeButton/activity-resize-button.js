@@ -1,4 +1,4 @@
-class JelliculeActivityResizebutton extends HTMLElement {
+class ActivityResizeButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -53,7 +53,7 @@ class JelliculeActivityResizebutton extends HTMLElement {
   _handleMouseDown(event) {
     event.preventDefault();
     
-    const activityBar = this.closest('jellicule-activity-bar');
+    const activityBar = this.closest('activity-bar');
     if (!activityBar) return;
     
     const orientation = activityBar.orientation;
@@ -91,4 +91,4 @@ class JelliculeActivityResizebutton extends HTMLElement {
   }
 }
 
-customElements.define('jellicule-activity-resizebutton', JelliculeActivityResizebutton);
+customElements.define('activity-resize-button', ActivityResizeButton);
