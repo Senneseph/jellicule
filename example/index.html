@@ -3,29 +3,59 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>j e l l i c u l e   example</title>
+        <title>j e l l i c u l e ! ! !</title>
         <link rel="stylesheet" href="styles/reset.css">
         <link rel="stylesheet" href="styles/jellicule.css">
-        <!-- Hot-reload script -->
+        <!-- Hot-reload and build status script -->
         <script>
-            // Auto-refresh when components change
+            // Auto-refresh when components change and show build status
             const checkForChanges = () => {
-                fetch('components/version.txt?' + new Date().getTime())
-                    .then(response => response.text())
-                    .then(version => {
+                fetch('build-status/status.json?' + new Date().getTime())
+                    .then(response => response.json())
+                    .then(status => {
+                        // Update build status display
+                        const buildStatusElement = document.getElementById('build-status');
+                        if (buildStatusElement) {
+                            buildStatusElement.textContent = `Build: ${status.status} | Last build: ${status.time} | Version: ${status.version}`;
+                            buildStatusElement.className = `build-status ${status.status}`;
+                        }
+
+                        // Check if we need to reload
                         const currentVersion = localStorage.getItem('jelliculeVersion');
-                        if (currentVersion && currentVersion !== version) {
+                        if (currentVersion && currentVersion !== status.version) {
                             console.log('Components updated, refreshing...');
                             location.reload();
                         }
-                        localStorage.setItem('jelliculeVersion', version);
+                        localStorage.setItem('jelliculeVersion', status.version);
                     })
                     .catch(err => console.log('Error checking for updates:', err));
             };
 
             // Check for changes every 2 seconds
             setInterval(checkForChanges, 2000);
+
+            // Initial check
+            document.addEventListener('DOMContentLoaded', checkForChanges);
         </script>
+        <style>
+            .build-status {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                padding: 5px 10px;
+                font-family: monospace;
+                font-size: 12px;
+                color: white;
+                background-color: #333;
+                z-index: 9999;
+            }
+            .build-status.success {
+                background-color: #4CAF50;
+            }
+            .build-status.failed {
+                background-color: #F44336;
+            }
+        </style>
         <!-- Import components directly -->
         <script type="module">
             // Import all components
@@ -38,6 +68,13 @@
         </script>
     </head>
     <body>
+        <div class="nav" style="position: sticky; top: 0; background-color: #fff; padding: 10px 0; border-bottom: 1px solid #eee; margin-bottom: 20px; z-index: 9999;">
+            <a href="index.html" style="margin-right: 15px; text-decoration: none; color: #333;">Example</a>
+            <a href="download.html" style="margin-right: 15px; text-decoration: none; color: #333;">Download</a>
+            <a href="docs.html" style="margin-right: 15px; text-decoration: none; color: #333;">Documentation</a>
+        </div>
+
+        <div id="build-status" class="build-status">Loading build status...</div>
         <Viewport>
             <ActivityBar orientation="top">
                 <ActivityResizeButton></ActivityResizeButton>

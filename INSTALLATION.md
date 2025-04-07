@@ -21,6 +21,11 @@
    http://localhost:7327
    ```
 
+4. To download the built library, visit:
+   ```
+   http://localhost:7327/download.html
+   ```
+
 ## Manual Installation (without Docker)
 
 If you prefer not to use Docker, you can serve the files using any web server:

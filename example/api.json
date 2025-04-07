@@ -1,0 +1,134 @@
+{
+  "name": "jellicule",
+  "version": "0.1.0",
+  "description": "A modern UI component library built with pure web components",
+  "components": [
+    {
+      "name": "jellicule-viewport",
+      "description": "The main container for the UI",
+      "attributes": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Content to be placed inside the viewport"
+        }
+      ]
+    },
+    {
+      "name": "jellicule-activity-bar",
+      "description": "Activity bars on all four sides of the viewport",
+      "attributes": [
+        {
+          "name": "orientation",
+          "description": "The orientation of the activity bar",
+          "type": "string",
+          "values": ["top", "right", "bottom", "left"],
+          "default": "left"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Activities to be placed inside the activity bar"
+        }
+      ]
+    },
+    {
+      "name": "jellicule-activity",
+      "description": "Individual activities within the activity bars",
+      "attributes": [
+        {
+          "name": "selected",
+          "description": "Whether the activity is selected",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "active",
+          "description": "Whether the activity is active",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Content to be placed inside the activity"
+        }
+      ],
+      "events": [
+        {
+          "name": "activity-selected",
+          "description": "Fired when the activity is selected",
+          "detail": {
+            "activity": "The activity element that was selected"
+          }
+        }
+      ]
+    },
+    {
+      "name": "jellicule-activity-resize-button",
+      "description": "Buttons for resizing the activity bars",
+      "attributes": [],
+      "slots": []
+    },
+    {
+      "name": "jellicule-main-content",
+      "description": "The main content area",
+      "attributes": [
+        {
+          "name": "context",
+          "description": "The context to display in the main content area",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Content to be placed inside the main content area"
+        }
+      ]
+    },
+    {
+      "name": "jellicule-content",
+      "description": "A generic content container",
+      "attributes": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Content to be placed inside the content container"
+        }
+      ]
+    }
+  ],
+  "css": {
+    "variables": [
+      {
+        "name": "--jellicule-background-color",
+        "description": "Background color for components",
+        "default": "#f0f0f0"
+      },
+      {
+        "name": "--jellicule-border-color",
+        "description": "Border color for components",
+        "default": "#ddd"
+      },
+      {
+        "name": "--jellicule-hover-color",
+        "description": "Background color for hover states",
+        "default": "#e0e0e0"
+      },
+      {
+        "name": "--jellicule-selected-color",
+        "description": "Background color for selected states",
+        "default": "#d0d0d0"
+      },
+      {
+        "name": "--jellicule-active-color",
+        "description": "Text color for active states",
+        "default": "#000"
+      }
+    ]
+  }
+}

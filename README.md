@@ -34,6 +34,14 @@ This project is called "jellicule".  Its goal is to create a consistent, high-le
 ## Example
 The project includes a working example at `/example/index.html` that showcases all components with minimal external JavaScript.
 
+## Download
+You can download the built library directly from the running server at `/download.html`. The library is also available via curl:
+
+```bash
+curl -O http://localhost:7327/dist/jellicule.min.js
+curl -O http://localhost:7327/styles/jellicule.css
+```
+
 ## Getting Started
 For installation instructions, please see [INSTALLATION.md](INSTALLATION.md).
 

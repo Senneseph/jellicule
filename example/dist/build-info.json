@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "buildTime": "2025-04-07T01:28:58.034Z",
+  "components": [
+    "activity-viewport.js",
+    "activity-bar.js",
+    "activity.js",
+    "activity-resize-button.js",
+    "main-content.js",
+    "content.js"
+  ]
+}

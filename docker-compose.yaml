@@ -1,14 +1,18 @@
 version: '3'
 
 services:
+  # Web server to serve the example
   web:
     image: nginx:alpine
     ports:
       - "7327:80"
     volumes:
       - ./example:/usr/share/nginx/html
-      - ./dist:/usr/share/nginx/html/dist
+      - ./components:/usr/share/nginx/html/components
       - ./styles:/usr/share/nginx/html/styles
+      - ./dist:/usr/share/nginx/html/dist
+    depends_on:
+      - builder
     restart: unless-stopped
     # Use bash for the entrypoint shell
     entrypoint: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
@@ -18,3 +22,55 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  # Builder service to watch for changes and rebuild
+  builder:
+    image: node:alpine
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+        echo 'Setting up build environment...' &&
+        apk add --no-cache inotify-tools &&
+        mkdir -p /app/dist &&
+        mkdir -p /app/example/dist &&
+        mkdir -p /app/example/build-status &&
+
+        # Initial build
+        echo 'Performing initial build...' &&
+        node /app/build.js &&
+        cp /app/dist/* /app/example/dist/ &&
+
+        # Create initial build status
+        BUILD_TIME=\$(date) &&
+        BUILD_STATUS='success' &&
+        echo '{"status": "'\$BUILD_STATUS'", "time": "'\$BUILD_TIME'", "version": "'\$(cat /app/components/version.txt)'"}' > /app/example/build-status/status.json &&
+
+        # Watch for changes
+        echo 'Watching for changes...' &&
+        while true; do
+          inotifywait -r -e modify,create,delete /app/components &&
+          echo 'Changes detected, rebuilding...' &&
+
+          # Update version
+          echo \$(date +%s) > /app/components/version.txt &&
+
+          # Attempt to build
+          if node /app/build.js; then
+            BUILD_STATUS='success'
+            echo 'Build successful!'
+          else
+            BUILD_STATUS='failed'
+            echo 'Build failed!'
+          fi &&
+
+          # Copy build files
+          cp /app/dist/* /app/example/dist/ &&
+
+          # Update build status
+          BUILD_TIME=\$(date) &&
+          echo '{"status": "'\$BUILD_STATUS'", "time": "'\$BUILD_TIME'", "version": "'\$(cat /app/components/version.txt)'"}' > /app/example/build-status/status.json &&
+          echo 'Build status updated: '\$BUILD_STATUS' at '\$BUILD_TIME
+        done
+      "

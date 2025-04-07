@@ -1,0 +1,1 @@
+{status: \, time: \, version: \$(cat /app/components/version.txt)}
