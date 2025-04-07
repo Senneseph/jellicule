@@ -30,11 +30,18 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - .:/app
+      - ./components:/app/components
+      - ./dist:/app/dist
+      - ./example:/app/example
+      - ./server:/app/server
+      - ./styles:/app/styles
+      - ./files:/app/files
+      - websocket_node_modules:/app/node_modules
     working_dir: /app
     command: >
       sh -c "
         echo 'Setting up WebSocket server...' &&
+        cd /app/server &&
         npm install ws --no-save &&
         node /app/server/websocket-server.js
       "
@@ -44,7 +51,13 @@ services:
   builder:
     image: node:alpine
     volumes:
-      - .:/app
+      - ./components:/app/components
+      - ./dist:/app/dist
+      - ./example:/app/example
+      - ./server:/app/server
+      - ./styles:/app/styles
+      - ./files:/app/files
+      - builder_node_modules:/app/node_modules
     working_dir: /app
     depends_on:
       - websocket
@@ -66,6 +79,8 @@ services:
 
         # Initial build
         echo 'Performing initial build...' &&
+        cd /app/server &&
+        npm install --no-save &&
         node /app/server/build.js | node /app/server/websocket-client.js &&
         cp /app/dist/* /app/example/dist/ &&
 
@@ -85,3 +100,7 @@ services:
           cp /app/dist/* /app/example/dist/
         done
       "
+
+volumes:
+  websocket_node_modules:
+  builder_node_modules:
