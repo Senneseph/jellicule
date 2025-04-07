@@ -10,6 +10,9 @@ RUN apt-get update && \
 # Set working directory
 WORKDIR /app
 
+# Expose ports
+EXPOSE 8080 8081
+
 # Copy package.json and install dependencies
 COPY package.json .
 RUN bun install

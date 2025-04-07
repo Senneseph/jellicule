@@ -35,12 +35,6 @@ If you prefer not to use Docker, you can serve the files using any web server:
 python -m http.server 7327
 ```
 
-### Using Node.js:
-```
-npm install -g http-server
-http-server -p 7327
-```
-
 ## Development Environment
 
 The project includes a WebSocket-based hot-reload development environment that automatically updates the browser when you make changes to the components.

@@ -66,10 +66,34 @@ This will start Docker containers that:
 1. Serve the example directory
 2. Run a WebSocket server for real-time updates
 3. Watch for changes to the components and automatically rebuild
+4. Provide a health check service to monitor build status
 
 Any changes you make to the components will automatically trigger a rebuild and update all connected browsers in real-time.
 
 Open your browser to http://localhost:7327/ to see the example.
+
+#### Checking Health Status
+The project includes a health check service that monitors the build status. You can check the health of the services using the provided scripts:
+
+**On Windows:**
+```powershell
+.\check-health.ps1
+```
+
+**On Linux/macOS:**
+```bash
+./check-health.sh
+```
+
+You can also access the health check directly in your browser:
+```
+http://localhost:8081/health
+```
+
+Or view the health check dashboard:
+```
+http://localhost:8081/
+```
 
 #### Stopping the Development Environment
 ```bash

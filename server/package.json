@@ -9,6 +9,7 @@
     "build": "bun build ./build.js --outdir ../dist",
     "dev": "bun --watch build.js",
     "start": "bun run websocket-server.js",
+    "health": "bun run health-check.js",
     "test": "bun test"
   },
   "keywords": [
