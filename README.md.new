@@ -1,0 +1,130 @@
+# j e l l i c u l e
+
+A modern web component library for building user interfaces.
+
+## Overview
+
+j e l l i c u l e is a design language and component library that provides a consistent, high-level, and modern standardized user-interface system. Built with pure web components and minimal JavaScript, it creates interfaces that are intuitive, responsive, and visually distinctive.
+
+The design is data-driven, with generic components for representing common data types and presentation styles. It draws inspiration from various UI paradigms to create a clean, recognizable interface pattern.
+
+## Features
+
+- Pure web components with no external dependencies
+- Customizable activity bars and panels
+- Responsive design that works across devices
+- Progressive Web App (PWA) capabilities
+- WebSocket-based hot-reload development environment
+- Comprehensive documentation and examples
+
+## Project Structure
+
+```
+/
++-- api-service/      # API service for backend functionality
++-- components/       # Web components
++-- dist/            # Built library files
++-- files/           # Source files for components and styles
++-- mcp-service/     # Master Control Program service
++-- meta/            # Documentation and specifications
++-- openapi-service/ # OpenAPI service for API documentation
++-- pwa-service/     # Progressive Web App
++-- service/         # Server configuration and scripts
++-- styles/          # CSS styles
+```
+
+## Getting Started
+
+### Requirements
+
+- Docker and Docker Compose
+
+### Installation
+
+For detailed installation instructions, see [INSTALLATION.md](INSTALLATION.md).
+
+Quick start:
+
+```bash
+# Start the development environment
+docker-compose up -d
+
+# Access the PWA
+# Open http://localhost:7327/ in your browser
+```
+
+### Development Environment
+
+The development environment includes:
+
+1. Progressive Web App (PWA) server
+2. WebSocket server for real-time updates
+3. Automatic rebuilding when components change
+4. Health check endpoint and dashboard
+5. Documentation server
+
+Any changes you make to the components will automatically trigger a rebuild and update all connected browsers in real-time.
+
+To stop the development environment:
+
+```bash
+docker-compose down
+```
+
+## Versioning and Releases
+
+This project follows [Semantic Versioning](https://semver.org/) (SemVer) for version numbering.
+
+### Release Process
+
+The project includes scripts for managing releases, versioning, and dependency management in the `scripts` directory:
+
+#### Preparing for a 1.0.0 Release
+
+```powershell
+# Dry run (shows what would happen without making changes)
+.\scripts\prepare-release.ps1
+
+# Execute the release preparation
+.\scripts\prepare-release.ps1 -Execute
+```
+
+This script:
+1. Checks and pins all dependencies
+2. Creates a comprehensive CHANGELOG.md from all commit messages
+3. Squashes all commits into a single "Initial release 1.0.0" commit
+4. Sets up version 1.0.0 and creates a git tag
+
+#### Updating Versions
+
+For subsequent releases, use the auto-version script:
+
+```powershell
+# Increment patch version (1.0.0 -> 1.0.1)
+.\scripts\auto-version.ps1 -VersionType patch
+
+# Increment minor version (1.0.0 -> 1.1.0)
+.\scripts\auto-version.ps1 -VersionType minor
+
+# Increment major version (1.0.0 -> 2.0.0)
+.\scripts\auto-version.ps1 -VersionType major
+```
+
+For more details on the release process, see [scripts/README.md](scripts/README.md).
+
+## Documentation
+
+- **General Documentation**: [DOCUMENTATION.md](DOCUMENTATION.md)
+- **API Documentation**: Available at http://localhost:7327/meta/openapi.yaml when running
+- **Health Dashboard**: Available at http://localhost:7327/dashboard
+- **Usage Examples**: Available in the PWA at http://localhost:7327/
+
+## Additional Resources
+
+- [CHANGELOG.md](CHANGELOG.md) - Version history and changes
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Guidelines for contributing
+- [BRANDING.md](BRANDING.md) - Branding guidelines and assets
+
+## License
+
+MIT License

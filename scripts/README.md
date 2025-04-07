@@ -75,6 +75,19 @@ Usage:
 .\scripts\squash-commits.ps1 -Execute
 ```
 
+### rewrite-history.ps1
+
+Rewrites git history by replacing README.md with README.md.new and squashing all commits.
+
+Usage:
+```powershell
+# Dry run (shows what would happen without making changes)
+.\scripts\rewrite-history.ps1
+
+# Execute the history rewrite
+.\scripts\rewrite-history.ps1 -Execute
+```
+
 ## Workflow
 
 The typical workflow for a release is:
