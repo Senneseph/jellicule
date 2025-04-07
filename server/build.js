@@ -1,12 +1,21 @@
 // Use ES modules with Bun
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, basename } from 'path';
-import { file } from 'bun';
 
 try {
-  // Create dist directory if it doesn't exist
+  // Create dist directories if they don't exist
   if (!existsSync('dist')) {
-    mkdirSync('dist');
+    mkdirSync('dist', { recursive: true });
+  }
+
+  // Create example/dist directory if it doesn't exist
+  if (!existsSync('example/dist')) {
+    mkdirSync('example/dist', { recursive: true });
+  }
+
+  // Create example/build-status directory if it doesn't exist
+  if (!existsSync('example/build-status')) {
+    mkdirSync('example/build-status', { recursive: true });
   }
 
   // Read all component files
@@ -142,8 +151,14 @@ try {
 
   // Create error files for debugging
   try {
+    // Create dist directory if it doesn't exist
     if (!existsSync('dist')) {
-      mkdirSync('dist');
+      mkdirSync('dist', { recursive: true });
+    }
+
+    // Create example/build-status directory if it doesn't exist
+    if (!existsSync('example/build-status')) {
+      mkdirSync('example/build-status', { recursive: true });
     }
     writeFileSync('dist/build-error.txt', `Build failed at ${new Date().toISOString()}\n\nError: ${error.message}\n\nStack: ${error.stack}`);
 

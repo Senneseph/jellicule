@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     # Use bash for the entrypoint shell
     entrypoint: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
-    # Add healthcheck
+    # Add healthcheck that reports status but doesn't trigger restarts
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://health-check:8081/health"]
       interval: 30s
@@ -61,6 +61,7 @@ services:
     depends_on:
       - websocket
       - health-check
+    # Add healthcheck that reports status but doesn't trigger restarts
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://health-check:8081/health"]
       interval: 30s
@@ -130,8 +131,13 @@ services:
       - ./server:/app/server
       - styles_volume:/app/styles:ro
     working_dir: /app
-    command: bun run /app/server/health-check.js
+    command: >
+      sh -c "
+        mkdir -p /app/example/build-status &&
+        bun run /app/server/health-check.js
+      "
     restart: unless-stopped
+    # Add healthcheck that reports status but doesn't trigger restarts
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/health"]
       interval: 30s

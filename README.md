@@ -73,27 +73,22 @@ Any changes you make to the components will automatically trigger a rebuild and 
 Open your browser to http://localhost:7327/ to see the example.
 
 #### Checking Health Status
-The project includes a health check service that monitors the build status. You can check the health of the services using the provided scripts:
+The project includes a health check service that monitors the build status. You can access the health check dashboard in your browser:
 
-**On Windows:**
-```powershell
-.\check-health.ps1
+```
+http://localhost:8081/
 ```
 
-**On Linux/macOS:**
-```bash
-./check-health.sh
-```
+Or get the raw health data in JSON format:
 
-You can also access the health check directly in your browser:
 ```
 http://localhost:8081/health
 ```
 
-Or view the health check dashboard:
-```
-http://localhost:8081/
-```
+The health check dashboard shows:
+- Current build status (success/failed)
+- Last build time and version
+- Status of all services
 
 #### Stopping the Development Environment
 ```bash

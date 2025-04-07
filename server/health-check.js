@@ -11,25 +11,25 @@ const server = serve({
   port: PORT,
   fetch(req) {
     const url = new URL(req.url);
-    
+
     // Health check endpoint
     if (url.pathname === '/health') {
       try {
         // Get build status
         const statusPath = join(import.meta.dirname, '..', 'example', 'build-status', 'status.json');
-        
+
         if (existsSync(statusPath)) {
           const status = JSON.parse(readFileSync(statusPath, 'utf8'));
-          
+
           // Return 200 OK if build was successful, 503 Service Unavailable if failed
           const statusCode = status.status === 'success' ? 200 : 503;
-          
+
           return new Response(JSON.stringify({
             status: status.status,
             time: status.time,
             version: status.version,
-            message: status.status === 'success' 
-              ? 'Build successful' 
+            message: status.status === 'success'
+              ? 'Build successful'
               : `Build failed: ${status.error || 'Unknown error'}`
           }), {
             status: statusCode,
@@ -65,14 +65,15 @@ const server = serve({
         });
       }
     }
-    
-    // Root endpoint with links
+
+    // Root endpoint with dashboard
     if (url.pathname === '/' || url.pathname === '') {
       return new Response(`
         <!DOCTYPE html>
         <html>
         <head>
-          <title>Jellicule Health Check</title>
+          <title>Jellicule Health Dashboard</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style>
             body {
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -80,48 +81,232 @@ const server = serve({
               margin: 0 auto;
               padding: 20px;
               line-height: 1.6;
+              color: #333;
             }
             h1 {
               border-bottom: 1px solid #eee;
               padding-bottom: 10px;
             }
-            .links {
+            .dashboard {
               margin: 20px 0;
+              padding: 20px;
+              background-color: #f8f9fa;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .status-card {
+              margin-bottom: 20px;
+              padding: 15px;
+              border-radius: 6px;
+              background-color: white;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            .status-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 10px;
+            }
+            .status-title {
+              font-weight: bold;
+              font-size: 1.1em;
+              margin: 0;
+            }
+            .status-indicator {
+              padding: 4px 8px;
+              border-radius: 12px;
+              font-size: 0.8em;
+              font-weight: bold;
+            }
+            .success {
+              background-color: #d4edda;
+              color: #155724;
+            }
+            .error {
+              background-color: #f8d7da;
+              color: #721c24;
+            }
+            .warning {
+              background-color: #fff3cd;
+              color: #856404;
+            }
+            .unknown {
+              background-color: #e2e3e5;
+              color: #383d41;
+            }
+            .status-details {
+              margin-top: 10px;
+              font-size: 0.9em;
+              color: #666;
+            }
+            .status-details p {
+              margin: 5px 0;
+            }
+            .refresh-button {
+              display: inline-block;
+              margin-top: 20px;
+              padding: 8px 16px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 0.9em;
+            }
+            .refresh-button:hover {
+              background-color: #0069d9;
+            }
+            .auto-refresh {
+              margin-left: 10px;
+              font-size: 0.9em;
+            }
+            .links {
+              margin-top: 20px;
             }
             .links a {
               display: inline-block;
               margin-right: 10px;
-              padding: 10px;
-              background-color: #f5f5f5;
-              border-radius: 4px;
+              color: #007bff;
               text-decoration: none;
-              color: #333;
             }
             .links a:hover {
-              background-color: #e0e0e0;
+              text-decoration: underline;
+            }
+            @media (max-width: 600px) {
+              .status-header {
+                flex-direction: column;
+                align-items: flex-start;
+              }
+              .status-indicator {
+                margin-top: 5px;
+              }
             }
           </style>
         </head>
         <body>
-          <h1>Jellicule Health Check</h1>
-          <p>This service provides health check information for the Jellicule UI component library.</p>
-          
-          <div class="links">
-            <a href="/health">Health Check</a>
+          <h1>Jellicule Health Dashboard</h1>
+          <p>This dashboard shows the health status of the Jellicule UI component library services.</p>
+
+          <div class="dashboard" id="dashboard">
+            <div class="status-card">
+              <div class="status-header">
+                <h3 class="status-title">Build Status</h3>
+                <span class="status-indicator unknown" id="build-status-indicator">Loading...</span>
+              </div>
+              <div class="status-details" id="build-status-details">
+                <p>Checking build status...</p>
+              </div>
+            </div>
+
+            <div class="status-card">
+              <div class="status-header">
+                <h3 class="status-title">Services Status</h3>
+                <span class="status-indicator unknown" id="services-status-indicator">Loading...</span>
+              </div>
+              <div class="status-details" id="services-status-details">
+                <p>Checking services status...</p>
+              </div>
+            </div>
+
+            <button class="refresh-button" onclick="refreshStatus()">Refresh Status</button>
+            <label class="auto-refresh">
+              <input type="checkbox" id="auto-refresh" checked>
+              Auto-refresh every 10 seconds
+            </label>
           </div>
-          
-          <h2>API Endpoints</h2>
-          <ul>
-            <li><strong>GET /health</strong> - Returns the current build status</li>
-          </ul>
-          
-          <h2>Docker Health Check</h2>
-          <p>This service is used by Docker to monitor the health of the Jellicule services.</p>
-          <p>The health check will return:</p>
-          <ul>
-            <li><strong>200 OK</strong> - If the build was successful or status is unknown</li>
-            <li><strong>503 Service Unavailable</strong> - If the build failed</li>
-          </ul>
+
+          <div class="links">
+            <a href="/health">Raw Health Data (JSON)</a>
+            <a href="http://localhost:7327/" target="_blank">Open Example App</a>
+          </div>
+
+          <script>
+            // Function to fetch health status
+            async function fetchHealthStatus() {
+              try {
+                const response = await fetch('/health');
+                const data = await response.json();
+
+                // Update build status
+                const buildStatusIndicator = document.getElementById('build-status-indicator');
+                const buildStatusDetails = document.getElementById('build-status-details');
+
+                buildStatusIndicator.textContent = data.status;
+                buildStatusIndicator.className = 'status-indicator ' +
+                  (data.status === 'success' ? 'success' :
+                   data.status === 'failed' ? 'error' : 'unknown');
+
+                let detailsHtml = '';
+                if (data.time) detailsHtml += `<p><strong>Last Build:</strong> ${data.time}</p>`;
+                if (data.version) detailsHtml += `<p><strong>Version:</strong> ${data.version}</p>`;
+                if (data.message) detailsHtml += `<p><strong>Message:</strong> ${data.message}</p>`;
+
+                buildStatusDetails.innerHTML = detailsHtml || '<p>No build details available</p>';
+
+                return data.status === 'success';
+              } catch (error) {
+                console.error('Error fetching health status:', error);
+
+                const buildStatusIndicator = document.getElementById('build-status-indicator');
+                const buildStatusDetails = document.getElementById('build-status-details');
+
+                buildStatusIndicator.textContent = 'Error';
+                buildStatusIndicator.className = 'status-indicator error';
+                buildStatusDetails.innerHTML = `<p>Error fetching health status: ${error.message}</p>`;
+
+                return false;
+              }
+            }
+
+            // Function to check services status
+            function updateServicesStatus(isHealthy) {
+              const servicesStatusIndicator = document.getElementById('services-status-indicator');
+              const servicesStatusDetails = document.getElementById('services-status-details');
+
+              if (isHealthy) {
+                servicesStatusIndicator.textContent = 'Healthy';
+                servicesStatusIndicator.className = 'status-indicator success';
+                servicesStatusDetails.innerHTML = `
+                  <p><strong>Web Server:</strong> Running</p>
+                  <p><strong>WebSocket Server:</strong> Running</p>
+                  <p><strong>Builder:</strong> Running</p>
+                  <p><strong>Health Check:</strong> Running</p>
+                `;
+              } else {
+                servicesStatusIndicator.textContent = 'Issues Detected';
+                servicesStatusIndicator.className = 'status-indicator warning';
+                servicesStatusDetails.innerHTML = `
+                  <p>One or more services may have issues.</p>
+                  <p>Check the build status for more information.</p>
+                `;
+              }
+            }
+
+            // Function to refresh all status
+            async function refreshStatus() {
+              const isHealthy = await fetchHealthStatus();
+              updateServicesStatus(isHealthy);
+            }
+
+            // Initial load
+            refreshStatus();
+
+            // Auto-refresh
+            let refreshInterval;
+
+            function setupAutoRefresh() {
+              const autoRefreshCheckbox = document.getElementById('auto-refresh');
+
+              if (autoRefreshCheckbox.checked) {
+                refreshInterval = setInterval(refreshStatus, 10000);
+              } else {
+                clearInterval(refreshInterval);
+              }
+            }
+
+            document.getElementById('auto-refresh').addEventListener('change', setupAutoRefresh);
+            setupAutoRefresh();
+          </script>
         </body>
         </html>
       `, {
@@ -131,7 +316,7 @@ const server = serve({
         }
       });
     }
-    
+
     // Not found
     return new Response('Not Found', { status: 404 });
   }
