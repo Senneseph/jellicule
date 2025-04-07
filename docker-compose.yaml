@@ -1,5 +1,5 @@
 services:
-  # Combined Jellicule service
+  # Combined j e l l i c u l e service
   jellicule:
     build:
       context: .
@@ -16,7 +16,7 @@ services:
       - ./meta:/app/meta
       - ./files:/app/files:ro
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7327/health"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7327/health/"]
       interval: 30s
       timeout: 10s
       retries: 3

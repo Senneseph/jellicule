@@ -64,6 +64,15 @@ This document outlines the branding guidelines for the j e l l i c u l e project
 - Use camelCase for component names: `ActivityBar`
 - Organize component files in subdirectories: `/components/layout/ActivityBar/`
 
+## URL Structure
+
+- Avoid file extensions in URLs, especially `.html`
+- Use directory-based URLs ending with a trailing slash: `/dashboard/` instead of `/dashboard.html`
+- Place content in index files within directories: `/dashboard/index.html` served as `/dashboard/`
+- Keep URLs lowercase and use hyphens for word separation: `/user-guide/` not `/UserGuide/`
+- Use semantic, descriptive paths that reflect the content's purpose
+- Maintain URL stability - once published, URLs should not change
+
 ## Documentation Style
 
 - Use Markdown for documentation

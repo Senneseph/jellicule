@@ -136,11 +136,11 @@ Any changes you make to the components will automatically trigger a rebuild and 
 You can check the health status of the build at:
 
 ```
-http://localhost:7327/dashboard
+http://localhost:7327/dashboard/
 ```
 
 Or get the raw health data in JSON format:
 
 ```
-http://localhost:7327/health
+http://localhost:7327/health/
 ```

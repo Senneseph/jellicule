@@ -119,6 +119,23 @@ For more details on the release process, see [scripts/README.md](scripts/README.
 - **Health Dashboard**: Available at http://localhost:7327/dashboard
 - **Usage Examples**: Available in the PWA at http://localhost:7327/
 
+## Design Principles
+
+### URL Structure
+
+j e l l i c u l e follows clean URL principles:
+
+- URLs avoid file extensions (especially .html)
+- Resources are accessed through directory paths ending with a slash
+- Each directory contains either an index file or a specific resource
+- This creates cleaner, more semantic URLs like `http://localhost:7327/dashboard/` instead of `http://localhost:7327/dashboard.html`
+
+This approach improves:
+- User experience (shorter, more memorable URLs)
+- SEO (search engines prefer clean URLs)
+- Maintainability (implementation details are hidden)
+- Flexibility (implementation can change without affecting URLs)
+
 ## Additional Resources
 
 - [CHANGELOG.md](CHANGELOG.md) - Version history and changes

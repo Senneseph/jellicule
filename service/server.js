@@ -335,7 +335,17 @@ const server = serve({
     const path = url.pathname;
 
     // Health check endpoint
-    if (path === '/health') {
+    if (path === '/health/' || path === '/health') {
+      // Redirect /health without trailing slash to /health/
+      if (path === '/health') {
+        return new Response(null, {
+          status: 301,
+          headers: {
+            'Location': '/health/',
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
+          }
+        });
+      }
       try {
         // Get build status
         const statusPath = join(BUILD_STATUS_DIR, 'status.json');
@@ -389,7 +399,17 @@ const server = serve({
     }
 
     // Dashboard endpoint
-    if (path === '/dashboard') {
+    if (path === '/dashboard/' || path === '/dashboard') {
+      // Redirect /dashboard without trailing slash to /dashboard/
+      if (path === '/dashboard') {
+        return new Response(null, {
+          status: 301,
+          headers: {
+            'Location': '/dashboard/',
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
+          }
+        });
+      }
       try {
         // Read the dashboard HTML file
         const dashboardPath = join(import.meta.dirname, 'health-dashboard.html');
@@ -406,6 +426,8 @@ const server = serve({
         return new Response('Error loading dashboard: ' + error.message, { status: 500 });
       }
     }
+
+
 
     // Serve static files from the pwa-service directory
     try {
@@ -424,8 +446,35 @@ const server = serve({
         filePath = join(PWA_DIR, path);
       }
 
-      // Check if file exists
-      if (existsSync(filePath) && !filePath.endsWith('/')) {
+      // Check if path doesn't end with a slash but is a directory
+      if (existsSync(filePath) && statSync(filePath).isDirectory() && !path.endsWith('/')) {
+        // Redirect to the same path with a trailing slash
+        return new Response(null, {
+          status: 301,
+          headers: {
+            'Location': path + '/',
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
+          }
+        });
+      }
+
+      // Check if it's a directory with index.html
+      if (existsSync(filePath) && statSync(filePath).isDirectory()) {
+        const indexPath = join(filePath, 'index.html');
+        if (existsSync(indexPath)) {
+          const content = readFileSync(indexPath);
+
+          return new Response(content, {
+            headers: {
+              'Content-Type': 'text/html',
+              'Cache-Control': 'no-cache, no-store, must-revalidate'
+            }
+          });
+        }
+      }
+
+      // Check if file exists (not a directory)
+      if (existsSync(filePath) && statSync(filePath).isFile()) {
         const content = readFileSync(filePath);
         const contentType = getContentType(filePath);
 
@@ -439,19 +488,17 @@ const server = serve({
         });
       }
 
-      // Check if it's a directory with index.html
-      if (existsSync(filePath) && filePath.endsWith('/')) {
-        const indexPath = join(filePath, 'index.html');
-        if (existsSync(indexPath)) {
-          const content = readFileSync(indexPath);
+      // Check if there's an HTML file without the .html extension
+      const htmlFilePath = filePath + '.html';
+      if (existsSync(htmlFilePath) && statSync(htmlFilePath).isFile()) {
+        const content = readFileSync(htmlFilePath);
 
-          return new Response(content, {
-            headers: {
-              'Content-Type': 'text/html',
-              'Cache-Control': 'no-cache, no-store, must-revalidate'
-            }
-          });
-        }
+        return new Response(content, {
+          headers: {
+            'Content-Type': 'text/html',
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
+          }
+        });
       }
 
       // File not found
