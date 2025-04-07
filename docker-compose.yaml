@@ -13,6 +13,7 @@ services:
       - ./dist:/usr/share/nginx/html/dist
     depends_on:
       - builder
+      - websocket
     restart: unless-stopped
     # Use bash for the entrypoint shell
     entrypoint: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
@@ -23,12 +24,30 @@ services:
       timeout: 10s
       retries: 3
 
+  # WebSocket server for hot-reload
+  websocket:
+    image: node:alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+        echo 'Setting up WebSocket server...' &&
+        npm install ws --no-save &&
+        node /app/server/websocket-server.js
+      "
+    restart: unless-stopped
+
   # Builder service to watch for changes and rebuild
   builder:
     image: node:alpine
     volumes:
       - .:/app
     working_dir: /app
+    depends_on:
+      - websocket
     command: >
       sh -c "
         echo 'Setting up build environment...' &&
@@ -37,15 +56,18 @@ services:
         mkdir -p /app/example/dist &&
         mkdir -p /app/example/build-status &&
 
+        # Wait for WebSocket server to start
+        echo 'Waiting for WebSocket server...' &&
+        until wget -q --spider http://websocket:8080 2>/dev/null || nc -z websocket 8080; do
+          echo 'WebSocket server not ready yet...'
+          sleep 1
+        done &&
+        echo 'WebSocket server is ready!' &&
+
         # Initial build
         echo 'Performing initial build...' &&
-        node /app/build.js &&
+        node /app/server/build.js | node /app/server/websocket-client.js &&
         cp /app/dist/* /app/example/dist/ &&
-
-        # Create initial build status
-        BUILD_TIME=\$(date) &&
-        BUILD_STATUS='success' &&
-        echo '{"status": "'\$BUILD_STATUS'", "time": "'\$BUILD_TIME'", "version": "'\$(cat /app/components/version.txt)'"}' > /app/example/build-status/status.json &&
 
         # Watch for changes
         echo 'Watching for changes...' &&
@@ -56,21 +78,10 @@ services:
           # Update version
           echo \$(date +%s) > /app/components/version.txt &&
 
-          # Attempt to build
-          if node /app/build.js; then
-            BUILD_STATUS='success'
-            echo 'Build successful!'
-          else
-            BUILD_STATUS='failed'
-            echo 'Build failed!'
-          fi &&
+          # Attempt to build and pipe output to WebSocket server
+          node /app/server/build.js | node /app/server/websocket-client.js &&
 
           # Copy build files
-          cp /app/dist/* /app/example/dist/ &&
-
-          # Update build status
-          BUILD_TIME=\$(date) &&
-          echo '{"status": "'\$BUILD_STATUS'", "time": "'\$BUILD_TIME'", "version": "'\$(cat /app/components/version.txt)'"}' > /app/example/build-status/status.json &&
-          echo 'Build status updated: '\$BUILD_STATUS' at '\$BUILD_TIME
+          cp /app/dist/* /app/example/dist/
         done
       "
