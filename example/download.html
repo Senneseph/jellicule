@@ -96,26 +96,68 @@ curl -O http://localhost:7327/styles/jellicule.css</pre>
     </div>
 
     <script>
-        // Fetch build information
-        fetch('dist/build-info.json?' + new Date().getTime())
-            .then(response => response.json())
-            .then(info => {
-                document.getElementById('build-info').innerHTML = `
-                    <h3>Build Information</h3>
-                    <p>Version: ${info.version}</p>
-                    <p>Build Time: ${info.buildTime}</p>
-                    <p>Components:</p>
-                    <ul>
-                        ${info.components.map(c => `<li>${c}</li>`).join('')}
-                    </ul>
-                `;
-            })
-            .catch(err => {
-                document.getElementById('build-info').innerHTML = `
-                    <h3>Build Information</h3>
-                    <p>Error loading build information: ${err.message}</p>
-                `;
-            });
+        // Function to update build information
+        const updateBuildInfo = () => {
+            fetch('dist/build-info.json?' + new Date().getTime())
+                .then(response => response.json())
+                .then(info => {
+                    document.getElementById('build-info').innerHTML = `
+                        <h3>Build Information</h3>
+                        <p>Version: ${info.version}</p>
+                        <p>Build Time: ${info.buildTime}</p>
+                        <p>Components:</p>
+                        <ul>
+                            ${info.components.map(c => `<li>${c}</li>`).join('')}
+                        </ul>
+                    `;
+                })
+                .catch(err => {
+                    document.getElementById('build-info').innerHTML = `
+                        <h3>Build Information</h3>
+                        <p>Error loading build information: ${err.message}</p>
+                    `;
+                });
+        };
+
+        // Connect to WebSocket server for real-time updates
+        const connectWebSocket = () => {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const host = window.location.hostname;
+            const ws = new WebSocket(`${protocol}//${host}:8080`);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+
+                    if (message.type === 'build-status') {
+                        // Update build information when a new build is available
+                        updateBuildInfo();
+                    }
+                } catch (err) {
+                    console.error('Error processing WebSocket message:', err);
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket disconnected. Reconnecting in 3 seconds...');
+                setTimeout(connectWebSocket, 3000);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                ws.close();
+            };
+        };
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBuildInfo();
+            connectWebSocket();
+        });
     </script>
 </body>
 </html>

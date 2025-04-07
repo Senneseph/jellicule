@@ -78,137 +78,179 @@
     </div>
 
     <h1>Jellicule Documentation</h1>
-    
+
     <p>
         Jellicule is a modern UI component library built with pure web components.
         It's designed to be lightweight, customizable, and easy to use.
     </p>
-    
+
     <h2>Installation</h2>
     <p>Include the library in your HTML:</p>
     <pre>&lt;link rel="stylesheet" href="path/to/jellicule.css"&gt;
 &lt;script src="path/to/jellicule.min.js"&gt;&lt;/script&gt;</pre>
-    
+
     <h2>Components</h2>
     <div id="components-container">
         Loading components documentation...
     </div>
-    
+
     <h2>CSS Variables</h2>
     <div id="css-variables-container">
         Loading CSS variables documentation...
     </div>
-    
+
     <script>
-        // Fetch API documentation
-        fetch('api.json?' + new Date().getTime())
-            .then(response => response.json())
-            .then(api => {
-                // Render components
-                const componentsContainer = document.getElementById('components-container');
-                let componentsHtml = '';
-                
-                api.components.forEach(component => {
-                    componentsHtml += `
-                        <div class="component" id="${component.name}">
-                            <h3>${component.name}</h3>
-                            <p>${component.description}</p>
-                            
-                            ${component.attributes && component.attributes.length > 0 ? `
-                                <h4>Attributes</h4>
-                                <table>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Type</th>
-                                        <th>Default</th>
-                                    </tr>
-                                    ${component.attributes.map(attr => `
+        // Function to update documentation
+        const updateDocumentation = () => {
+            fetch('api.json?' + new Date().getTime())
+                .then(response => response.json())
+                .then(api => {
+                    // Render components
+                    const componentsContainer = document.getElementById('components-container');
+                    let componentsHtml = '';
+
+                    api.components.forEach(component => {
+                        componentsHtml += `
+                            <div class="component" id="${component.name}">
+                                <h3>${component.name}</h3>
+                                <p>${component.description}</p>
+
+                                ${component.attributes && component.attributes.length > 0 ? `
+                                    <h4>Attributes</h4>
+                                    <table>
                                         <tr>
-                                            <td>${attr.name}</td>
-                                            <td>${attr.description}</td>
-                                            <td>${attr.type || ''}</td>
-                                            <td>${attr.default || ''}</td>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Type</th>
+                                            <th>Default</th>
                                         </tr>
-                                    `).join('')}
-                                </table>
-                            ` : ''}
-                            
-                            ${component.slots && component.slots.length > 0 ? `
-                                <h4>Slots</h4>
-                                <table>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                    </tr>
-                                    ${component.slots.map(slot => `
+                                        ${component.attributes.map(attr => `
+                                            <tr>
+                                                <td>${attr.name}</td>
+                                                <td>${attr.description}</td>
+                                                <td>${attr.type || ''}</td>
+                                                <td>${attr.default || ''}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </table>
+                                ` : ''}
+
+                                ${component.slots && component.slots.length > 0 ? `
+                                    <h4>Slots</h4>
+                                    <table>
                                         <tr>
-                                            <td>${slot.name}</td>
-                                            <td>${slot.description}</td>
+                                            <th>Name</th>
+                                            <th>Description</th>
                                         </tr>
-                                    `).join('')}
-                                </table>
-                            ` : ''}
-                            
-                            ${component.events && component.events.length > 0 ? `
-                                <h4>Events</h4>
-                                <table>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                    </tr>
-                                    ${component.events.map(event => `
+                                        ${component.slots.map(slot => `
+                                            <tr>
+                                                <td>${slot.name}</td>
+                                                <td>${slot.description}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </table>
+                                ` : ''}
+
+                                ${component.events && component.events.length > 0 ? `
+                                    <h4>Events</h4>
+                                    <table>
                                         <tr>
-                                            <td>${event.name}</td>
-                                            <td>${event.description}</td>
+                                            <th>Name</th>
+                                            <th>Description</th>
                                         </tr>
-                                    `).join('')}
-                                </table>
-                            ` : ''}
-                            
-                            <h4>Example</h4>
-                            <pre>&lt;${component.name}${component.attributes && component.attributes.length > 0 ? 
-                                ` ${component.attributes.filter(attr => attr.default !== undefined).map(attr => 
-                                    attr.type === 'boolean' ? `${attr.name}` : `${attr.name}="${attr.default}"`
-                                ).join(' ')}` : ''}&gt;${component.slots && component.slots.length > 0 ? '\n  Content goes here\n' : ''}&lt;/${component.name}&gt;</pre>
-                        </div>
-                    `;
-                });
-                
-                componentsContainer.innerHTML = componentsHtml;
-                
-                // Render CSS variables
-                const cssVariablesContainer = document.getElementById('css-variables-container');
-                if (api.css && api.css.variables && api.css.variables.length > 0) {
-                    let cssVariablesHtml = `
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Default</th>
-                            </tr>
-                    `;
-                    
-                    api.css.variables.forEach(variable => {
-                        cssVariablesHtml += `
-                            <tr>
-                                <td>${variable.name}</td>
-                                <td>${variable.description}</td>
-                                <td>${variable.default || ''}</td>
-                            </tr>
+                                        ${component.events.map(event => `
+                                            <tr>
+                                                <td>${event.name}</td>
+                                                <td>${event.description}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </table>
+                                ` : ''}
+
+                                <h4>Example</h4>
+                                <pre>&lt;${component.name}${component.attributes && component.attributes.length > 0 ?
+                                    ` ${component.attributes.filter(attr => attr.default !== undefined).map(attr =>
+                                        attr.type === 'boolean' ? `${attr.name}` : `${attr.name}="${attr.default}"`
+                                    ).join(' ')}` : ''}&gt;${component.slots && component.slots.length > 0 ? '\n  Content goes here\n' : ''}&lt;/${component.name}&gt;</pre>
+                            </div>
                         `;
                     });
-                    
-                    cssVariablesHtml += '</table>';
-                    cssVariablesContainer.innerHTML = cssVariablesHtml;
-                } else {
-                    cssVariablesContainer.innerHTML = '<p>No CSS variables documented.</p>';
+
+                    componentsContainer.innerHTML = componentsHtml;
+
+                    // Render CSS variables
+                    const cssVariablesContainer = document.getElementById('css-variables-container');
+                    if (api.css && api.css.variables && api.css.variables.length > 0) {
+                        let cssVariablesHtml = `
+                            <table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Default</th>
+                                </tr>
+                        `;
+
+                        api.css.variables.forEach(variable => {
+                            cssVariablesHtml += `
+                                <tr>
+                                    <td>${variable.name}</td>
+                                    <td>${variable.description}</td>
+                                    <td>${variable.default || ''}</td>
+                                </tr>
+                            `;
+                        });
+
+                        cssVariablesHtml += '</table>';
+                        cssVariablesContainer.innerHTML = cssVariablesHtml;
+                    } else {
+                        cssVariablesContainer.innerHTML = '<p>No CSS variables documented.</p>';
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('components-container').innerHTML = `<p>Error loading components documentation: ${err.message}</p>`;
+                    document.getElementById('css-variables-container').innerHTML = `<p>Error loading CSS variables documentation: ${err.message}</p>`;
+                });
+        };
+
+        // Connect to WebSocket server for real-time updates
+        const connectWebSocket = () => {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const host = window.location.hostname;
+            const ws = new WebSocket(`${protocol}//${host}:8080`);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+
+                    if (message.type === 'build-status') {
+                        // Update documentation when a new build is available
+                        updateDocumentation();
+                    }
+                } catch (err) {
+                    console.error('Error processing WebSocket message:', err);
                 }
-            })
-            .catch(err => {
-                document.getElementById('components-container').innerHTML = `<p>Error loading components documentation: ${err.message}</p>`;
-                document.getElementById('css-variables-container').innerHTML = `<p>Error loading CSS variables documentation: ${err.message}</p>`;
-            });
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket disconnected. Reconnecting in 3 seconds...');
+                setTimeout(connectWebSocket, 3000);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                ws.close();
+            };
+        };
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDocumentation();
+            connectWebSocket();
+        });
     </script>
 </body>
 </html>
