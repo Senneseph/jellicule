@@ -4,10 +4,12 @@
   "description": "A modern UI component library",
   "main": "dist/jellicule.js",
   "module": "dist/jellicule.esm.js",
+  "type": "module",
   "scripts": {
-    "build": "bun build",
+    "build": "bun build ./build.js --outdir ../dist",
     "dev": "bun --watch build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "bun run websocket-server.js",
+    "test": "bun test"
   },
   "keywords": [
     "ui",

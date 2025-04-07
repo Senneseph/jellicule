@@ -1,15 +1,11 @@
-Build failed at 2025-04-07T03:25:55.999Z
+Build failed at 2025-04-07T03:58:23.935Z
 
 Error: Component file not found: components/layout/ActivityViewport/activity-viewport.js
 
 Stack: Error: Component file not found: components/layout/ActivityViewport/activity-viewport.js
-    at /app/server/build.js:23:13
-    at Array.forEach (<anonymous>)
-    at Object.<anonymous> (/app/server/build.js:21:14)
-    at Module._compile (node:internal/modules/cjs/loader:1734:14)
-    at Object..js (node:internal/modules/cjs/loader:1899:10)
-    at Module.load (node:internal/modules/cjs/loader:1469:32)
-    at Function._load (node:internal/modules/cjs/loader:1286:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:151:5)
+    at <anonymous> (/app/server/build.js:25:17)
+    at forEach (native:1:11)
+    at /app/server/build.js:23:14
+    at moduleEvaluation (native:1:11)
+    at moduleEvaluation (native:1:11)
+    at <anonymous> (native:2)

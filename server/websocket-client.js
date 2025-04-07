@@ -5,8 +5,8 @@
  * It's used by the build process to notify the WebSocket server of build events.
  */
 
-// Use Bun's WebSocket client
-const WebSocket = require('ws');
+// Use ES modules with Bun
+import { WebSocket } from 'ws';
 
 // Buffer to store messages while not connected
 let messageBuffer = [];

@@ -1,9 +1,7 @@
-// Use Bun's built-in modules
-const fs = require('fs');
-const path = require('path');
-
-// Bun has built-in WebSocket support
-const { WebSocketServer } = require('ws');
+// Use ES modules with Bun
+import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
+import { join } from 'path';
+import { WebSocketServer } from 'ws';
 
 // Create a WebSocket server
 const wss = new WebSocketServer({ port: 8080 });
@@ -22,9 +20,9 @@ wss.on('connection', (ws) => {
 
   // Send current build status to the new client
   try {
-    const statusPath = path.join(__dirname, '..', 'example', 'build-status', 'status.json');
-    if (fs.existsSync(statusPath)) {
-      const status = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+    const statusPath = join(import.meta.dirname, '..', 'example', 'build-status', 'status.json');
+    if (existsSync(statusPath)) {
+      const status = JSON.parse(readFileSync(statusPath, 'utf8'));
       ws.send(JSON.stringify({
         type: 'build-status',
         data: status
@@ -70,10 +68,10 @@ function broadcast(message) {
 }
 
 // Export the broadcast function
-module.exports = { broadcast };
+export { broadcast };
 
 // If this file is run directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('WebSocket server running. Waiting for build events...');
 
   // Listen for build events from stdin

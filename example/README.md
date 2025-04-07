@@ -1,4 +1,5 @@
 # Jellicule UI Example
+An implementation of the MCP UI Builder standard.
 
 This is an example of the Jellicule UI component library in action. It demonstrates the use of the following components:
 

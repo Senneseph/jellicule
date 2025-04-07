@@ -1,14 +1,12 @@
-// Use Bun's built-in modules
-const fs = require('fs');
-const path = require('path');
-
-// Bun-specific optimizations
-const { file } = Bun;
+// Use ES modules with Bun
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { join, basename } from 'path';
+import { file } from 'bun';
 
 try {
   // Create dist directory if it doesn't exist
-  if (!fs.existsSync('dist')) {
-    fs.mkdirSync('dist');
+  if (!existsSync('dist')) {
+    mkdirSync('dist');
   }
 
   // Read all component files
@@ -23,7 +21,7 @@ try {
 
   // Verify all component files exist
   components.forEach(componentPath => {
-    if (!fs.existsSync(componentPath)) {
+    if (!existsSync(componentPath)) {
       throw new Error(`Component file not found: ${componentPath}`);
     }
   });
@@ -31,10 +29,10 @@ try {
   // Get version from version.txt or create it
   let version = '0.1.0';
   try {
-    if (fs.existsSync('components/version.txt')) {
-      version = fs.readFileSync('components/version.txt', 'utf8').trim();
+    if (existsSync('components/version.txt')) {
+      version = readFileSync('components/version.txt', 'utf8').trim();
     } else {
-      fs.writeFileSync('components/version.txt', version);
+      writeFileSync('components/version.txt', version);
     }
   } catch (err) {
     console.warn('Warning: Could not read or write version.txt', err);
@@ -56,7 +54,7 @@ try {
   // Add each component's code
   components.forEach(componentPath => {
     try {
-      const code = fs.readFileSync(componentPath, 'utf8');
+      const code = readFileSync(componentPath, 'utf8');
 
       // Remove export keyword and standalone customElements.define
       const processedCode = code
@@ -94,18 +92,18 @@ try {
 `;
 
   // Write the combined code to the dist directory
-  fs.writeFileSync('dist/jellicule.js', combinedCode);
+  writeFileSync('dist/jellicule.js', combinedCode);
 
   // Create a minified version (not really minified, just a copy for now)
-  fs.writeFileSync('dist/jellicule.min.js', combinedCode);
+  writeFileSync('dist/jellicule.min.js', combinedCode);
 
   // Create a JSON file with build information
   const buildInfo = {
     version: version,
     buildTime: new Date().toISOString(),
-    components: components.map(c => path.basename(c))
+    components: components.map(c => basename(c))
   };
-  fs.writeFileSync('dist/build-info.json', JSON.stringify(buildInfo, null, 2));
+  writeFileSync('dist/build-info.json', JSON.stringify(buildInfo, null, 2));
 
   // Create build status for the WebSocket server
   const buildStatus = {
@@ -115,13 +113,13 @@ try {
   };
 
   // Ensure the build-status directory exists
-  const statusDir = path.join(__dirname, '..', 'example', 'build-status');
-  if (!fs.existsSync(statusDir)) {
-    fs.mkdirSync(statusDir, { recursive: true });
+  const statusDir = join(import.meta.dirname, '..', 'example', 'build-status');
+  if (!existsSync(statusDir)) {
+    mkdirSync(statusDir, { recursive: true });
   }
 
   // Write the status file
-  fs.writeFileSync(path.join(statusDir, 'status.json'), JSON.stringify(buildStatus, null, 2));
+  writeFileSync(join(statusDir, 'status.json'), JSON.stringify(buildStatus, null, 2));
 
   // Notify the WebSocket server
   console.log(JSON.stringify({
@@ -144,10 +142,10 @@ try {
 
   // Create error files for debugging
   try {
-    if (!fs.existsSync('dist')) {
-      fs.mkdirSync('dist');
+    if (!existsSync('dist')) {
+      mkdirSync('dist');
     }
-    fs.writeFileSync('dist/build-error.txt', `Build failed at ${new Date().toISOString()}\n\nError: ${error.message}\n\nStack: ${error.stack}`);
+    writeFileSync('dist/build-error.txt', `Build failed at ${new Date().toISOString()}\n\nError: ${error.message}\n\nStack: ${error.stack}`);
 
     // Create a minimal working library with error information
     const errorLibrary = `/**
@@ -168,8 +166,8 @@ try {
 })(typeof window !== 'undefined' ? window : this);
 `;
 
-    fs.writeFileSync('dist/jellicule.js', errorLibrary);
-    fs.writeFileSync('dist/jellicule.min.js', errorLibrary);
+    writeFileSync('dist/jellicule.js', errorLibrary);
+    writeFileSync('dist/jellicule.min.js', errorLibrary);
 
     // Create build status for the WebSocket server
     const buildStatus = {
@@ -180,13 +178,13 @@ try {
     };
 
     // Ensure the build-status directory exists
-    const statusDir = path.join(__dirname, '..', 'example', 'build-status');
-    if (!fs.existsSync(statusDir)) {
-      fs.mkdirSync(statusDir, { recursive: true });
+    const statusDir = join(import.meta.dirname, '..', 'example', 'build-status');
+    if (!existsSync(statusDir)) {
+      mkdirSync(statusDir, { recursive: true });
     }
 
     // Write the status file
-    fs.writeFileSync(path.join(statusDir, 'status.json'), JSON.stringify(buildStatus, null, 2));
+    writeFileSync(join(statusDir, 'status.json'), JSON.stringify(buildStatus, null, 2));
 
     // Notify the WebSocket server
     console.log(JSON.stringify({

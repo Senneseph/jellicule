@@ -24,6 +24,11 @@ Let's build the fundamentals. We'll need to test this in a directory being serve
 ## Project Overview
 This project is called "jellicule".  Its goal is to create a consistent, high-level, modern, and abstract standardized user-interface system for the current age of AI-created software. The goal is to standardize API libraries with UI libraries using generic Web Components. It takes inspirations from Star Trek's LCARS and Sony's XcrossMediaBar design languages and attempts to provide a free, open standard for providing software services to user's in an age of automation.  All we are focusing on here is replicating efforts like Angular Material, Bootstrap, React's MUI, etc. To provide a library that anyone can use an customize.  Please help me get started with the first steps of initializing the repo and creating some initial files.
 
+## Theory
+Let the UI be data-driven. Assign generic components for representing the most common data types and representation styles. This library provides a rich, abstract suite of components and presentation patterns for a UML system to use. The "default" UI of 21st century human-ai-machine interface design.
+
+## This must become an MCP service.
+
 ## Features
 - Pure web components with no external dependencies
 - Customizable activity bars on all four sides of the viewport

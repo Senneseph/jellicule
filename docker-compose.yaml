@@ -23,7 +23,7 @@ services:
 
   # WebSocket server for hot-reload
   websocket:
-    image: oven/bun:latest
+    build: ./server
     ports:
       - "8080:8080"
     volumes:
@@ -34,18 +34,12 @@ services:
       - styles_volume:/app/styles:ro
       - ./files:/app/files:ro
     working_dir: /app
-    command: >
-      sh -c "
-        echo 'Setting up WebSocket server...' &&
-        cd /app/server &&
-        bun install ws --no-save &&
-        bun run /app/server/websocket-server.js
-      "
+    command: bun run /app/server/websocket-server.js
     restart: unless-stopped
 
   # Builder service to watch for changes and rebuild
   builder:
-    image: oven/bun:latest
+    build: ./server
     volumes:
       - components_volume:/app/components
       - dist_volume:/app/dist
@@ -59,7 +53,6 @@ services:
     command: >
       sh -c "
         echo 'Setting up build environment...' &&
-        apt-get update && apt-get install -y inotify-tools wget netcat-openbsd &&
         mkdir -p /app/dist &&
         mkdir -p /app/example/dist &&
         mkdir -p /app/example/build-status &&
@@ -88,8 +81,7 @@ services:
         # Initial build
         echo 'Performing initial build...' &&
         cd /app/server &&
-        bun install --no-save &&
-        bun run /app/server/build.js | bun run /app/server/websocket-client.js &&
+        bun run build.js | bun run websocket-client.js &&
         cp /app/dist/* /app/example/dist/ &&
 
         # Watch for changes
@@ -102,7 +94,7 @@ services:
           echo \$(date +%s) > /app/components/version.txt &&
 
           # Attempt to build and pipe output to WebSocket server
-          bun run /app/server/build.js | bun run /app/server/websocket-client.js &&
+          bun run build.js | bun run websocket-client.js &&
 
           # Copy build files
           cp /app/dist/* /app/example/dist/

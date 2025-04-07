@@ -1,6 +1,7 @@
 # Build and dependency directories
 node_modules/
 /dist
+/server/dist
 
 # Runtime directories (created by Docker)
 /components
