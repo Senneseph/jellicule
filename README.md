@@ -46,30 +46,29 @@ curl -O http://localhost:7327/styles/jellicule.css
 For installation instructions, please see [INSTALLATION.md](INSTALLATION.md).
 
 ### Development Environment
-The project includes a hot-reload development environment that automatically updates the browser when you make changes to the components.
+The project includes a WebSocket-based hot-reload development environment that automatically updates the browser when you make changes to the components.
 
 #### Requirements
 - Docker and Docker Compose
 
 #### Starting the Development Environment
 
-**On Linux/macOS:**
 ```bash
-./dev.sh
+docker-compose up -d
 ```
 
-**On Windows:**
-```
-dev.bat
-```
+This will start Docker containers that:
+1. Serve the example directory
+2. Run a WebSocket server for real-time updates
+3. Watch for changes to the components and automatically rebuild
 
-This will start a Docker container that serves the example directory and watches for changes to the components. Any changes you make to the components will automatically be reflected in the browser.
+Any changes you make to the components will automatically trigger a rebuild and update all connected browsers in real-time.
 
 Open your browser to http://localhost:7327/ to see the example.
 
 #### Stopping the Development Environment
 ```bash
-docker-compose -f docker-compose.dev.yaml down
+docker-compose down
 ```
 
 ## Documentation
