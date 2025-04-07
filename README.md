@@ -98,6 +98,59 @@ Any changes you make to the components will automatically trigger a rebuild and 
 
 Open your browser to http://localhost:7327/ to see the PWA.
 
+## Versioning and Releases
+
+This project follows [Semantic Versioning](https://semver.org/) (SemVer) for version numbering.
+
+### Release Process
+
+The project includes scripts for managing releases, versioning, and dependency management in the `scripts` directory:
+
+#### Preparing for a 1.0.0 Release
+
+```powershell
+# Dry run (shows what would happen without making changes)
+.\scripts\prepare-release.ps1
+
+# Execute the release preparation
+.\scripts\prepare-release.ps1 -Execute
+```
+
+This script:
+1. Checks and pins all dependencies
+2. Creates a comprehensive CHANGELOG.md from all commit messages
+3. Squashes all commits into a single 'Initial release 1.0.0' commit
+4. Sets up version 1.0.0 and creates a git tag
+
+#### Updating Versions
+
+For subsequent releases, use the auto-version script:
+
+```powershell
+# Increment patch version (1.0.0 -> 1.0.1)
+.\scripts\auto-version.ps1 -VersionType patch
+
+# Increment minor version (1.0.0 -> 1.1.0)
+.\scripts\auto-version.ps1 -VersionType minor
+
+# Increment major version (1.0.0 -> 2.0.0)
+.\scripts\auto-version.ps1 -VersionType major
+```
+
+#### Dependency Management
+
+To ensure all dependencies are properly pinned to specific versions:
+
+```powershell
+# Check for unpinned dependencies
+.\scripts\pin-dependencies.ps1
+
+# Fix unpinned dependencies
+.\scripts\pin-dependencies.ps1 -Fix
+```
+
+See the [scripts/README.md](scripts/README.md) file for more details on the release process.
+
 #### Checking Health Status
 The project includes a health check endpoint that monitors the build status. You can access the health check dashboard in your browser:
 
