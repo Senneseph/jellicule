@@ -1,7 +1,8 @@
 # Installation Guide
 
 ## Prerequisites
-- [List required software, dependencies, etc.]
+- Docker and Docker Compose
+- Git
 
 ## Installation Steps
 1. Clone the repository:
@@ -10,10 +11,43 @@
    cd jellicule
    ```
 
-2. [Additional installation steps]
+2. Start the Docker container:
+   ```
+   docker-compose up -d
+   ```
+
+3. Open your browser and navigate to:
+   ```
+   http://localhost:8080
+   ```
+
+## Manual Installation (without Docker)
+
+If you prefer not to use Docker, you can serve the files using any web server:
+
+### Using Python's built-in HTTP server:
+```
+python -m http.server 8080
+```
+
+### Using Node.js:
+```
+npm install -g http-server
+http-server -p 8080
+```
 
 ## Configuration
-Instructions for configuring the project after installation.
+The Jellicule UI components don't require any special configuration. They are pure web components that can be used in any HTML file.
 
 ## Troubleshooting
-Common issues and their solutions.
+
+### Port Conflicts
+If port 8080 is already in use, you can change it in the docker-compose.yaml file:
+
+```yaml
+ports:
+  - "8081:80"  # Change 8080 to any available port
+```
+
+### Component Not Rendering
+If components are not rendering correctly, check the browser console for any JavaScript errors.

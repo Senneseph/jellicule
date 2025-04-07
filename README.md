@@ -25,9 +25,14 @@ Let's build the fundamentals. We'll need to test this in a directory being serve
 This project is called "jellicule".  Its goal is to create a consistent, high-level, modern, and abstract standardized user-interface system for the current age of AI-created software. The goal is to standardize API libraries with UI libraries using generic Web Components. It takes inspirations from Star Trek's LCARS and Sony's XcrossMediaBar design languages and attempts to provide a free, open standard for providing software services to user's in an age of automation.  All we are focusing on here is replicating efforts like Angular Material, Bootstrap, React's MUI, etc. To provide a library that anyone can use an customize.  Please help me get started with the first steps of initializing the repo and creating some initial files.
 
 ## Features
-- [Feature 1]
-- [Feature 2]
-- [Feature 3]
+- Pure web components with no external dependencies
+- Customizable activity bars on all four sides of the viewport
+- Resizable panels
+- Context-aware main content area
+- Clean, modern design language
+
+## Example
+The project includes a working example at `/example/index.html` that showcases all components with minimal external JavaScript.
 
 ## Getting Started
 For installation instructions, please see [INSTALLATION.md](INSTALLATION.md).
@@ -39,4 +44,4 @@ For detailed documentation, please see [DOCUMENTATION.md](DOCUMENTATION.md).
 For a list of changes and version history, please see [CHANGELOG.md](CHANGELOG.md).
 
 ## License
-[Specify your license here]
+MIT License

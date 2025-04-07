@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8085:80"
+    volumes:
+      - .:/usr/share/nginx/html
+    restart: unless-stopped
+    # Use bash for the entrypoint shell
+    entrypoint: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
+    # Add healthcheck
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
