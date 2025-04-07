@@ -27,7 +27,8 @@ The technical specifications provide detailed information about the design and i
 The GitHub assets include:
 
 - **github-card.svg**: A detailed card that can be used for repository presentations, documentation, or marketing materials.
-- **github-social-preview.svg**: An image designed to be used as the social preview for the repository when shared on social media or messaging platforms.
+- **github-social-preview.svg**: A simple social preview image for the repository.
+- **repository-open-graph.svg**: A GitHub repository template-style open graph image that mimics the GitHub interface.
 
 To set the social preview for your repository:
 
@@ -35,6 +36,13 @@ To set the social preview for your repository:
 2. Click on "Settings"
 3. Scroll down to the "Social preview" section
 4. Click on "Edit"
-5. Upload the `github-social-preview.svg` file
+5. Upload the `repository-open-graph.svg` file or convert it to PNG first using the included HTML converter
+
+To convert the SVG to PNG:
+
+1. Open the `repository-open-graph.html` file in a web browser
+2. Click the "Convert to PNG" button
+3. Download the PNG file
+4. Upload the PNG file to GitHub
 
 These assets follow the branding guidelines specified in the [BRANDING.md](../BRANDING.md) file.
