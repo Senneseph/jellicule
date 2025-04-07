@@ -1,6 +1,6 @@
-// Service Worker for Jellicule UI PWA
+// Service Worker for j e l l i c u l e PWA
 
-const CACHE_NAME = 'jellicule-ui-v1';
+const CACHE_NAME = 'jcule-ui-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

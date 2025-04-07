@@ -62,3 +62,15 @@ The machine-usable user interface into the project. Here the service is to build
 
 `/mcp-service`
 The machine-usable user interface into the project. Here the service is to build / host / advertise service for a UI library. So our machine-interface into this is a machine-readable description of the UI library. In our specific case, we will simulate a UI-building tool.
+
+`DIAGNOSTICS.md`
+How to diagnose problems. How logs are presented automatically. Setting health-checks and alert conditions.
+
+`HEALTH-CHECK.md`
+General description of what the health checks say and why the default alerts are sensible.
+
+`TROUBLESHOOTING.md`
+Database of ongoing troubleshooting knowledge (build errors, runtime errors, configuration errors, etc.) This is like stackexchange, but used to create deterministic troubleshooting tools.
+
+`TESTING.md`
+Description of how to test the project.

@@ -1,0 +1,288 @@
+openapi: 3.0.0
+info:
+  title: j e l l i c u l e API
+  description: API for the j e l l i c u l e component library
+  version: 0.1.0
+  contact:
+    name: jcule Support
+    url: https://github.com/jellicule
+servers:
+  - url: http://localhost:7328
+    description: API Service
+  - url: http://localhost:7329
+    description: MCP Service
+  - url: http://localhost:7327
+    description: Main Service
+paths:
+  /api/components:
+    get:
+      summary: Get all components
+      description: Returns a list of all components
+      operationId: getComponents
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success]
+                  components:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Component'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/components/{name}:
+    get:
+      summary: Get component by name
+      description: Returns the code for a specific component
+      operationId: getComponentByName
+      parameters:
+        - name: name
+          in: path
+          description: Name of the component
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success]
+                  name:
+                    type: string
+                  code:
+                    type: string
+        '404':
+          description: Component not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/status:
+    get:
+      summary: Get build status
+      description: Returns the current build status
+      operationId: getStatus
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success]
+                  buildStatus:
+                    $ref: '#/components/schemas/BuildStatus'
+        '404':
+          description: Build status not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /health:
+    get:
+      summary: Get health status
+      description: Returns the current health status of the j e l l i c u l e service
+      operationId: getHealth
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+  /mcp:
+    post:
+      summary: MCP protocol endpoint
+      description: Endpoint for the MCP protocol
+      operationId: mcpProtocol
+      requestBody:
+        description: MCP protocol message
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/PingRequest'
+                - $ref: '#/components/schemas/GetStatusRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/PongResponse'
+                  - $ref: '#/components/schemas/StatusResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Component:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the component
+        path:
+          type: string
+          description: The path to the component file
+        size:
+          type: integer
+          description: The size of the component file in bytes
+        modified:
+          type: string
+          format: date-time
+          description: The last modified time of the component file
+      required:
+        - name
+        - path
+        - size
+        - modified
+    BuildStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, failed, unknown]
+          description: The current status of the build
+        time:
+          type: string
+          format: date-time
+          description: The time of the last build
+        version:
+          type: string
+          description: The current version of the library
+        error:
+          type: string
+          description: The error message if the build failed
+      required:
+        - status
+        - time
+        - version
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, failed, unknown]
+          description: The current status of the service
+        time:
+          type: string
+          format: date-time
+          description: The time of the last build
+        version:
+          type: string
+          description: The current version of the library
+        message:
+          type: string
+          description: Additional information about the status
+      required:
+        - status
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [error]
+        message:
+          type: string
+          description: The error message
+      required:
+        - status
+        - message
+    PingRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [ping]
+        id:
+          type: string
+          description: The ID of the ping request
+      required:
+        - type
+        - id
+    PongResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [pong]
+        id:
+          type: string
+          description: The ID of the ping request
+      required:
+        - type
+        - id
+    GetStatusRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [get_status]
+      required:
+        - type
+    StatusResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [status]
+        data:
+          $ref: '#/components/schemas/BuildStatus'
+      required:
+        - type
+        - data

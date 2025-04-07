@@ -1,4 +1,4 @@
-# Icons for Jellicule UI PWA
+# Icons for j e l l i c u l e PWA
 
 This directory should contain the following icon files:
 
