@@ -1,0 +1,11 @@
+Build failed at 2025-04-07T05:13:47.745Z
+
+Error: Component file not found: components/layout/ActivityViewport/activity-viewport.js
+
+Stack: Error: Component file not found: components/layout/ActivityViewport/activity-viewport.js
+    at <anonymous> (/app/server/build.js:34:17)
+    at forEach (native:1:11)
+    at /app/server/build.js:32:14
+    at moduleEvaluation (native:1:11)
+    at moduleEvaluation (native:1:11)
+    at <anonymous> (native:2)

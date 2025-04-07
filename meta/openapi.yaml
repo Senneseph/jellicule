@@ -1,0 +1,75 @@
+openapi: 3.0.0
+info:
+  title: Jellicule UI API
+  description: API for the Jellicule UI component library
+  version: 0.1.0
+  contact:
+    name: Jellicule Support
+    url: https://github.com/jellicule
+servers:
+  - url: http://localhost:7327
+    description: Local development server
+paths:
+  /health:
+    get:
+      summary: Get health status
+      description: Returns the current health status of the Jellicule UI service
+      operationId: getHealth
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+  /dist/jellicule.min.js:
+    get:
+      summary: Get the minified Jellicule UI library
+      description: Returns the minified JavaScript file for the Jellicule UI library
+      operationId: getLibrary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/javascript:
+              schema:
+                type: string
+  /styles/jellicule.css:
+    get:
+      summary: Get the Jellicule UI styles
+      description: Returns the CSS file for the Jellicule UI library
+      operationId: getStyles
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/css:
+              schema:
+                type: string
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, failed, unknown]
+          description: The current status of the service
+        time:
+          type: string
+          format: date-time
+          description: The time of the last build
+        version:
+          type: string
+          description: The current version of the library
+        message:
+          type: string
+          description: Additional information about the status
+      required:
+        - status

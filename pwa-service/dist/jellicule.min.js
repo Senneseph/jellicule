@@ -1,13 +1,18 @@
 /**
  * Jellicule UI Components Library
  * Version: 1.0.0
- * Built: 2025-04-07T01:28:58.014Z
+ * Built: 2025-04-07T06:24:45.125Z
  */
 
 (function(global) {
   'use strict';
 
-  // Component classes
+  // Define the global jellicule object
+  global.jellicule = {
+    version: '1.0.0',
+    components: {}
+  };
+
 const ActivityViewport extends HTMLElement {
   constructor() {
     super();
@@ -55,71 +60,7 @@ const ActivityViewport extends HTMLElement {
   }
 }
 
-// For standalone use: customElements.define('activity-viewport', ActivityViewport);
-
-const ActivityBar extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.render();
-  }
-
-  static get observedAttributes() {
-    return ['orientation'];
-  }
-
-  get orientation() {
-    return this.getAttribute('orientation') || 'left';
-  }
-
-  set orientation(value) {
-    this.setAttribute('orientation', value);
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: flex;
-          background-color: #f0f0f0;
-          border: 1px solid #ddd;
-        }
-        :host([orientation="top"]), :host([orientation="bottom"]) {
-          flex-direction: row;
-          width: 100%;
-          height: 40px;
-        }
-        :host([orientation="left"]), :host([orientation="right"]) {
-          flex-direction: column;
-          height: 100%;
-          width: 40px;
-        }
-        .activity-container {
-          display: flex;
-          flex-direction: inherit;
-          flex: 1;
-        }
-      </style>
-      <div class="activity-container">
-        <slot></slot>
-      </div>
-    `;
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'orientation' && oldValue !== newValue) {
-      this.render();
-    }
-  }
-
-  connectedCallback() {
-    // Initialize any event listeners or additional setup
-  }
-}
-
-// For standalone use: customElements.define('activity-bar', ActivityBar);
-
-const Activity extends HTMLElement {
+// For standalone use: customElements.define('activity-viewport', ActivityViewport);\n\nconst Activity extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -216,9 +157,7 @@ const Activity extends HTMLElement {
   }
 }
 
-// For standalone use: customElements.define('activity', Activity);
-
-const ActivityResizeButton extends HTMLElement {
+// For standalone use: customElements.define('activity', Activity);\n\nclass ActivityResizeButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -311,9 +250,7 @@ const ActivityResizeButton extends HTMLElement {
   }
 }
 
-// For standalone use: customElements.define('activity-resize-button', ActivityResizeButton);
-
-const MainContent extends HTMLElement {
+customElements.define('activity-resize-button', ActivityResizeButton);\n\nconst MainContent extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -380,9 +317,7 @@ const MainContent extends HTMLElement {
   }
 }
 
-// For standalone use: customElements.define('main-content', MainContent);
-
-const Content extends HTMLElement {
+// For standalone use: customElements.define('main-content', MainContent);\n\nconst Content extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -416,25 +351,176 @@ const Content extends HTMLElement {
   }
 }
 
-// For standalone use: customElements.define('content', Content);
+// For standalone use: customElements.define('content', Content);\n\nconst ActivityBar extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.render();
+  }
 
+  static get observedAttributes() {
+    return ['orientation'];
+  }
 
-  // Register custom elements
-  customElements.define('jellicule-viewport', ActivityViewport);
-  customElements.define('jellicule-activity-bar', ActivityBar);
-  customElements.define('jellicule-activity', Activity);
-  customElements.define('jellicule-activity-resize-button', ActivityResizeButton);
-  customElements.define('jellicule-main-content', MainContent);
-  customElements.define('jellicule-content', Content);
+  get orientation() {
+    return this.getAttribute('orientation') || 'left';
+  }
 
-  // Export to global scope
-  global.jellicule = {
-    version: '1.0.0',
-    ActivityViewport,
-    ActivityBar,
-    Activity,
-    ActivityResizeButton,
-    MainContent,
-    Content
+  set orientation(value) {
+    this.setAttribute('orientation', value);
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: flex;
+          background-color: #f0f0f0;
+          border: 1px solid #ddd;
+        }
+        :host([orientation="top"]), :host([orientation="bottom"]) {
+          flex-direction: row;
+          width: 100%;
+          height: 40px;
+        }
+        :host([orientation="left"]), :host([orientation="right"]) {
+          flex-direction: column;
+          height: 100%;
+          width: 40px;
+        }
+        .activity-container {
+          display: flex;
+          flex-direction: inherit;
+          flex: 1;
+        }
+      </style>
+      <div class="activity-container">
+        <slot></slot>
+      </div>
+    `;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'orientation' && oldValue !== newValue) {
+      this.render();
+    }
+  }
+
+  connectedCallback() {
+    // Initialize any event listeners or additional setup
+  }
+}
+
+// For standalone use: customElements.define('activity-bar', ActivityBar);\n\nconst ActivityResizeButton extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.render();
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px;
+          cursor: col-resize;
+          background-color: #e8e8e8;
+          border-right: 1px solid #ccc;
+          user-select: none;
+        }
+        :host(:hover) {
+          background-color: #d0d0d0;
+        }
+        .resize-icon {
+          width: 12px;
+          height: 12px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        .resize-line {
+          height: 2px;
+          background-color: #666;
+          width: 100%;
+        }
+      </style>
+      <div class="resize-icon">
+        <div class="resize-line"></div>
+        <div class="resize-line"></div>
+        <div class="resize-line"></div>
+      </div>
+    `;
+  }
+
+  connectedCallback() {
+    this.addEventListener('mousedown', this._handleMouseDown.bind(this));
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('mousedown', this._handleMouseDown.bind(this));
+  }
+
+  _handleMouseDown(event) {
+    event.preventDefault();
+    
+    const activityBar = this.closest('activity-bar');
+    if (!activityBar) return;
+    
+    const orientation = activityBar.orientation;
+    const isHorizontal = orientation === 'left' || orientation === 'right';
+    
+    const startPos = isHorizontal ? event.clientX : event.clientY;
+    const startSize = isHorizontal ? activityBar.offsetWidth : activityBar.offsetHeight;
+    
+    const handleMouseMove = (moveEvent) => {
+      moveEvent.preventDefault();
+      
+      const currentPos = isHorizontal ? moveEvent.clientX : moveEvent.clientY;
+      const diff = currentPos - startPos;
+      
+      const newSize = orientation === 'right' || orientation === 'bottom'
+        ? startSize - diff
+        : startSize + diff;
+      
+      if (newSize > 30) {
+        if (isHorizontal) {
+          activityBar.style.width = `${newSize}px`;
+        } else {
+          activityBar.style.height = `${newSize}px`;
+        }
+      }
+    };
+    
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }
+}
+
+// For standalone use: customElements.define('activity-resize-button', ActivityResizeButton);\n\n
+  // Register all components
+  customElements.define('ActivityViewport', ActivityViewportElement);
+  customElements.define('ActivityBar', ActivityBarElement);
+  customElements.define('Activity', ActivityElement);
+  customElements.define('ActivityResizeButton', ActivityResizebuttonElement);
+  customElements.define('MainContent', MainContentElement);
+  customElements.define('Content', ContentElement);
+
+  // Add components to the jellicule object
+  global.jellicule.components = {
+    ActivityViewport: ActivityViewportElement,
+    ActivityBar: ActivityBarElement,
+    Activity: ActivityElement,
+    ActivityResizeButton: ActivityResizebuttonElement,
+    MainContent: MainContentElement,
+    Content: ContentElement
   };
+
 })(typeof window !== 'undefined' ? window : this);

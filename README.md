@@ -36,8 +36,30 @@ Let the UI be data-driven. Assign generic components for representing the most c
 - Context-aware main content area
 - Clean, modern design language
 
-## Example
-The project includes a working example at `/example/index.html` that showcases all components with minimal external JavaScript.
+## Project Structure
+
+```
+/
+├── components/       # Web components
+├── dist/            # Built library files
+├── files/           # Source files for components and styles
+├── meta/            # Documentation and specifications
+├── pwa-service/     # Progressive Web App
+├── service/         # Server configuration and scripts
+└── styles/          # CSS styles
+```
+
+## Progressive Web App
+The project includes a Progressive Web App (PWA) at `/pwa-service/index.html` that showcases all components with minimal external JavaScript.
+
+## Progressive Web App Features
+
+The Jellicule UI is available as a Progressive Web App (PWA) with the following features:
+
+- **Installable**: Can be installed on desktop and mobile devices
+- **Offline Support**: Works offline using service worker caching
+- **Responsive Design**: Adapts to different screen sizes
+- **Fast Loading**: Optimized for performance
 
 ## Download
 You can download the built library directly from the running server at `/download.html`. The library is also available via curl:
@@ -62,33 +84,46 @@ The project includes a WebSocket-based hot-reload development environment that a
 docker-compose up -d
 ```
 
-This will start Docker containers that:
-1. Serve the example directory
-2. Run a WebSocket server for real-time updates
-3. Watch for changes to the components and automatically rebuild
-4. Provide a health check service to monitor build status
+This will start a single Docker container that:
+1. Serves the Progressive Web App (PWA)
+2. Runs a WebSocket server for real-time updates
+3. Watches for changes to the components and automatically rebuilds
+4. Provides a health check endpoint to monitor build status
+5. Serves metadata and documentation
 
 Any changes you make to the components will automatically trigger a rebuild and update all connected browsers in real-time.
 
-Open your browser to http://localhost:7327/ to see the example.
+Open your browser to http://localhost:7327/ to see the PWA.
 
 #### Checking Health Status
-The project includes a health check service that monitors the build status. You can access the health check dashboard in your browser:
+The project includes a health check endpoint that monitors the build status. You can access the health check dashboard in your browser:
 
 ```
-http://localhost:8081/
+http://localhost:7327/dashboard
 ```
 
 Or get the raw health data in JSON format:
 
 ```
-http://localhost:8081/health
+http://localhost:7327/health
 ```
 
 The health check dashboard shows:
 - Current build status (success/failed)
 - Last build time and version
 - Status of all services
+
+#### Accessing Documentation
+The project includes documentation in the `/meta` directory, which is served at:
+
+```
+http://localhost:7327/meta/
+```
+
+This includes:
+- OpenAPI specification
+- Usage documentation
+- Technical specifications
 
 #### Stopping the Development Environment
 ```bash

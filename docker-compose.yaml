@@ -1,149 +1,42 @@
 services:
-  # Web server to serve the example
-  web:
-    image: nginx:alpine
+  # Combined Jellicule service
+  jellicule:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "7327:80"
-    volumes:
-      - ./example:/usr/share/nginx/html
-      - dist_volume:/usr/share/nginx/html/dist
-      - styles_volume:/usr/share/nginx/html/styles
-    depends_on:
-      - builder
-      - websocket
-      - health-check
-    restart: unless-stopped
-    # Use bash for the entrypoint shell
-    entrypoint: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
-    # Add healthcheck that reports status but doesn't trigger restarts
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://health-check:8081/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-
-  # WebSocket server for hot-reload
-  websocket:
-    build: ./server
-    ports:
-      - "8080:8080"
-    volumes:
-      - components_volume:/app/components:ro
-      - dist_volume:/app/dist
-      - ./example:/app/example
-      - ./server:/app/server
-      - styles_volume:/app/styles:ro
-      - ./files:/app/files:ro
-    working_dir: /app
-    command: bun run /app/server/websocket-server.js
-    restart: unless-stopped
-    depends_on:
-      - health-check
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://health-check:8081/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-
-  # Builder service to watch for changes and rebuild
-  builder:
-    build: ./server
+      - "7327:7327"  # HTTP server
+      - "8080:8080"  # WebSocket server
     volumes:
       - components_volume:/app/components
       - dist_volume:/app/dist
-      - ./example:/app/example
-      - ./server:/app/server
       - styles_volume:/app/styles
+      - ./pwa-service:/app/pwa-service
+      - ./service:/app/service
+      - ./meta:/app/meta
       - ./files:/app/files:ro
-    working_dir: /app
-    depends_on:
-      - websocket
-      - health-check
-    # Add healthcheck that reports status but doesn't trigger restarts
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://health-check:8081/health"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7327/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
     command: >
       sh -c "
-        echo 'Setting up build environment...' &&
-        mkdir -p /app/dist &&
-        mkdir -p /app/example/dist &&
-        mkdir -p /app/example/build-status &&
-        mkdir -p /app/components &&
-        mkdir -p /app/styles &&
-
         # Copy files from files directory to components and styles if they don't exist
-        if [ ! -d "/app/components/layout" ]; then
+        if [ ! -d \"/app/components/layout\" ]; then
           echo 'Initializing components directory...' &&
           cp -r /app/files/components/* /app/components/ || true
         fi &&
 
-        if [ ! -f "/app/styles/jellicule.css" ]; then
+        if [ ! -f \"/app/styles/jellicule.css\" ]; then
           echo 'Initializing styles directory...' &&
           cp -r /app/files/styles/* /app/styles/ || true
         fi &&
 
-        # Wait for WebSocket server to start
-        echo 'Waiting for WebSocket server...' &&
-        until wget -q --spider http://websocket:8080 2>/dev/null || nc -z websocket 8080; do
-          echo 'WebSocket server not ready yet...'
-          sleep 1
-        done &&
-        echo 'WebSocket server is ready!' &&
-
-        # Initial build
-        echo 'Performing initial build...' &&
-        cd /app/server &&
-        bun run build.js | bun run websocket-client.js &&
-        cp /app/dist/* /app/example/dist/ &&
-
-        # Watch for changes
-        echo 'Watching for changes...' &&
-        while true; do
-          inotifywait -r -e modify,create,delete /app/components &&
-          echo 'Changes detected, rebuilding...' &&
-
-          # Update version
-          echo \$(date +%s) > /app/components/version.txt &&
-
-          # Attempt to build and pipe output to WebSocket server
-          bun run build.js | bun run websocket-client.js &&
-
-          # Copy build files
-          cp /app/dist/* /app/example/dist/
-        done
+        # Start the server
+        bun run /app/service/server.js
       "
-
-  # Health check service
-  health-check:
-    build: ./server
-    ports:
-      - "8081:8081"
-    volumes:
-      - components_volume:/app/components:ro
-      - dist_volume:/app/dist:ro
-      - ./example:/app/example
-      - ./server:/app/server
-      - styles_volume:/app/styles:ro
-    working_dir: /app
-    command: >
-      sh -c "
-        mkdir -p /app/example/build-status &&
-        bun run /app/server/health-check.js
-      "
-    restart: unless-stopped
-    # Add healthcheck that reports status but doesn't trigger restarts
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
 
 volumes:
   components_volume:

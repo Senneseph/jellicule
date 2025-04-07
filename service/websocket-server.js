@@ -20,7 +20,7 @@ wss.on('connection', (ws) => {
 
   // Send current build status to the new client
   try {
-    const statusPath = join(import.meta.dirname, '..', 'example', 'build-status', 'status.json');
+    const statusPath = join(import.meta.dirname, '..', 'pwa-service', 'build-status', 'status.json');
     if (existsSync(statusPath)) {
       const status = JSON.parse(readFileSync(statusPath, 'utf8'));
       ws.send(JSON.stringify({

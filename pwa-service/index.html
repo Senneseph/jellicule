@@ -3,9 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>j e l l i c u l e ! ! !</title>
+        <meta name="theme-color" content="#f0f0f0">
+        <meta name="description" content="Jellicule UI - A modern web component library">
+        <title>Jellicule UI</title>
         <link rel="stylesheet" href="styles/reset.css">
         <link rel="stylesheet" href="styles/jellicule.css">
+        <link rel="manifest" href="manifest.json">
+        <link rel="icon" href="icons/favicon.ico">
+        <link rel="apple-touch-icon" href="icons/icon-192x192.png">
         <!-- WebSocket hot-reload and build status script -->
         <script>
             // Connect to WebSocket server for real-time updates
@@ -107,19 +112,17 @@
     </head>
     <body>
         <div class="nav" style="position: sticky; top: 0; background-color: #fff; padding: 10px 0; border-bottom: 1px solid #eee; margin-bottom: 20px; z-index: 9999;">
-            <a href="index.html" style="margin-right: 15px; text-decoration: none; color: #333;">Example</a>
-            <a href="download.html" style="margin-right: 15px; text-decoration: none; color: #333;">Download</a>
-            <a href="docs.html" style="margin-right: 15px; text-decoration: none; color: #333;">Documentation</a>
+            <a href="/" style="margin-right: 15px; text-decoration: none; color: #333;">Home</a>
+            <a href="/download/" style="margin-right: 15px; text-decoration: none; color: #333;">Download</a>
+            <a href="/documentation/" style="margin-right: 15px; text-decoration: none; color: #333;">Documentation</a>
         </div>
 
         <div id="build-status" class="build-status">Loading build status...</div>
         <Viewport>
-            <ActivityBar orientation="top">
-                <ActivityResizeButton></ActivityResizeButton>
-                <Activity selected>A</Activity>
-                <Activity>B</Activity>
-                <Activity>C</Activity>
-                <Activity>D</Activity>
+            <ActivityBar
+                orientation="top"
+                activityList="['Home', 'Download', 'Documentation']"
+                activityDefault="Home">
             </ActivityBar>
             <ActivityBar orientation="right">
                 <ActivityResizeButton></ActivityResizeButton>
@@ -147,5 +150,20 @@
             <MainContent context="e.g.: $ViewPort.context.current, A13W95"></MainContent>
         </Viewport>
         <script src="js/main.js" type="module"></script>
+
+        <!-- Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js')
+                        .then(registration => {
+                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        })
+                        .catch(error => {
+                            console.log('ServiceWorker registration failed: ', error);
+                        });
+                });
+            }
+        </script>
     </body>
 </html>

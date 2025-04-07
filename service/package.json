@@ -7,9 +7,8 @@
   "type": "module",
   "scripts": {
     "build": "bun build ./build.js --outdir ../dist",
-    "dev": "bun --watch build.js",
-    "start": "bun run websocket-server.js",
-    "health": "bun run health-check.js",
+    "dev": "bun --watch server.js",
+    "start": "bun run server.js",
     "test": "bun test"
   },
   "keywords": [

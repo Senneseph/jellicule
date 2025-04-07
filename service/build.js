@@ -8,14 +8,14 @@ try {
     mkdirSync('dist', { recursive: true });
   }
 
-  // Create example/dist directory if it doesn't exist
-  if (!existsSync('example/dist')) {
-    mkdirSync('example/dist', { recursive: true });
+  // Create pwa-service/dist directory if it doesn't exist
+  if (!existsSync('pwa-service/dist')) {
+    mkdirSync('pwa-service/dist', { recursive: true });
   }
 
-  // Create example/build-status directory if it doesn't exist
-  if (!existsSync('example/build-status')) {
-    mkdirSync('example/build-status', { recursive: true });
+  // Create pwa-service/build-status directory if it doesn't exist
+  if (!existsSync('pwa-service/build-status')) {
+    mkdirSync('pwa-service/build-status', { recursive: true });
   }
 
   // Read all component files
@@ -122,7 +122,7 @@ try {
   };
 
   // Ensure the build-status directory exists
-  const statusDir = join(import.meta.dirname, '..', 'example', 'build-status');
+  const statusDir = join(import.meta.dirname, '..', 'pwa-service', 'build-status');
   if (!existsSync(statusDir)) {
     mkdirSync(statusDir, { recursive: true });
   }
@@ -156,9 +156,9 @@ try {
       mkdirSync('dist', { recursive: true });
     }
 
-    // Create example/build-status directory if it doesn't exist
-    if (!existsSync('example/build-status')) {
-      mkdirSync('example/build-status', { recursive: true });
+    // Create pwa-service/build-status directory if it doesn't exist
+    if (!existsSync('pwa-service/build-status')) {
+      mkdirSync('pwa-service/build-status', { recursive: true });
     }
     writeFileSync('dist/build-error.txt', `Build failed at ${new Date().toISOString()}\n\nError: ${error.message}\n\nStack: ${error.stack}`);
 
@@ -193,7 +193,7 @@ try {
     };
 
     // Ensure the build-status directory exists
-    const statusDir = join(import.meta.dirname, '..', 'example', 'build-status');
+    const statusDir = join(import.meta.dirname, '..', 'pwa-service', 'build-status');
     if (!existsSync(statusDir)) {
       mkdirSync(statusDir, { recursive: true });
     }
