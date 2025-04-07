@@ -2,11 +2,8 @@
 import '../../components/layout/ActivityViewport/activity-viewport.js';
 import '../../components/layout/ActivityBar/activity-bar.js';
 import '../../components/layout/Activity/activity.js';
-import '../../components/layout/ActivityResizebutton/activity-resizebutton.js';
+import '../../components/layout/ActivityResizeButton/activity-resize-button.js';
 import '../../components/layout/MainContent/main-content.js';
-import '../../components/layout/Header/header.js';
-import '../../components/layout/Sidebar/sidebar.js';
-import '../../components/layout/Footer/footer.js';
 import '../../components/layout/Content/content.js';
 
 // Initialize any global functionality
@@ -77,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class ActivityResizebuttonElement extends HTMLElement {
     constructor() {
       super();
-      const resizeButton = document.createElement('activity-resizebutton');
+      const resizeButton = document.createElement('activity-resize-button');
 
       // Copy attributes
       Array.from(this.attributes).forEach(attr => {
@@ -118,6 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
   customElements.define('Viewport', ViewportElement);
   customElements.define('ActivityBar', ActivityBarElement);
   customElements.define('Activity', ActivityElement);
-  customElements.define('ActivityResizebutton', ActivityResizebuttonElement);
+  customElements.define('ActivityResizeButton', ActivityResizebuttonElement);
   customElements.define('MainContent', MainContentElement);
 });

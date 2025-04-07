@@ -13,10 +13,8 @@
 }
 
 /* Global styles for jellicule components */
-activity-viewport, activity-bar, activity, activity-resizebutton, main-content,
-header, sidebar, footer, content,
-Viewport, ActivityBar, Activity, ActivityResizebutton, MainContent,
-Header, Sidebar, Footer, Content {
+activity-viewport, activity-bar, activity, activity-resize-button, main-content, content,
+Viewport, ActivityBar, Activity, ActivityResizeButton, MainContent, Content {
   box-sizing: border-box;
   font-family: inherit;
 }
@@ -62,32 +60,6 @@ main-content, MainContent {
   background-color: #fff;
   padding: 16px;
   overflow: auto;
-}
-
-/* Header styles */
-header, Header {
-  background-color: var(--jellicule-background-color);
-  border-bottom: 1px solid var(--jellicule-border-color);
-  padding: 10px;
-}
-
-/* Sidebar styles */
-sidebar, Sidebar {
-  background-color: var(--jellicule-background-color);
-  border-right: 1px solid var(--jellicule-border-color);
-  width: 250px;
-}
-
-sidebar[position="right"], Sidebar[position="right"] {
-  border-right: none;
-  border-left: 1px solid var(--jellicule-border-color);
-}
-
-/* Footer styles */
-footer, Footer {
-  background-color: var(--jellicule-background-color);
-  border-top: 1px solid var(--jellicule-border-color);
-  padding: 10px;
 }
 
 /* Content styles */
