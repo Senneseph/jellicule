@@ -1,6 +1,6 @@
 {
-  "status": "unknown",
-  "time": "2023-07-01T00:00:00.000Z",
-  "version": "0.1.0",
-  "message": "Initial status - no build has been performed yet"
+  "status": "failed",
+  "time": "2025-04-07T04:43:45.396Z",
+  "version": "error",
+  "error": "Component file not found: components/layout/ActivityViewport/activity-viewport.js"
 }

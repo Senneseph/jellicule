@@ -6,6 +6,7 @@ node_modules/
 # Runtime directories (created by Docker)
 /components
 /styles
+/example/build-status/status.json
 
 # Docker volumes
 /data
