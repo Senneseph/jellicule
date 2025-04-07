@@ -6,7 +6,9 @@ services:
     ports:
       - "7327:80"
     volumes:
-      - .:/usr/share/nginx/html
+      - ./example:/usr/share/nginx/html
+      - ./dist:/usr/share/nginx/html/dist
+      - ./styles:/usr/share/nginx/html/styles
     restart: unless-stopped
     # Use bash for the entrypoint shell
     entrypoint: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]

@@ -37,6 +37,33 @@ The project includes a working example at `/example/index.html` that showcases a
 ## Getting Started
 For installation instructions, please see [INSTALLATION.md](INSTALLATION.md).
 
+### Development Environment
+The project includes a hot-reload development environment that automatically updates the browser when you make changes to the components.
+
+#### Requirements
+- Docker and Docker Compose
+
+#### Starting the Development Environment
+
+**On Linux/macOS:**
+```bash
+./dev.sh
+```
+
+**On Windows:**
+```
+dev.bat
+```
+
+This will start a Docker container that serves the example directory and watches for changes to the components. Any changes you make to the components will automatically be reflected in the browser.
+
+Open your browser to http://localhost:7327/ to see the example.
+
+#### Stopping the Development Environment
+```bash
+docker-compose -f docker-compose.dev.yaml down
+```
+
 ## Documentation
 For detailed documentation, please see [DOCUMENTATION.md](DOCUMENTATION.md).
 

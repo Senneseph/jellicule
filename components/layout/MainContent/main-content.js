@@ -1,4 +1,4 @@
-class MainContent extends HTMLElement {
+export class MainContent extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -65,4 +65,4 @@ class MainContent extends HTMLElement {
   }
 }
 
-customElements.define('main-content', MainContent);
+// For standalone use: customElements.define('main-content', MainContent);

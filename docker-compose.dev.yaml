@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  # Web server to serve the example
+  web:
+    image: nginx:alpine
+    ports:
+      - "7327:80"
+    volumes:
+      - ./example:/usr/share/nginx/html
+      - ./components:/usr/share/nginx/html/components
+      - ./styles:/usr/share/nginx/html/styles
+    depends_on:
+      - builder
+    restart: unless-stopped
+
+  # Builder service to watch for changes and rebuild
+  builder:
+    image: node:alpine
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+        echo 'Setting up hot-reload environment...' &&
+        apk add --no-cache inotify-tools &&
+        mkdir -p /app/example/components &&
+        cp -r /app/components /app/example/ &&
+        echo 'Watching for changes...' &&
+        while true; do
+          inotifywait -r -e modify,create,delete /app/components &&
+          echo 'Changes detected, updating components...' &&
+          cp -r /app/components /app/example/ &&
+          echo $(date +%s) > /app/components/version.txt &&
+          echo $(date +%s) > /app/example/components/version.txt &&
+          echo 'Updated version.txt with timestamp: '$(cat /app/components/version.txt)
+        done
+      "
+    restart: unless-stopped

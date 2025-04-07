@@ -1,4 +1,4 @@
-class ActivityViewport extends HTMLElement {
+export class ActivityViewport extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -45,4 +45,4 @@ class ActivityViewport extends HTMLElement {
   }
 }
 
-customElements.define('activity-viewport', ActivityViewport);
+// For standalone use: customElements.define('activity-viewport', ActivityViewport);

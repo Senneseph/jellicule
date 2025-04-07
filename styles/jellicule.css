@@ -14,13 +14,14 @@
 
 /* Global styles for jellicule components */
 activity-viewport, activity-bar, activity, activity-resize-button, main-content, content,
-Viewport, ActivityBar, Activity, ActivityResizeButton, MainContent, Content {
+Viewport, ActivityBar, Activity, ActivityResizeButton, MainContent, Content,
+jellicule-viewport, jellicule-activity-bar, jellicule-activity, jellicule-activity-resize-button, jellicule-main-content, jellicule-content {
   box-sizing: border-box;
   font-family: inherit;
 }
 
 /* Viewport styles */
-activity-viewport, Viewport {
+activity-viewport, Viewport, jellicule-viewport {
   display: grid;
   width: 100%;
   height: 100vh;
@@ -29,41 +30,41 @@ activity-viewport, Viewport {
 }
 
 /* Activity bar styles */
-activity-bar, ActivityBar {
+activity-bar, ActivityBar, jellicule-activity-bar {
   background-color: var(--jellicule-background-color);
   border: 1px solid var(--jellicule-border-color);
 }
 
 /* Activity styles */
-activity, Activity {
+activity, Activity, jellicule-activity {
   padding: 8px;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s;
 }
 
-activity:hover, Activity:hover {
+activity:hover, Activity:hover, jellicule-activity:hover {
   background-color: var(--jellicule-hover-color);
 }
 
-activity[selected], Activity[selected] {
+activity[selected], Activity[selected], jellicule-activity[selected] {
   background-color: var(--jellicule-selected-color);
 }
 
-activity[active], Activity[active] {
+activity[active], Activity[active], jellicule-activity[active] {
   font-weight: bold;
   color: var(--jellicule-active-color);
 }
 
 /* Main content styles */
-main-content, MainContent {
+main-content, MainContent, jellicule-main-content {
   background-color: #fff;
   padding: 16px;
   overflow: auto;
 }
 
 /* Content styles */
-content, Content {
+content, Content, jellicule-content {
   background-color: #fff;
   padding: 20px;
   overflow: auto;

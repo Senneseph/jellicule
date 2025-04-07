@@ -1,4 +1,4 @@
-class ActivityResizeButton extends HTMLElement {
+export class ActivityResizeButton extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -91,4 +91,4 @@ class ActivityResizeButton extends HTMLElement {
   }
 }
 
-customElements.define('activity-resize-button', ActivityResizeButton);
+// For standalone use: customElements.define('activity-resize-button', ActivityResizeButton);

@@ -1,4 +1,4 @@
-class Activity extends HTMLElement {
+export class Activity extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -95,4 +95,4 @@ class Activity extends HTMLElement {
   }
 }
 
-customElements.define('activity', Activity);
+// For standalone use: customElements.define('activity', Activity);

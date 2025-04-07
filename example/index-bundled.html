@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>j e l l i c u l e   example</title>
+        <link rel="stylesheet" href="../styles/reset.css">
+        <link rel="stylesheet" href="../styles/jellicule.css">
+        <!-- Import the bundled library -->
+        <script src="../dist/jellicule.min.js"></script>
+    </head>
+    <body>
+        <jellicule-viewport>
+            <jellicule-activity-bar orientation="top">
+                <jellicule-activity-resize-button></jellicule-activity-resize-button>
+                <jellicule-activity selected>A</jellicule-activity>
+                <jellicule-activity>B</jellicule-activity>
+                <jellicule-activity>C</jellicule-activity>
+                <jellicule-activity>D</jellicule-activity>
+            </jellicule-activity-bar>
+            <jellicule-activity-bar orientation="right">
+                <jellicule-activity-resize-button></jellicule-activity-resize-button>
+                <jellicule-activity>A1</jellicule-activity>
+                <jellicule-activity>A2</jellicule-activity>
+                <jellicule-activity selected>A3</jellicule-activity>
+                <jellicule-activity>A4</jellicule-activity>
+            </jellicule-activity-bar>
+            <jellicule-activity-bar orientation="bottom">
+                <jellicule-activity-resize-button></jellicule-activity-resize-button>
+                <jellicule-activity>A3Z</jellicule-activity>
+                <jellicule-activity>A3Y</jellicule-activity>
+                <jellicule-activity>A3X</jellicule-activity>
+                <jellicule-activity selected>A3W</jellicule-activity>
+                <jellicule-activity>A3V</jellicule-activity>
+            </jellicule-activity-bar>
+            <jellicule-activity-bar orientation="left">
+                <jellicule-activity-resize-button></jellicule-activity-resize-button>
+                <jellicule-activity>A13W99</jellicule-activity>
+                <jellicule-activity>A13W98</jellicule-activity>
+                <jellicule-activity>A13W97</jellicule-activity>
+                <jellicule-activity>A13W96</jellicule-activity>
+                <jellicule-activity selected active>A13W95</jellicule-activity>
+            </jellicule-activity-bar>
+            <jellicule-main-content context="e.g.: $ViewPort.context.current, A13W95"></jellicule-main-content>
+        </jellicule-viewport>
+    </body>
+</html>

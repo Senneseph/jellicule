@@ -1,4 +1,4 @@
-class ActivityBar extends HTMLElement {
+export class ActivityBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -58,4 +58,4 @@ class ActivityBar extends HTMLElement {
   }
 }
 
-customElements.define('activity-bar', ActivityBar);
+// For standalone use: customElements.define('activity-bar', ActivityBar);

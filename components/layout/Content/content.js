@@ -1,4 +1,4 @@
-class Content extends HTMLElement {
+export class Content extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -32,4 +32,4 @@ class Content extends HTMLElement {
   }
 }
 
-customElements.define('content', Content);
+// For standalone use: customElements.define('content', Content);
