@@ -1,7 +1,7 @@
 /**
  * Jellicule UI Components Library
  * Version: 1.0.0
- * Built: 2025-04-08T06:27:39.287Z
+ * Built: 2025-04-08T06:48:04.940Z
  */
 
 (function(global) {

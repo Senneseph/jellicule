@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRT Effect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content">
+        <h1>CRT MONITOR VIBES</h1>
+        <p>This entire page should look like an old-school green phosphor monitor. Even images get the treatment!</p>
+        <img src="https://via.placeholder.com/300x200" alt="Placeholder Image">
+        <p>Scroll down to see more content affected...</p>
+        <ul>
+            <li>List Item 1</li>
+            <li>List Item 2</li>
+            <li>Another Item</li>
+        </ul>
+        <pre>
+// Some code example
+function greet(name) {
+    console.log(`Hello, ${name}!`);
+}
+        </pre>
+    </div>
+</body>
+</html>
+
+/* Basic Reset & Full Viewport Setup */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a0a; /* Dark background base */
+    overflow: hidden; /* Hide scrollbars from body itself */
+    font-family: 'Courier New', Courier, monospace; /* Classic terminal font */
+}
+
+body {
+    position: relative; /* Needed for pseudo-element positioning */
+    color: #00FF41; /* Bright green text color */
+
+    /* --- CRT Filter Effect ---
+       Grayscale: Remove color
+       Sepia: Add a base tint to work from
+       Hue-rotate: Shift towards green
+       Saturate: Boost the green intensity
+       Brightness/Contrast: Adjust phosphor look
+    */
+    filter:
+        grayscale(100%)
+        sepia(100%)
+        hue-rotate(55deg) /* Adjust for desired green shade (50-70 is usually good) */
+        saturate(1000%)   /* High saturation for strong color */
+        brightness(0.9)   /* Slightly dim overall */
+        contrast(2);      /* High contrast */
+
+    /* --- Subtle Flicker Animation --- */
+    animation: crtFlicker 0.08s infinite alternate;
+
+    /* --- Text Glow --- */
+    text-shadow: 0 0 6px #00FF41, 0 0 2px #00FF41; /* Adjust glow size/intensity */
+}
+
+/* --- Scanline Overlay --- */
+body::after {
+    content: "";
+    position: fixed; /* Covers the entire viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 50%, /* Adjust darkness of scanlines */
+        transparent 100%
+    );
+    background-size: 100% 3px; /* Adjust thickness of scanlines (e.g., 2px, 3px, 4px) */
+    pointer-events: none; /* Allows interaction with content below */
+    z-index: 10; /* Ensure it's on top */
+}
+
+/* --- Vignette Overlay --- */
+body::before {
+    content: "";
+    position: fixed; /* Covers the entire viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle,
+        rgba(0, 0, 0, 0) 50%, /* Center is transparent */
+        rgba(0, 0, 0, 0.4) 110% /* Edges fade to dark */
+    );
+    pointer-events: none; /* Allows interaction with content below */
+    z-index: 9; /* Below scanlines but above content */
+}
+
+
+/* --- Flicker Animation Keyframes --- */
+@keyframes crtFlicker {
+    0% {
+        opacity: 0.96;
+    }
+    /* Small, rapid changes */
+    15% {
+       opacity: 0.94;
+    }
+    30% {
+        opacity: 1;
+    }
+    45% {
+        opacity: 0.97;
+    }
+    60% {
+        opacity: 0.95;
+    }
+     80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.94;
+    }
+}
+
+/* --- Content Styling --- */
+/* Make content scrollable *within* the CRT effect */
+.content {
+    padding: 2rem;
+    height: 100%;
+    overflow-y: auto; /* Allow scrolling for content */
+     /* Add a little extra padding at bottom for scroll */
+    padding-bottom: 4rem;
+}
+
+/* Ensure images are also affected by the filter */
+img {
+    max-width: 100%;
+    height: auto;
+    /* The body filter takes care of the color */
+    border: 1px solid #00FF41; /* Optional green border */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h1 {
+   text-align: center;
+   margin-bottom: 2rem;
+}
+
+pre {
+    background-color: rgba(0, 20, 0, 0.5); /* Dark green tint background */
+    padding: 1em;
+    border: 1px dashed #00FF41;
+    overflow-x: auto; /* Allow horizontal scroll for code */
+}

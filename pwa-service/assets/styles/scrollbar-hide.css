@@ -1,0 +1,104 @@
+/**
+ * Hide scrollbars and resize indicators while maintaining scrolling functionality
+ */
+
+/* Hide scrollbars for all elements */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  resize: none; /* Prevent resize handles */
+}
+
+/* Hide webkit scrollbars */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent resize indicators on all elements */
+div, section, article, aside, nav, header, footer, main, p, h1, h2, h3, h4, h5, h6 {
+  resize: none !important;
+}
+
+/* Prevent user-select on elements that shouldn't be selectable */
+jc-activity-bar, jc-activity, jc-activity-resize-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Main content area - maintain scrolling */
+jc-main-content {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Content container - maintain scrolling */
+jc-content {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Viewport context behavior */
+jc-activity-viewport {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Full viewport application mode */
+.jc-fullview-app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  background-color: var(--jc-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Controls that appear on interaction */
+.jc-app-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transform: translateY(100%);
+  transition: transform var(--jc-animation-duration) var(--jc-transition-function);
+  z-index: 51;
+}
+
+/* Show controls on hover/focus */
+.jc-fullview-app:hover .jc-app-controls,
+.jc-fullview-app:focus-within .jc-app-controls,
+.jc-app-controls:hover,
+.jc-app-controls:focus-within {
+  transform: translateY(0);
+}
+
+/* Subtle indicator for available controls */
+.jc-fullview-app::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 5px;
+  background-color: var(--jc-primary);
+  border-radius: 5px 5px 0 0;
+  opacity: 0.7;
+  transition: opacity var(--jc-transition-step);
+}
+
+.jc-fullview-app:hover::after {
+  opacity: 0;
+}

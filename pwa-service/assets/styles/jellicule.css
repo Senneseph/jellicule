@@ -11,6 +11,23 @@
 /* Import default theme */
 @import url('./theme-retro80s.css');
 
+/* Global styles to prevent resize indicators */
+* {
+  box-sizing: border-box;
+  resize: none !important;
+}
+
+/* Prevent text selection on UI elements */
+jc-activity-viewport,
+jc-activity-bar,
+jc-activity,
+jc-activity-resize-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 /* Global styles for jellicule components */
 /* Support all component naming conventions for backward compatibility */
 activity-viewport, activity-bar, activity, activity-resize-button, main-content, content,

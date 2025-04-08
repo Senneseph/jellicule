@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="j e l l i c u l e D Y N A M I C S">
+    <title>j e l l i c u l e D Y N A M I C S</title>
+
+    <style id="ui.style.point"></style>
+</head>
+<body style="display: flex; justify-content: center; align-items: center;">
+    <div>
+        <div style="display: inline-block">
+            <h3>ui.Style Theme</h3>
+            <textarea id="ui.style.theme" rows="10" cols="50">
+                /* Default CSS (or your previous CSS) */
+                .activity-bar-s { color: seashell; background-color: black; }
+                .activity-bar-n { color: navajowhite; background-color: black; }
+                .activity-bar-e { color: mediumseagreen; background-color: black; }
+                .activity-bar-w { color: whitesmoke; background-color: black; }
+            </textarea>
+            <br />
+            <button id="ui.style.apply">Apply Theme</button>
+            <button id="ui.style.default">Set Default</button>
+        </div>
+        <div style="display: inline-block">
+            <h3>ui.Layout Design</h3>
+            <textarea id="ui.layout.design" rows="10" cols="50">
+                <div id="ActivityViewport">
+                    <div id="activity-bar-s"><div><span>Example South</span></div></div>
+                    <div id="activity-bar-n"><span>Example North</span></div>
+                    <div id="activity-bar-e"><span>Example East</span></div>
+                    <div id="activity-bar-w"><span>Example West</span></div>
+                    <div id="MainContent"><span>Default Main Content Area</span></div>
+                 </div>
+            </textarea>
+            <br />
+            <button id="ui.layout.apply">Apply Design</button>
+            <button id="ui.layout.default">Set Default</button>
+        </div>
+    </div>
+
+    <div id="ui.viewport.point">
+        <div id="ActivityViewport">
+            <div id="activity-bar-s"><div><span>Initial South</span></div></div>
+            <div id="activity-bar-n"><span>Initial North</span></div>
+            <div id="activity-bar-e"><span>Initial East</span></div>
+            <div id="activity-bar-w"><span>Initial West</span></div>
+            <div id="MainContent"><span>Initial Main Content Area</span></div>
+         </div>
+    </div>
+
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>

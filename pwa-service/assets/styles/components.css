@@ -23,6 +23,12 @@ jc-activity-viewport {
         "south south south";
     grid-template-rows: auto 1fr auto;
     grid-template-columns: auto 1fr auto;
+
+    /* Prevent resize indicators */
+    resize: none;
+    -webkit-resize: none;
+    -moz-resize: none;
+    -ms-resize: none;
 }
 
 /* ActivityBar - Navigation and tool bars */
@@ -44,6 +50,13 @@ jc-activity-bar {
     transition: width var(--activity-bar-transition),
                 height var(--activity-bar-transition);
     will-change: width, height;
+
+    /* Prevent resize indicators */
+    resize: none;
+    -webkit-resize: none;
+    -moz-resize: none;
+    -ms-resize: none;
+    pointer-events: auto;
 }
 
 /* Position the activity bars in their respective grid areas */
@@ -164,6 +177,12 @@ jc-main-content {
     grid-area: main;
     overflow: auto;
     position: relative;
+
+    /* Prevent resize indicators */
+    resize: none;
+    -webkit-resize: none;
+    -moz-resize: none;
+    -ms-resize: none;
 }
 
 /* Content - Content container with max width */
@@ -176,6 +195,12 @@ jc-content {
     margin: 0 auto;
     padding: var(--content-padding);
     max-width: var(--content-max-width);
+
+    /* Prevent resize indicators */
+    resize: none;
+    -webkit-resize: none;
+    -moz-resize: none;
+    -ms-resize: none;
 }
 
 /* Support for different content widths */

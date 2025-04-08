@@ -8,6 +8,7 @@ import { initInstallPrompt } from './install-prompt.js'
 import { registerServiceWorker } from './service-worker-registration.js'
 import { initAnimationSystem } from './animation-system.js'
 import { startAnimation } from './startup-animation.js'
+import { initClockApp, showClockApp } from './clock-app.js'
 
 // Initialize any global functionality
 document.addEventListener('DOMContentLoaded', () => {
@@ -145,5 +146,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start the startup animation
     startAnimation()
+
+    // Initialize clock app
+    initClockApp()
+
+    // Add clock app launcher
+    const clockButton = document.createElement('button')
+    clockButton.className = 'jc-button jc-glow jc-m-2'
+    clockButton.textContent = 'Open Clock App'
+    clockButton.addEventListener('click', showClockApp)
+
+    // Add to the first card in the content
+    const firstCard = document.querySelector('.jc-card')
+    if (firstCard) {
+      firstCard.appendChild(clockButton)
+    }
   })
 });

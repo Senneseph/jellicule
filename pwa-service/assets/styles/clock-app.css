@@ -1,0 +1,207 @@
+/**
+ * Clock/Watch Application Styles
+ */
+
+/* Clock app container */
+.jc-clock-app {
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  font-family: var(--font-retro);
+}
+
+/* Clock display container */
+.jc-clock-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Digital clock */
+.jc-digital-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.jc-digital-clock .jc-time {
+  font-size: 8rem;
+  font-weight: bold;
+  color: var(--jc-neon-blue);
+  text-shadow: 0 0 10px var(--jc-neon-blue), 0 0 20px var(--jc-neon-blue);
+  margin-bottom: 1rem;
+}
+
+.jc-digital-clock .jc-date {
+  font-size: 2rem;
+  color: var(--jc-neon-pink);
+  text-shadow: 0 0 5px var(--jc-neon-pink);
+}
+
+/* Analog clock */
+.jc-analog-clock {
+  display: none;
+  width: 300px;
+  height: 300px;
+  position: relative;
+}
+
+.jc-clock-face {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--jc-neon-blue);
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--jc-neon-blue);
+  position: relative;
+}
+
+/* Clock markings */
+.jc-clock-face::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at center, transparent 75%, var(--jc-neon-blue) 76%, transparent 77%),
+    conic-gradient(
+      from 0deg,
+      transparent 0deg 6deg, var(--jc-neon-blue) 6deg 6.5deg,
+      transparent 6.5deg 16deg, var(--jc-neon-blue) 16deg 16.5deg,
+      transparent 16.5deg 26deg, var(--jc-neon-blue) 26deg 26.5deg,
+      transparent 26.5deg 36deg, var(--jc-neon-blue) 36deg 36.5deg,
+      transparent 36.5deg 46deg, var(--jc-neon-blue) 46deg 46.5deg,
+      transparent 46.5deg 56deg, var(--jc-neon-blue) 56deg 56.5deg,
+      transparent 56.5deg 66deg, var(--jc-neon-blue) 66deg 66.5deg,
+      transparent 66.5deg 76deg, var(--jc-neon-blue) 76deg 76.5deg,
+      transparent 76.5deg 86deg, var(--jc-neon-blue) 86deg 86.5deg,
+      transparent 86.5deg 96deg, var(--jc-neon-blue) 96deg 96.5deg,
+      transparent 96.5deg 106deg, var(--jc-neon-blue) 106deg 106.5deg,
+      transparent 106.5deg 116deg, var(--jc-neon-blue) 116deg 116.5deg,
+      transparent 116.5deg 126deg, var(--jc-neon-blue) 126deg 126.5deg,
+      transparent 126.5deg 136deg, var(--jc-neon-blue) 136deg 136.5deg,
+      transparent 136.5deg 146deg, var(--jc-neon-blue) 146deg 146.5deg,
+      transparent 146.5deg 156deg, var(--jc-neon-blue) 156deg 156.5deg,
+      transparent 156.5deg 166deg, var(--jc-neon-blue) 166deg 166.5deg,
+      transparent 166.5deg 176deg, var(--jc-neon-blue) 176deg 176.5deg,
+      transparent 176.5deg 186deg, var(--jc-neon-blue) 186deg 186.5deg,
+      transparent 186.5deg 196deg, var(--jc-neon-blue) 196deg 196.5deg,
+      transparent 196.5deg 206deg, var(--jc-neon-blue) 206deg 206.5deg,
+      transparent 206.5deg 216deg, var(--jc-neon-blue) 216deg 216.5deg,
+      transparent 216.5deg 226deg, var(--jc-neon-blue) 226deg 226.5deg,
+      transparent 226.5deg 236deg, var(--jc-neon-blue) 236deg 236.5deg,
+      transparent 236.5deg 246deg, var(--jc-neon-blue) 246deg 246.5deg,
+      transparent 246.5deg 256deg, var(--jc-neon-blue) 256deg 256.5deg,
+      transparent 256.5deg 266deg, var(--jc-neon-blue) 266deg 266.5deg,
+      transparent 266.5deg 276deg, var(--jc-neon-blue) 276deg 276.5deg,
+      transparent 276.5deg 286deg, var(--jc-neon-blue) 286deg 286.5deg,
+      transparent 286.5deg 296deg, var(--jc-neon-blue) 296deg 296.5deg,
+      transparent 296.5deg 306deg, var(--jc-neon-blue) 306deg 306.5deg,
+      transparent 306.5deg 316deg, var(--jc-neon-blue) 316deg 316.5deg,
+      transparent 316.5deg 326deg, var(--jc-neon-blue) 326deg 326.5deg,
+      transparent 326.5deg 336deg, var(--jc-neon-blue) 336deg 336.5deg,
+      transparent 336.5deg 346deg, var(--jc-neon-blue) 346deg 346.5deg,
+      transparent 346.5deg 356deg, var(--jc-neon-blue) 356deg 356.5deg,
+      transparent 356.5deg 360deg
+    );
+}
+
+/* Hour numbers */
+.jc-clock-face::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* Clock hands */
+.jc-hour-hand, .jc-minute-hand, .jc-second-hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+  transform: translateX(-50%) rotate(90deg);
+}
+
+.jc-hour-hand {
+  width: 8px;
+  height: 60px;
+  background-color: var(--jc-neon-pink);
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--jc-neon-pink);
+  z-index: 10;
+}
+
+.jc-minute-hand {
+  width: 4px;
+  height: 90px;
+  background-color: var(--jc-neon-green);
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--jc-neon-green);
+  z-index: 11;
+}
+
+.jc-second-hand {
+  width: 2px;
+  height: 100px;
+  background-color: var(--jc-neon-purple);
+  border-radius: 1px;
+  box-shadow: 0 0 10px var(--jc-neon-purple);
+  z-index: 12;
+}
+
+.jc-center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: var(--jc-neon-blue);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px var(--jc-neon-blue);
+  z-index: 13;
+}
+
+/* Clock controls */
+.jc-clock-app .jc-app-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.jc-control-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .jc-digital-clock .jc-time {
+    font-size: 4rem;
+  }
+  
+  .jc-digital-clock .jc-date {
+    font-size: 1.5rem;
+  }
+  
+  .jc-analog-clock {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .jc-control-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

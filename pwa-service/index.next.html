@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthMem | Virtual Gear Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        synthgreen: '#00ff9d',
+                        synthorange: '#ff6b35',
+                        synthteal: '#00e5ff',
+                        synthdark: '#0d0f1c',
+                        synthpanel: '#1a1d2e',
+                    },
+                    fontFamily: {
+                        'synth': ['"Rajdhani"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0d0f1c;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .knob {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1a1d2e, #151827);
+            box-shadow: 5px 5px 10px #0a0b14, 
+                        -5px -5px 10px #2a2f48;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .knob::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #00ff9d;
+            border-radius: 50%;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 5px #00ff9d;
+        }
+        
+        .slider {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #1a1d2e;
+            border-radius: 4px;
+            outline: none;
+            box-shadow: inset 3px 3px 6px #0a0b14, 
+                        inset -3px -3px 6px #2a2f48;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff6b35;
+            cursor: pointer;
+            box-shadow: 0 0 5px #ff6b35;
+        }
+        
+        .panel {
+            background-color: #1a1d2e;
+            border-radius: 10px;
+            box-shadow: 8px 8px 16px #0a0b14, 
+                        -8px -8px 16px #2a2f48;
+        }
+        
+        .btn-synth {
+            background: linear-gradient(145deg, #1a1d2e, #151827);
+            box-shadow: 5px 5px 10px #0a0b14, 
+                        -5px -5px 10px #2a2f48;
+            transition: all 0.2s;
+        }
+        
+        .btn-synth:active {
+            box-shadow: inset 5px 5px 10px #0a0b14, 
+                        inset -5px -5px 10px #2a2f48;
+        }
+        
+        .btn-synth-green {
+            color: #00ff9d;
+            text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+        
+        .btn-synth-orange {
+            color: #ff6b35;
+            text-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+        }
+        
+        .btn-synth-teal {
+            color: #00e5ff;
+            text-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
+        }
+        
+        .grid-line {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .grid-line.vertical {
+            width: 1px;
+            height: 100%;
+        }
+        
+        .grid-line.horizontal {
+            width: 100%;
+            height: 1px;
+        }
+        
+        .module {
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .module:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+        }
+        
+        .cable {
+            position: absolute;
+            background-color: rgba(0, 229, 255, 0.3);
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 8px currentColor;
+        }
+        
+        .glow-box {
+            box-shadow: 0 0 15px currentColor;
+        }
+        
+        /* Animation for active cables */
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.3; }
+        }
+        
+        .cable-active {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Top Navigation -->
+    <header class="bg-synthdark border-b border-synthteal/20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-synthgreen to-synthteal flex items-center justify-center">
+                    <i class="fas fa-sliders-h text-synthdark"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-synthgreen to-synthteal glow-text">
+                    SynthMem
+                </h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="btn-synth btn-synth-green px-4 py-2 rounded-lg font-semibold">
+                    <i class="fas fa-save mr-2"></i> Save
+                </button>
+                <button class="btn-synth btn-synth-orange px-4 py-2 rounded-lg font-semibold">
+                    <i class="fas fa-play mr-2"></i> Test
+                </button>
+                <div class="relative group">
+                    <button class="btn-synth btn-synth-teal px-4 py-2 rounded-lg font-semibold">
+                        <i class="fas fa-user mr-2"></i> User
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-synthpanel rounded-lg shadow-lg z-50 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
+                        <a href="#" class="block px-4 py-2 text-white hover:bg-synthdark/50">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-white hover:bg-synthdark/50">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-synthorange hover:bg-synthdark/50">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex flex-1 overflow-hidden">
+        <!-- Left Sidebar - Components Library -->
+        <aside class="w-64 bg-synthdark border-r border-synthteal/20 p-4 overflow-y-auto">
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-3 text-synthgreen flex items-center">
+                    <i class="fas fa-box-open mr-2"></i> Components
+                </h2>
+                <div class="space-y-2">
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-sliders-h mr-2"></i> Knob
+                    </button>
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-slider-h mr-2"></i> Slider
+                    </button>
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-toggle-on mr-2"></i> Toggle
+                    </button>
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-square mr-2"></i> Button
+                    </button>
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-wave-square mr-2"></i> Display
+                    </button>
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-plug mr-2"></i> Input
+                    </button>
+                    <button class="w-full btn-synth btn-synth-teal text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-plug mr-2"></i> Output
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-3 text-synthgreen flex items-center">
+                    <i class="fas fa-puzzle-piece mr-2"></i> Modules
+                </h2>
+                <div class="space-y-2">
+                    <button class="w-full btn-synth btn-synth-orange text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-sync-alt mr-2"></i> LFO
+                    </button>
+                    <button class="w-full btn-synth btn-synth-orange text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-filter mr-2"></i> Filter
+                    </button>
+                    <button class="w-full btn-synth btn-synth-orange text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-wave-square mr-2"></i> Oscillator
+                    </button>
+                    <button class="w-full btn-synth btn-synth-orange text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-volume-up mr-2"></i> Amplifier
+                    </button>
+                    <button class="w-full btn-synth btn-synth-orange text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-clock mr-2"></i> Sequencer
+                    </button>
+                </div>
+            </div>
+            
+            <div>
+                <h2 class="text-lg font-semibold mb-3 text-synthgreen flex items-center">
+                    <i class="fas fa-folder mr-2"></i> Presets
+                </h2>
+                <div class="space-y-2">
+                    <button class="w-full btn-synth btn-synth-green text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-music mr-2"></i> Moog Style
+                    </button>
+                    <button class="w-full btn-synth btn-synth-green text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-music mr-2"></i> Roland Style
+                    </button>
+                    <button class="w-full btn-synth btn-synth-green text-left px-3 py-2 rounded flex items-center">
+                        <i class="fas fa-music mr-2"></i> Korg Style
+                    </button>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Workspace -->
+        <section class="flex-1 relative overflow-hidden">
+            <!-- Grid Background -->
+            <div class="absolute inset-0 overflow-hidden" id="grid-background">
+                <!-- Grid lines will be added here by JavaScript -->
+            </div>
+            
+            <!-- Current Cables -->
+            <div id="cables-container"></div>
+            
+            <!-- Gear Canvas -->
+            <div class="absolute inset-0 p-8" id="gear-canvas">
+                <!-- Example Module - Oscillator -->
+                <div class="module panel absolute w-64 h-48 top-20 left-20 p-4 rounded-lg" data-module-id="osc-1">
+                    <div class="flex justify-between items-center mb-3 border-b border-synthteal/20 pb-2">
+                        <h3 class="font-semibold text-synthgreen">VCO-1</h3>
+                        <div class="flex space-x-2">
+                            <button class="w-6 h-6 rounded-full bg-synthdark flex items-center justify-center text-xs text-synthorange">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="w-6 h-6 rounded-full bg-synthdark flex items-center justify-center text-xs text-synthteal">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-3">
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Freq</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Fine</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Wave</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">PWM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 flex justify-between">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthorange mb-1 cursor-pointer" data-connector="output" data-module="osc-1" data-param="out"></div>
+                            <span class="text-xs">Out</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthteal mb-1 cursor-pointer" data-connector="input" data-module="osc-1" data-param="fm"></div>
+                            <span class="text-xs">FM</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthteal mb-1 cursor-pointer" data-connector="input" data-module="osc-1" data-param="sync"></div>
+                            <span class="text-xs">Sync</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Example Module - Filter -->
+                <div class="module panel absolute w-64 h-48 top-20 left-96 p-4 rounded-lg" data-module-id="filter-1">
+                    <div class="flex justify-between items-center mb-3 border-b border-synthteal/20 pb-2">
+                        <h3 class="font-semibold text-synthgreen">VCF-1</h3>
+                        <div class="flex space-x-2">
+                            <button class="w-6 h-6 rounded-full bg-synthdark flex items-center justify-center text-xs text-synthorange">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="w-6 h-6 rounded-full bg-synthdark flex items-center justify-center text-xs text-synthteal">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Cutoff</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Res</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Drive</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 flex justify-between">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthorange mb-1 cursor-pointer" data-connector="output" data-module="filter-1" data-param="out"></div>
+                            <span class="text-xs">Out</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthteal mb-1 cursor-pointer" data-connector="input" data-module="filter-1" data-param="in"></div>
+                            <span class="text-xs">In</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthteal mb-1 cursor-pointer" data-connector="input" data-module="filter-1" data-param="env"></div>
+                            <span class="text-xs">Env</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Example Module - LFO -->
+                <div class="module panel absolute w-48 h-40 top-80 left-40 p-4 rounded-lg" data-module-id="lfo-1">
+                    <div class="flex justify-between items-center mb-3 border-b border-synthteal/20 pb-2">
+                        <h3 class="font-semibold text-synthgreen">LFO-1</h3>
+                        <div class="flex space-x-2">
+                            <button class="w-6 h-6 rounded-full bg-synthdark flex items-center justify-center text-xs text-synthorange">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Rate</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="knob mb-1"></div>
+                            <span class="text-xs text-center">Amt</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 flex justify-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 rounded-full bg-synthorange mb-1 cursor-pointer" data-connector="output" data-module="lfo-1" data-param="out"></div>
+                            <span class="text-xs">Out</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Example Cable (connected from LFO to VCO FM) -->
+                <div class="cable" id="cable-1" style="left: 100px; top: 300px; width: 200px; height: 2px; transform: rotate(30deg);"></div>
+            </div>
+        </section>
+        
+        <!-- Right Sidebar - Properties Panel -->
+        <aside class="w-80 bg-synthdark border-l border-synthteal/20 p-4 overflow-y-auto">
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-3 text-synthgreen flex items-center">
+                    <i class="fas fa-cog mr-2"></i> Properties
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-synthteal mb-1">Module Name</label>
+                        <input type="text" class="w-full bg-synthpanel border border-synthteal/20 rounded px-3 py-2 text-sm focus:outline-none focus:border-synthteal/50" value="VCO-1">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-synthteal mb-1">Type</label>
+                        <select class="w-full bg-synthpanel border border-synthteal/20 rounded px-3 py-2 text-sm focus:outline-none focus:border-synthteal/50">
+                            <option>Oscillator</option>
+                            <option>Filter</option>
+                            <option>LFO</option>
+                            <option>Envelope</option>
+                            <option>Effect</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-synthteal mb-1">Waveform</label>
+                        <div class="flex space-x-2">
+                            <button class="btn-synth btn-synth-green px-3 py-1 rounded text-xs">Sine</button>
+                            <button class="btn-synth btn-synth-green px-3 py-1 rounded text-xs">Square</button>
+                            <button class="btn-synth btn-synth-green px-3 py-1 rounded text-xs">Saw</button>
+                            <button class="btn-synth btn-synth-green px-3 py-1 rounded text-xs">Triangle</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-synthteal mb-1">Frequency</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" min="20" max="20000" value="440" class="slider flex-1">
+                            <span class="text-xs w-12 text-center">440 Hz</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-synthteal mb-1">Octave</label>
+                        <div class="flex space-x-2">
+                            <button class="btn-synth btn-synth-orange px-3 py-1 rounded text-xs">-2</button>
+                            <button class="btn-synth btn-synth-orange px-3 py-1 rounded text-xs">-1</button>
+                            <button class="btn-synth btn-synth-orange px-3 py-1 rounded text-xs bg-synthorange/20">0</button>
+                            <button class="btn-synth btn-synth-orange px-3 py-1 rounded text-xs">+1</button>
+                            <button class="btn-synth btn-synth-orange px-3 py-1 rounded text-xs">+2</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-synthteal mb-1">Pulse Width</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" min="0" max="100" value="50" class="slider flex-1">
+                            <span class="text-xs w-12 text-center">50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h2 class="text-lg font-semibold mb-3 text-synthgreen flex items-center">
+                    <i class="fas fa-project-diagram mr-2"></i> Connections
+                </h2>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2 bg-synthpanel/50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-synthteal mr-2"></div>
+                            <span class="text-sm">FM Input</span>
+                        </div>
+                        <div class="text-xs text-synthorange">LFO-1 → Out</div>
+                        <button class="text-xs text-synthorange">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-2 bg-synthpanel/50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-synthteal mr-2"></div>
+                            <span class="text-sm">Sync Input</span>
+                        </div>
+                        <div class="text-xs text-synthorange">None</div>
+                        <button class="text-xs text-synthteal">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-2 bg-synthpanel/50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-synthorange mr-2"></div>
+                            <span class="text-sm">Output</span>
+                        </div>
+                        <div class="text-xs text-synthorange">VCF-1 → In</div>
+                        <button class="text-xs text-synthteal">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+    
+    <!-- Status Bar -->
+    <footer class="bg-synthdark border-t border-synthteal/20 px-4 py-2 text-sm flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <span class="text-synthgreen"><i class="fas fa-circle mr-1"></i> Connected</span>
+            <span class="text-synthteal">Project: <span class="font-semibold">Juno-106 Emulation</span></span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-synthorange">CPU: 24%</span>
+            <span class="text-synthteal">Latency: 8ms</span>
+            <button class="text-synthgreen">
+                <i class="fas fa-question-circle"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize grid background
+        function initGrid() {
+            const gridContainer = document.getElementById('grid-background');
+            const gridSize = 20; // pixels between lines
+            
+            // Clear existing grid
+            gridContainer.innerHTML = '';
+            
+            // Calculate number of lines needed
+            const width = gridContainer.offsetWidth;
+            const height = gridContainer.offsetHeight;
+            const verticalLines = Math.floor(width / gridSize);
+            const horizontalLines = Math.floor(height / gridSize);
+            
+            // Add vertical lines
+            for (let i = 0; i < verticalLines; i++) {
+                const line = document.createElement('div');
+                line.className = 'grid-line vertical';
+                line.style.left = `${i * gridSize}px`;
+                gridContainer.appendChild(line);
+            }
+            
+            // Add horizontal lines
+            for (let i = 0; i < horizontalLines; i++) {
+                const line = document.createElement('div');
+                line.className = 'grid-line horizontal';
+                line.style.top = `${i * gridSize}px`;
+                gridContainer.appendChild(line);
+            }
+        }
+        
+        // Initialize draggable modules
+        function initDraggableModules() {
+            const modules = document.querySelectorAll('.module');
+            
+            modules.forEach(module => {
+                let isDragging = false;
+                let offsetX, offsetY;
+                
+                module.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('[data-connector]')) {
+                        // Don't drag if clicking on a connector
+                        return;
+                    }
+                    
+                    isDragging = true;
+                    offsetX = e.clientX - module.getBoundingClientRect().left;
+                    offsetY = e.clientY - module.getBoundingClientRect().top;
+                    
+                    // Bring to front
+                    module.style.zIndex = 100;
+                    
+                    document.addEventListener('mousemove', dragModule);
+                    document.addEventListener('mouseup', stopDrag);
+                });
+                
+                function dragModule(e) {
+                    if (!isDragging) return;
+                    
+                    const x = e.clientX - offsetX;
+                    const y = e.clientY - offsetY;
+                    
+                    module.style.left = `${x}px`;
+                    module.style.top = `${y}px`;
+                    
+                    // Update any connected cables
+                    updateCables();
+                }
+                
+                function stopDrag() {
+                    isDragging = false;
+                    document.removeEventListener('mousemove', dragModule);
+                    document.removeEventListener('mouseup', stopDrag);
+                }
+            });
+        }
+        
+        // Initialize cable connections
+        function initCableConnections() {
+            const connectors = document.querySelectorAll('[data-connector]');
+            let startConnector = null;
+            
+            connectors.forEach(connector => {
+                connector.addEventListener('mousedown', startCableDrag);
+                connector.addEventListener('mouseup', endCableDrag);
+            });
+            
+            function startCableDrag(e) {
+                startConnector = e.target;
+                document.addEventListener('mousemove', dragCable);
+                e.stopPropagation();
+            }
+            
+            function dragCable(e) {
+                if (!startConnector) return;
+                
+                // Clear any existing temp cable
+                const existingTemp = document.getElementById('temp-cable');
+                if (existingTemp) existingTemp.remove();
+                
+                // Get start position
+                const startRect = startConnector.getBoundingClientRect();
+                const startX = startRect.left + startRect.width / 2;
+                const startY = startRect.top + startRect.height / 2;
+                
+                // Create temp cable
+                const cable = document.createElement('div');
+                cable.id = 'temp-cable';
+                cable.className = 'cable';
+                
+                // Calculate angle and length
+                const length = Math.sqrt(Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2));
+                const angle = Math.atan2(e.clientY - startY, e.clientX - startX) * 180 / Math.PI;
+                
+                // Position the cable
+                cable.style.left = `${startX}px`;
+                cable.style.top = `${startY}px`;
+                cable.style.width = `${length}px`;
+                cable.style.transform = `rotate(${angle}deg)`;
+                
+                // Color based on connector type
+                if (startConnector.dataset.connector === 'output') {
+                    cable.style.backgroundColor = 'rgba(255, 107, 53, 0.5)';
+                } else {
+                    cable.style.backgroundColor = 'rgba(0, 229, 255, 0.5)';
+                }
+                
+                document.body.appendChild(cable);
+            }
+            
+            function endCableDrag(e) {
+                if (!startConnector) return;
+                
+                // Remove temp cable
+                const tempCable = document.getElementById('temp-cable');
+                if (tempCable) tempCable.remove();
+                
+                // Check if we're ending on a connector
+                const endConnector = e.target.closest('[data-connector]');
+                if (!endConnector || endConnector === startConnector) {
+                    startConnector = null;
+                    document.removeEventListener('mousemove', dragCable);
+                    return;
+                }
+                
+                // Check connection rules (output to input)
+                if (startConnector.dataset.connector === 'output' && endConnector.dataset.connector === 'input') {
+                    createCable(startConnector, endConnector);
+                } else if (startConnector.dataset.connector === 'input' && endConnector.dataset.connector === 'output') {
+                    createCable(endConnector, startConnector);
+                }
+                
+                startConnector = null;
+                document.removeEventListener('mousemove', dragCable);
+            }
+            
+            function createCable(fromConnector, toConnector) {
+                // Create permanent cable
+                const cableId = `cable-${Date.now()}`;
+                const cable = document.createElement('div');
+                cable.id = cableId;
+                cable.className = 'cable';
+                
+                // Get positions
+                const fromRect = fromConnector.getBoundingClientRect();
+                const toRect = toConnector.getBoundingClientRect();
+                
+                const fromX = fromRect.left + fromRect.width / 2;
+                const fromY = fromRect.top + fromRect.height / 2;
+                const toX = toRect.left + toRect.width / 2;
+                const toY = toRect.top + toRect.height / 2;
+                
+                // Calculate angle and length
+                const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+                const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+                
+                // Position the cable
+                cable.style.left = `${fromX}px`;
+                cable.style.top = `${fromY}px`;
+                cable.style.width = `${length}px`;
+                cable.style.transform = `rotate(${angle}deg)`;
+                cable.style.backgroundColor = 'rgba(0, 229, 255, 0.3)';
+                
+                // Store connection data
+                cable.dataset.fromModule = fromConnector.dataset.module;
+                cable.dataset.fromParam = fromConnector.dataset.param;
+                cable.dataset.toModule = toConnector.dataset.module;
+                cable.dataset.toParam = toConnector.dataset.param;
+                
+                document.getElementById('cables-container').appendChild(cable);
+                
+                // Update properties panel
+                updatePropertiesPanel();
+            }
+            
+            function updateCables() {
+                const cables = document.querySelectorAll('.cable:not(#temp-cable)');
+                
+                cables.forEach(cable => {
+                    const fromModule = document.querySelector(`[data-module-id="${cable.dataset.fromModule}"]`);
+                    const toModule = document.querySelector(`[data-module-id="${cable.dataset.toModule}"]`);
+                    
+                    if (!fromModule || !toModule) {
+                        cable.remove();
+                        return;
+                    }
+                    
+                    const fromConnector = fromModule.querySelector(`[data-connector="output"][data-param="${cable.dataset.fromParam}"]`);
+                    const toConnector = toModule.querySelector(`[data-connector="input"][data-param="${cable.dataset.toParam}"]`);
+                    
+                    if (!fromConnector || !toConnector) {
+                        cable.remove();
+                        return;
+                    }
+                    
+                    const fromRect = fromConnector.getBoundingClientRect();
+                    const toRect = toConnector.getBoundingClientRect();
+                    
+                    const fromX = fromRect.left + fromRect.width / 2;
+                    const fromY = fromRect.top + fromRect.height / 2;
+                    const toX = toRect.left + toRect.width / 2;
+                    const toY = toRect.top + toRect.height / 2;
+                    
+                    const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+                    const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+                    
+                    cable.style.left = `${fromX}px`;
+                    cable.style.top = `${fromY}px`;
+                    cable.style.width = `${length}px`;
+                    cable.style.transform = `rotate(${angle}deg)`;
+                });
+            }
+            
+            function updatePropertiesPanel() {
+                // In a real app, this would update the properties panel with the selected module's details
+            }
+        }
+        
+        // Initialize the app
+        window.addEventListener('load', () => {
+            initGrid();
+            initDraggableModules();
+            initCableConnections();
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', initGrid);
+    </script>
+</body>
+</html>
