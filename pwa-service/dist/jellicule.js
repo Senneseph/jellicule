@@ -1,7 +1,7 @@
 /**
  * Jellicule UI Components Library
  * Version: 1.0.0
- * Built: 2025-04-07T21:15:43.860Z
+ * Built: 2025-04-08T02:55:07.134Z
  */
 
 (function(global) {
@@ -13,7 +13,7 @@
     components: {}
   };
 
-const ActivityViewport extends HTMLElement {
+class ActivityViewport extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -524,3 +524,4 @@ customElements.define('activity-resize-button', ActivityResizeButton);\n\nconst 
   };
 
 })(typeof window !== 'undefined' ? window : this);
+

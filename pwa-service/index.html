@@ -1,372 +1,137 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="theme-color" content="#f5d76e">
-        <meta name="description" content="j e l l i c u l e - A modern web component library">
-        <title>j e l l i c u l e</title>
-        <link rel="stylesheet" href="assets/styles/reset.css">
-        <link rel="stylesheet" href="assets/styles/jellicule.css">
-        <link rel="manifest" href="manifest.json">
-        <link rel="icon" href="assets/icons/favicon.ico">
-        <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
-        <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
-        <style>
-            :root {
-                --font-retro: 'VT323', monospace;
-                --font-pixel: 'Press Start 2P', cursive;
-            }
-            body {
-                font-family: var(--font-retro);
-            }
-            h1, h2, h3, h4, h5, h6 {
-                font-family: var(--font-pixel);
-            }
-        </style>
-        <!-- WebSocket hot-reload and build status script -->
-        <script>
-            // Check if we're running in offline mode
-            let isOfflineMode = false;
-            let reconnectAttempts = 0;
-            const MAX_RECONNECT_ATTEMPTS = 3;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5d76e">
+    <meta name="description" content="j e l l i c u l e - A modern web component library">
+    <title>j e l l i c u l e</title>
 
-            // Function to update the build status display
-            const updateBuildStatus = (status, isOffline = false) => {
-                const buildStatusElement = document.getElementById('build-status');
-                if (buildStatusElement) {
-                    if (isOffline) {
-                        buildStatusElement.textContent = 'Offline Mode - Local Version';
-                        buildStatusElement.className = 'build-status offline';
-                    } else {
-                        buildStatusElement.textContent = `Build: ${status.status} | Last build: ${status.time} | Version: ${status.version}`;
-                        buildStatusElement.className = `build-status ${status.status}`;
-                    }
-                }
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/styles/reset.css">
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+    <link rel="stylesheet" href="assets/styles/jellicule.css">
+    <link rel="stylesheet" href="assets/styles/showcase.css">
+    <link rel="stylesheet" href="assets/styles/build-status.css">
 
-                if (!isOffline) {
-                    localStorage.setItem('jelliculeVersion', status.version);
-                    localStorage.setItem('jelliculeLastStatus', JSON.stringify(status));
-                }
-            };
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="assets/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+</head>
+<body>
+    <div id="build-status" class="build-status">Loading build status...</div>
 
-            // Connect to WebSocket server for real-time updates
-            const connectWebSocket = () => {
-                // If we're in offline mode and not explicitly trying to reconnect, don't attempt connection
-                if (isOfflineMode && reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-                    console.log('Running in offline mode, not attempting WebSocket connection');
-                    return;
-                }
+    <jc-activity-viewport>
+        <!-- North Navigation Bar -->
+        <jc-activity-bar orientation="north">
+            <jc-activity-resize-button></jc-activity-resize-button>
+            <jc-activity icon="🏠" label="Home" selected></jc-activity>
+            <jc-activity icon="⬇️" label="Download"></jc-activity>
+            <jc-activity icon="📚" label="Documentation"></jc-activity>
+            <jc-activity icon="🔌" label="API"></jc-activity>
+            <jc-activity icon="🧩" label="Examples"></jc-activity>
+            <jc-activity icon="ℹ️" label="About"></jc-activity>
+        </jc-activity-bar>
 
-                try {
-                    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-                    const host = window.location.hostname;
-                    const ws = new WebSocket(`${protocol}//${host}:8080`);
+        <!-- East Tools Bar -->
+        <jc-activity-bar orientation="east">
+            <jc-activity-resize-button></jc-activity-resize-button>
+            <jc-activity icon="🎨" label="Theme"></jc-activity>
+            <jc-activity icon="⚙️" label="Settings"></jc-activity>
+            <jc-activity icon="🔍" label="Search" selected></jc-activity>
+            <jc-activity icon="❓" label="Help"></jc-activity>
+        </jc-activity-bar>
 
-                    // Set a connection timeout
-                    const connectionTimeout = setTimeout(() => {
-                        console.log('WebSocket connection timeout');
-                        ws.close();
-                    }, 5000);
+        <!-- South Status Bar -->
+        <jc-activity-bar orientation="south">
+            <jc-activity-resize-button></jc-activity-resize-button>
+            <jc-activity icon="✅" label="Status"></jc-activity>
+            <jc-activity icon="🔔" label="Notifications"></jc-activity>
+            <jc-activity icon="📊" label="Statistics" selected></jc-activity>
+            <jc-activity icon="📝" label="Logs"></jc-activity>
+        </jc-activity-bar>
 
-                    ws.onopen = () => {
-                        console.log('WebSocket connected');
-                        clearTimeout(connectionTimeout);
-                        reconnectAttempts = 0;
-                        isOfflineMode = false;
-                    };
+        <!-- West Navigation Bar - Set to expanded by default -->
+        <jc-activity-bar orientation="west" data-expanded="true">
+            <jc-activity-resize-button></jc-activity-resize-button>
+            <jc-activity icon="📋" label="Components" selected></jc-activity>
+            <jc-activity icon="🧰" label="Tools"></jc-activity>
+            <jc-activity icon="🔧" label="Utilities"></jc-activity>
+            <jc-activity icon="📦" label="Resources"></jc-activity>
+        </jc-activity-bar>
 
-                    ws.onmessage = (event) => {
-                        try {
-                            const message = JSON.parse(event.data);
+        <!-- Main Content Area -->
+        <jc-main-content>
+            <jc-content width="default">
+                <h1 class="showcase-title">j e l l i c u l e</h1>
+                <h2 class="showcase-subtitle">A Retro-Themed Web Component Library</h2>
 
-                            if (message.type === 'build-status') {
-                                const status = message.data;
+                <div class="showcase-container">
+                    <h3 class="showcase-heading">Activity Bars Showcase</h3>
+                    <p class="showcase-description">This page demonstrates the activity bars component of the j e l l i c u l e library. Each activity bar is positioned on one side of the viewport and can be expanded or collapsed.</p>
 
-                                // Update build status display
-                                updateBuildStatus(status);
+                    <div class="showcase-grid">
+                        <div class="showcase-item">
+                            <h4 class="showcase-item-heading">West Activity Bar</h4>
+                            <p>Contains main navigation items:</p>
+                            <ul class="showcase-item-list">
+                                <li class="showcase-item-list-entry">📋 <strong>Components</strong></li>
+                                <li class="showcase-item-list-entry">🧰 <strong>Tools</strong></li>
+                                <li class="showcase-item-list-entry">🔧 <strong>Utilities</strong></li>
+                                <li class="showcase-item-list-entry">📦 <strong>Resources</strong></li>
+                            </ul>
+                            <p class="showcase-item-note"><em>Click the hamburger menu or resize button to toggle.</em></p>
+                        </div>
 
-                                // Check if we need to reload
-                                const currentVersion = localStorage.getItem('jelliculeVersion');
-                                if (currentVersion && currentVersion !== status.version) {
-                                    console.log('Components updated, refreshing...');
-                                    location.reload();
-                                }
-                            }
-                        } catch (err) {
-                            console.error('Error processing WebSocket message:', err);
-                        }
-                    };
+                        <div class="showcase-item">
+                            <h4 class="showcase-item-heading">North Activity Bar</h4>
+                            <p>Contains main sections:</p>
+                            <ul class="showcase-item-list">
+                                <li class="showcase-item-list-entry">🏠 <strong>Home</strong></li>
+                                <li class="showcase-item-list-entry">⬇️ <strong>Download</strong></li>
+                                <li class="showcase-item-list-entry">📚 <strong>Documentation</strong></li>
+                                <li class="showcase-item-list-entry">🔌 <strong>API</strong></li>
+                            </ul>
+                            <p class="showcase-item-note"><em>Click the north triangle button or resize button to toggle.</em></p>
+                        </div>
 
-                    ws.onclose = () => {
-                        clearTimeout(connectionTimeout);
-                        reconnectAttempts++;
+                        <div class="showcase-item">
+                            <h4 class="showcase-item-heading">East Activity Bar</h4>
+                            <p>Contains tools and settings:</p>
+                            <ul class="showcase-item-list">
+                                <li class="showcase-item-list-entry">🎨 <strong>Theme</strong></li>
+                                <li class="showcase-item-list-entry">⚙️ <strong>Settings</strong></li>
+                                <li class="showcase-item-list-entry">🔍 <strong>Search</strong></li>
+                                <li class="showcase-item-list-entry">❓ <strong>Help</strong></li>
+                            </ul>
+                            <p class="showcase-item-note"><em>Click the east triangle button or resize button to toggle.</em></p>
+                        </div>
 
-                        if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-                            console.log(`WebSocket disconnected after ${reconnectAttempts} attempts. Switching to offline mode.`);
-                            isOfflineMode = true;
-                            updateBuildStatus({}, true);
-                        } else {
-                            console.log(`WebSocket disconnected. Reconnecting in 3 seconds... (Attempt ${reconnectAttempts} of ${MAX_RECONNECT_ATTEMPTS})`);
-                            setTimeout(connectWebSocket, 3000);
-                        }
-                    };
-
-                    ws.onerror = (error) => {
-                        console.error('WebSocket error:', error);
-                        clearTimeout(connectionTimeout);
-                        ws.close();
-                    };
-                } catch (error) {
-                    console.error('Error creating WebSocket connection:', error);
-                    reconnectAttempts++;
-
-                    if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-                        console.log(`Failed to create WebSocket after ${reconnectAttempts} attempts. Switching to offline mode.`);
-                        isOfflineMode = true;
-                        updateBuildStatus({}, true);
-                    } else {
-                        setTimeout(connectWebSocket, 3000);
-                    }
-                }
-            };
-
-            // Initial connection
-            document.addEventListener('DOMContentLoaded', () => {
-                // Check if we're online
-                if (!navigator.onLine) {
-                    console.log('Browser reports offline status. Starting in offline mode.');
-                    isOfflineMode = true;
-                    updateBuildStatus({}, true);
-
-                    // Try to load cached status
-                    const cachedStatus = localStorage.getItem('jelliculeLastStatus');
-                    if (cachedStatus) {
-                        try {
-                            updateBuildStatus(JSON.parse(cachedStatus));
-                        } catch (e) {
-                            console.error('Error parsing cached status:', e);
-                        }
-                    }
-                    return;
-                }
-
-                // Load initial status
-                fetch('build-status/status.json')
-                    .then(response => response.json())
-                    .then(status => {
-                        updateBuildStatus(status);
-                    })
-                    .catch(err => {
-                        console.log('Error loading initial status:', err);
-                        // Try to load cached status
-                        const cachedStatus = localStorage.getItem('jelliculeLastStatus');
-                        if (cachedStatus) {
-                            try {
-                                updateBuildStatus(JSON.parse(cachedStatus));
-                            } catch (e) {
-                                console.error('Error parsing cached status:', e);
-                                updateBuildStatus({}, true);
-                            }
-                        } else {
-                            updateBuildStatus({}, true);
-                        }
-                    });
-
-                // Connect to WebSocket only if we're online
-                connectWebSocket();
-
-                // Listen for online/offline events
-                window.addEventListener('online', () => {
-                    console.log('Browser reports online status. Attempting to reconnect.');
-                    isOfflineMode = false;
-                    reconnectAttempts = 0;
-                    connectWebSocket();
-                });
-
-                window.addEventListener('offline', () => {
-                    console.log('Browser reports offline status. Switching to offline mode.');
-                    isOfflineMode = true;
-                    updateBuildStatus({}, true);
-                });
-            });
-        </script>
-        <style>
-            .build-status {
-                position: fixed;
-                bottom: 0;
-                right: 0;
-                padding: 5px 10px;
-                font-family: monospace;
-                font-size: 12px;
-                color: white;
-                background-color: #333;
-                z-index: 9999;
-            }
-            .build-status.success {
-                background-color: #4CAF50;
-            }
-            .build-status.failed {
-                background-color: #F44336;
-            }
-            .build-status.offline {
-                background-color: #FF9800;
-            }
-        </style>
-        <!-- Import components -->
-        <script type="module">
-            // Import component registry
-            import '../files/components/component-registry.js';
-        </script>
-    </head>
-    <body>
-        <div id="build-status" class="build-status">Loading build status...</div>
-
-        <jc-activity-viewport>
-            <!-- Top Navigation Bar -->
-            <jc-activity-bar orientation="top">
-                <jc-activity-resize-button></jc-activity-resize-button>
-                <jc-activity icon="🏠" label="Home" selected></jc-activity>
-                <jc-activity icon="⬇️" label="Download"></jc-activity>
-                <jc-activity icon="📚" label="Documentation"></jc-activity>
-                <jc-activity icon="🔌" label="API"></jc-activity>
-                <jc-activity icon="🧩" label="Examples"></jc-activity>
-                <jc-activity icon="ℹ️" label="About"></jc-activity>
-            </jc-activity-bar>
-
-            <!-- Right Tools Bar -->
-            <jc-activity-bar orientation="right">
-                <jc-activity-resize-button></jc-activity-resize-button>
-                <jc-activity icon="🎨" label="Theme"></jc-activity>
-                <jc-activity icon="⚙️" label="Settings"></jc-activity>
-                <jc-activity icon="🔍" label="Search" selected></jc-activity>
-                <jc-activity icon="❓" label="Help"></jc-activity>
-            </jc-activity-bar>
-
-            <!-- Bottom Status Bar -->
-            <jc-activity-bar orientation="bottom">
-                <jc-activity-resize-button></jc-activity-resize-button>
-                <jc-activity icon="✅" label="Status"></jc-activity>
-                <jc-activity icon="🔔" label="Notifications"></jc-activity>
-                <jc-activity icon="📊" label="Statistics" selected></jc-activity>
-                <jc-activity icon="📝" label="Logs"></jc-activity>
-            </jc-activity-bar>
-
-            <!-- Left Navigation Bar -->
-            <jc-activity-bar orientation="left">
-                <jc-activity-resize-button></jc-activity-resize-button>
-                <jc-activity icon="📋" label="Components" selected></jc-activity>
-                <jc-activity icon="🧰" label="Tools"></jc-activity>
-                <jc-activity icon="🔧" label="Utilities"></jc-activity>
-                <jc-activity icon="📦" label="Resources"></jc-activity>
-            </jc-activity-bar>
-
-            <!-- Main Content Area -->
-            <jc-main-content>
-                <jc-content width="default">
-                    <h1 style="margin-bottom: 20px; font-size: 2rem; text-align: center;">j e l l i c u l e</h1>
-                    <h2 style="margin-bottom: 15px; font-size: 1.2rem; text-align: center;">A Retro-Themed Web Component Library</h2>
-
-                    <div style="margin: 30px 0; padding: 20px; border: 1px solid var(--jc-border); border-radius: 4px;">
-                        <h3 style="margin-bottom: 15px;">Component Showcase</h3>
-                        <p style="margin-bottom: 15px;">This page demonstrates the core components of the j e l l i c u l e library. Use the activity bars on each side to navigate through different sections.</p>
-
-                        <ul style="list-style: none; padding: 0; margin: 20px 0;">
-                            <li style="margin-bottom: 10px;">🏠 <strong>Home</strong> - Overview and component showcase</li>
-                            <li style="margin-bottom: 10px;">⬇️ <strong>Download</strong> - Download options and instructions</li>
-                            <li style="margin-bottom: 10px;">📚 <strong>Documentation</strong> - Component documentation</li>
-                            <li style="margin-bottom: 10px;">🔌 <strong>API</strong> - API documentation</li>
-                            <li style="margin-bottom: 10px;">🧩 <strong>Examples</strong> - Usage examples</li>
-                            <li style="margin-bottom: 10px;">ℹ️ <strong>About</strong> - Project information</li>
-                        </ul>
-
-                        <p>Click on the hamburger menu in the top-left corner to expand the activity bars.</p>
+                        <div class="showcase-item">
+                            <h4 class="showcase-item-heading">South Activity Bar</h4>
+                            <p>Contains status information:</p>
+                            <ul class="showcase-item-list">
+                                <li class="showcase-item-list-entry">✅ <strong>Status</strong></li>
+                                <li class="showcase-item-list-entry">🔔 <strong>Notifications</strong></li>
+                                <li class="showcase-item-list-entry">📊 <strong>Statistics</strong></li>
+                                <li class="showcase-item-list-entry">📝 <strong>Logs</strong></li>
+                            </ul>
+                            <p class="showcase-item-note"><em>Click the south triangle button or resize button to toggle.</em></p>
+                        </div>
                     </div>
 
-                    <div style="display: flex; justify-content: center; margin-top: 30px;">
-                        <button id="theme-toggle" style="padding: 10px 20px; background: var(--jc-chrome); border: 1px solid var(--jc-border); border-radius: 4px; cursor: pointer; font-family: var(--font-retro); font-size: 1rem;">Toggle Theme</button>
-                    </div>
-                </jc-content>
-            </jc-main-content>
-        </jc-activity-viewport>
+                    <p class="showcase-footer">Each activity bar can be expanded or collapsed independently. When expanded, the activity bar takes up more space in its orientation while maintaining the main content in the center.</p>
+                </div>
 
-        <script src="assets/js/main.js" type="module"></script>
+                <div class="button-container">
+                    <button id="theme-toggle" class="theme-toggle-button">Switch to Light Mode</button>
+                </div>
+            </jc-content>
+        </jc-main-content>
+    </jc-activity-viewport>
 
-        <!-- Theme Toggle Script -->
-        <script>
-            document.getElementById('theme-toggle').addEventListener('click', () => {
-                const html = document.documentElement;
-                const currentTheme = html.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                html.setAttribute('data-theme', newTheme);
-                localStorage.setItem('jellicule-theme', newTheme);
-            });
-
-            // Check for saved theme preference
-            document.addEventListener('DOMContentLoaded', () => {
-                const savedTheme = localStorage.getItem('jellicule-theme');
-                if (savedTheme) {
-                    document.documentElement.setAttribute('data-theme', savedTheme);
-                }
-            });
-        </script>
-
-        <!-- Service Worker Registration -->
-        <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./service-worker.js')
-                        .then(registration => {
-                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                        })
-                        .catch(error => {
-                            console.log('ServiceWorker registration failed: ', error);
-                        });
-                });
-            }
-
-            // Add to home screen prompt
-            let deferredPrompt;
-            const addBtn = document.createElement('button');
-            addBtn.style.display = 'none';
-            addBtn.textContent = 'Install Jellicule UI';
-            addBtn.style.position = 'fixed';
-            addBtn.style.bottom = '20px';
-            addBtn.style.right = '20px';
-            addBtn.style.padding = '10px 20px';
-            addBtn.style.backgroundColor = '#2196F3';
-            addBtn.style.color = 'white';
-            addBtn.style.border = 'none';
-            addBtn.style.borderRadius = '4px';
-            addBtn.style.zIndex = '9999';
-            addBtn.style.cursor = 'pointer';
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                // Prevent Chrome 67 and earlier from automatically showing the prompt
-                e.preventDefault();
-                // Stash the event so it can be triggered later
-                deferredPrompt = e;
-                // Update UI to notify the user they can add to home screen
-                addBtn.style.display = 'block';
-
-                addBtn.addEventListener('click', () => {
-                    // Hide our user interface that shows our A2HS button
-                    addBtn.style.display = 'none';
-                    // Show the prompt
-                    deferredPrompt.prompt();
-                    // Wait for the user to respond to the prompt
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the A2HS prompt');
-                        } else {
-                            console.log('User dismissed the A2HS prompt');
-                        }
-                        deferredPrompt = null;
-                    });
-                });
-            });
-
-            document.body.appendChild(addBtn);
-        </script>
-    </body>
+    <!-- Main Script - Imports all components and initializes functionality -->
+    <script src="assets/js/main.js" type="module"></script>
+</body>
 </html>

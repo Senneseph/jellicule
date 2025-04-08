@@ -1,0 +1,35 @@
+/* Font definitions */
+@font-face {
+    font-family: 'VT323';
+    font-style: normal;
+    font-weight: 400;
+    src: local('VT323'), local('VT323-Regular');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Press Start 2P'), local('PressStart2P-Regular');
+    font-display: swap;
+}
+
+/* Font variables */
+:root {
+    /* Primary fonts with fallbacks */
+    --font-retro: 'VT323', 'Courier New', monospace;
+    --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+    
+    /* Font sizes */
+    --font-size-small: 0.875rem;
+    --font-size-normal: 1rem;
+    --font-size-medium: 1.25rem;
+    --font-size-large: 1.5rem;
+    --font-size-xlarge: 2rem;
+    
+    /* Line heights */
+    --line-height-tight: 1.1;
+    --line-height-normal: 1.5;
+    --line-height-loose: 1.8;
+}

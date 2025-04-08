@@ -2,70 +2,92 @@
 
 /* Custom properties for theming */
 :root {
-  --jellicule-primary-color: #3498db;
-  --jellicule-secondary-color: #2c3e50;
-  --jellicule-background-color: #f5f5f5;
-  --jellicule-text-color: #333;
-  --jellicule-border-color: #ddd;
-  --jellicule-active-color: #2980b9;
-  --jellicule-hover-color: #e0e0e0;
-  --jellicule-selected-color: #d0d0d0;
+  /* Light theme (default) */
+  --jc-primary: #3498db;
+  --jc-secondary: #2c3e50;
+  --jc-bg: #f5f5f5;
+  --jc-text: #333333;
+  --jc-border: #dddddd;
+  --jc-chrome: #eeeeee;
+  --jc-hover: #e0e0e0;
+  --jc-selected: #d0d0d0;
+  --jc-active: #2980b9;
+  --jc-error: #e74c3c;
+  --jc-success: #2ecc71;
+  --jc-warning: #f39c12;
+  --jc-info: #3498db;
+
+  /* Retro grid effect */
+  --jc-grid-color: rgba(0, 0, 0, 0.05);
+  --jc-grid-size: 20px;
+
+  /* Shadows */
+  --jc-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --jc-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --jc-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
+
+/* Dark theme */
+[data-theme="dark"] {
+  --jc-primary: #3498db;
+  --jc-secondary: #2c3e50;
+  --jc-bg: #1e1e1e;
+  --jc-text: #f0f0f0;
+  --jc-border: #444444;
+  --jc-chrome: #252525;
+  --jc-hover: #333333;
+  --jc-selected: #3a3a3a;
+  --jc-active: #2980b9;
+  --jc-error: #e74c3c;
+  --jc-success: #2ecc71;
+  --jc-warning: #f39c12;
+  --jc-info: #3498db;
+
+  /* Retro grid effect */
+  --jc-grid-color: rgba(255, 255, 255, 0.05);
+
+  /* Shadows */
+  --jc-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --jc-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --jc-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Import component-specific styles */
+@import url('./components.css');
 
 /* Global styles for jellicule components */
+/* Support all component naming conventions for backward compatibility */
 activity-viewport, activity-bar, activity, activity-resize-button, main-content, content,
 Viewport, ActivityBar, Activity, ActivityResizeButton, MainContent, Content,
-jellicule-viewport, jellicule-activity-bar, jellicule-activity, jellicule-activity-resize-button, jellicule-main-content, jellicule-content {
+jc-activity-viewport, jc-activity-bar, jc-activity, jc-activity-resize-button, jc-main-content, jc-content {
   box-sizing: border-box;
   font-family: inherit;
+  margin: 0;
+  padding: 0;
 }
 
-/* Viewport styles */
-activity-viewport, Viewport, jellicule-viewport {
-  display: grid;
+/* Basic styling for body and html */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  font-family: var(--font-retro, monospace);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Retro grid background effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--jellicule-background-color);
-}
-
-/* Activity bar styles */
-activity-bar, ActivityBar, jellicule-activity-bar {
-  background-color: var(--jellicule-background-color);
-  border: 1px solid var(--jellicule-border-color);
-}
-
-/* Activity styles */
-activity, Activity, jellicule-activity {
-  padding: 8px;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.2s;
-}
-
-activity:hover, Activity:hover, jellicule-activity:hover {
-  background-color: var(--jellicule-hover-color);
-}
-
-activity[selected], Activity[selected], jellicule-activity[selected] {
-  background-color: var(--jellicule-selected-color);
-}
-
-activity[active], Activity[active], jellicule-activity[active] {
-  font-weight: bold;
-  color: var(--jellicule-active-color);
-}
-
-/* Main content styles */
-main-content, MainContent, jellicule-main-content {
-  background-color: #fff;
-  padding: 16px;
-  overflow: auto;
-}
-
-/* Content styles */
-content, Content, jellicule-content {
-  background-color: #fff;
-  padding: 20px;
-  overflow: auto;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background-image: linear-gradient(var(--jc-grid-color) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--jc-grid-color) 1px, transparent 1px);
+  background-size: var(--jc-grid-size) var(--jc-grid-size);
+  opacity: 0.5;
 }

@@ -138,17 +138,33 @@ export class ActivityResizeButton extends BaseComponent {
         }
 
         // Toggle expanded state based on size
-        if (newSize > 100) {
+        const expandedThreshold = isHorizontal ? 100 : 80;
+        if (newSize > expandedThreshold) {
           activityBar.setAttribute('data-expanded', 'true');
         } else {
           activityBar.removeAttribute('data-expanded');
         }
 
-        // Dispatch resize event
+        // Dispatch resize event with expanded state
         this.dispatchCustomEvent('activity-bar-resized', {
           orientation,
-          size: newSize
+          size: newSize,
+          expanded: newSize > expandedThreshold
         });
+
+        // Update toggle button states in the viewport
+        const viewport = activityBar.closest('activity-viewport, jc-activity-viewport');
+        if (viewport) {
+          const event = new CustomEvent('activity-bar-state-changed', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              orientation,
+              expanded: newSize > expandedThreshold
+            }
+          });
+          viewport.dispatchEvent(event);
+        }
       }
     };
 

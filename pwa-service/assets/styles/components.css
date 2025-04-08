@@ -1,0 +1,59 @@
+/* Base component styles */
+
+/* ActivityViewport */
+jc-activity-viewport {
+    --viewport-bg: var(--jc-bg);
+    --viewport-text: var(--jc-text);
+    --viewport-border: var(--jc-border);
+    --viewport-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ActivityBar */
+jc-activity-bar {
+    --activity-bar-bg: var(--jc-chrome);
+    --activity-bar-text: var(--jc-text);
+    --activity-bar-border: var(--jc-border);
+    --activity-bar-indicator: var(--jc-primary);
+    --activity-bar-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    --activity-bar-width: 48px;
+    --activity-bar-height: 48px;
+    --activity-bar-expanded-width: 200px;
+    --activity-bar-expanded-height: 200px;
+    --activity-bar-transition: 0.3s ease;
+}
+
+/* Activity */
+jc-activity {
+    --activity-bg: transparent;
+    --activity-hover-bg: var(--jc-hover);
+    --activity-selected-bg: var(--jc-selected);
+    --activity-text: var(--jc-text);
+    --activity-border: var(--jc-border);
+    --activity-icon-size: 24px;
+    --activity-padding: 8px;
+    --activity-transition: 0.2s ease;
+}
+
+/* ActivityResizeButton */
+jc-activity-resize-button {
+    --resize-button-bg: var(--jc-chrome);
+    --resize-button-hover-bg: var(--jc-hover);
+    --resize-button-border: var(--jc-border);
+    --resize-button-size: 16px;
+    --resize-button-transition: 0.2s ease;
+}
+
+/* MainContent */
+jc-main-content {
+    --main-content-bg: var(--jc-bg);
+    --main-content-text: var(--jc-text);
+    --main-content-padding: 20px;
+}
+
+/* Content */
+jc-content {
+    --content-bg: var(--jc-bg);
+    --content-text: var(--jc-text);
+    --content-max-width: 1200px;
+    --content-padding: 20px;
+}

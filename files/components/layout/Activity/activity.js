@@ -115,17 +115,56 @@ export class Activity extends BaseComponent {
       /* Expanded state shows labels */
       :host-context(activity-bar[data-expanded="true"]), :host-context(jc-activity-bar[data-expanded="true"]) {
         justify-content: flex-start;
+        padding: 8px 12px;
       }
 
       :host-context(activity-bar[data-expanded="true"]) .activity-content,
       :host-context(jc-activity-bar[data-expanded="true"]) .activity-content {
         flex-direction: row;
+        justify-content: flex-start;
+        width: 100%;
       }
 
       :host-context(activity-bar[data-expanded="true"]) .icon,
       :host-context(jc-activity-bar[data-expanded="true"]) .icon {
-        margin-right: 8px;
+        margin-right: 12px;
         margin-bottom: 0;
+        min-width: 24px;
+        text-align: center;
+      }
+
+      :host-context(activity-bar[data-expanded="true"]) .label,
+      :host-context(jc-activity-bar[data-expanded="true"]) .label {
+        display: block;
+        font-size: 0.9em;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Orientation-specific styles for expanded state */
+      :host-context(activity-bar[orientation="left"][data-expanded="true"]) .activity-content,
+      :host-context(jc-activity-bar[orientation="left"][data-expanded="true"]) .activity-content,
+      :host-context(activity-bar[orientation="right"][data-expanded="true"]) .activity-content,
+      :host-context(jc-activity-bar[orientation="right"][data-expanded="true"]) .activity-content {
+        flex-direction: row;
+      }
+
+      :host-context(activity-bar[orientation="top"][data-expanded="true"]) .activity-content,
+      :host-context(jc-activity-bar[orientation="top"][data-expanded="true"]) .activity-content,
+      :host-context(activity-bar[orientation="bottom"][data-expanded="true"]) .activity-content,
+      :host-context(jc-activity-bar[orientation="bottom"][data-expanded="true"]) .activity-content {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      :host-context(activity-bar[orientation="top"][data-expanded="true"]) .icon,
+      :host-context(jc-activity-bar[orientation="top"][data-expanded="true"]) .icon,
+      :host-context(activity-bar[orientation="bottom"][data-expanded="true"]) .icon,
+      :host-context(jc-activity-bar[orientation="bottom"][data-expanded="true"]) .icon {
+        margin-right: 0;
+        margin-bottom: 8px;
       }
     `;
 

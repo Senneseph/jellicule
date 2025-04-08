@@ -1,10 +1,12 @@
-// Import all web components
-import '../../components/layout/ActivityViewport/activity-viewport.js';
-import '../../components/layout/ActivityBar/activity-bar.js';
-import '../../components/layout/Activity/activity.js';
-import '../../components/layout/ActivityResizeButton/activity-resize-button.js';
-import '../../components/layout/MainContent/main-content.js';
-import '../../components/layout/Content/content.js';
+// Import component registry
+import '../../files/components/component-registry.js';
+
+// Import utility modules
+import { initBuildStatus } from './build-status.js';
+import { initNetworkStatus } from './offline-notification.js';
+import { initTheme, setupThemeToggle } from './theme-toggle.js';
+import { initInstallPrompt } from './install-prompt.js';
+import { registerServiceWorker } from './service-worker-registration.js';
 
 // Initialize any global functionality
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,11 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add PWA-specific functionality here
   }
 
-  // Define custom elements directly
+  // Define legacy custom elements for backward compatibility
   class ViewportElement extends HTMLElement {
     constructor() {
       super();
-      const viewport = document.createElement('activity-viewport');
+      const viewport = document.createElement('jc-activity-viewport');
 
       // Copy attributes
       Array.from(this.attributes).forEach(attr => {
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class ActivityBarElement extends HTMLElement {
     constructor() {
       super();
-      const activityBar = document.createElement('activity-bar');
+      const activityBar = document.createElement('jc-activity-bar');
 
       // Copy attributes
       Array.from(this.attributes).forEach(attr => {
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class ActivityElement extends HTMLElement {
     constructor() {
       super();
-      const activity = document.createElement('activity');
+      const activity = document.createElement('jc-activity');
 
       // Copy attributes
       Array.from(this.attributes).forEach(attr => {
@@ -84,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class ActivityResizebuttonElement extends HTMLElement {
     constructor() {
       super();
-      const resizeButton = document.createElement('activity-resize-button');
+      const resizeButton = document.createElement('jc-activity-resize-button');
 
       // Copy attributes
       Array.from(this.attributes).forEach(attr => {
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class MainContentElement extends HTMLElement {
     constructor() {
       super();
-      const mainContent = document.createElement('main-content');
+      const mainContent = document.createElement('jc-main-content');
 
       // Copy attributes
       Array.from(this.attributes).forEach(attr => {
@@ -121,116 +123,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Define the custom elements
+  // Define the legacy custom elements
   customElements.define('Viewport', ViewportElement);
   customElements.define('ActivityBar', ActivityBarElement);
   customElements.define('Activity', ActivityElement);
   customElements.define('ActivityResizeButton', ActivityResizebuttonElement);
   customElements.define('MainContent', MainContentElement);
 
-  // Create offline notification element
-  let offlineNotification = null;
-
-  // Function to show offline notification
-  const showOfflineNotification = () => {
-    // Don't show multiple notifications
-    if (offlineNotification) return;
-
-    // Create notification element
-    offlineNotification = document.createElement('div');
-    offlineNotification.id = 'offline-notification';
-    offlineNotification.style.position = 'fixed';
-    offlineNotification.style.bottom = '20px';
-    offlineNotification.style.left = '20px';
-    offlineNotification.style.padding = '10px 20px';
-    offlineNotification.style.backgroundColor = '#FF9800';
-    offlineNotification.style.color = 'white';
-    offlineNotification.style.borderRadius = '4px';
-    offlineNotification.style.zIndex = '9999';
-    offlineNotification.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-    offlineNotification.style.display = 'flex';
-    offlineNotification.style.alignItems = 'center';
-    offlineNotification.style.justifyContent = 'space-between';
-
-    // Add content
-    const textSpan = document.createElement('span');
-    textSpan.textContent = 'You are offline. The app is running in local mode.';
-    offlineNotification.appendChild(textSpan);
-
-    // Add close button
-    const closeButton = document.createElement('button');
-    closeButton.textContent = '×';
-    closeButton.style.background = 'none';
-    closeButton.style.border = 'none';
-    closeButton.style.color = 'white';
-    closeButton.style.fontSize = '20px';
-    closeButton.style.marginLeft = '10px';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.padding = '0 5px';
-    closeButton.addEventListener('click', () => {
-      if (offlineNotification && offlineNotification.parentNode) {
-        offlineNotification.parentNode.removeChild(offlineNotification);
-        offlineNotification = null;
-      }
-    });
-    offlineNotification.appendChild(closeButton);
-
-    document.body.appendChild(offlineNotification);
-  };
-
-  // Function to hide offline notification
-  const hideOfflineNotification = () => {
-    if (offlineNotification && offlineNotification.parentNode) {
-      offlineNotification.parentNode.removeChild(offlineNotification);
-      offlineNotification = null;
-    }
-  };
-
-  // Add network status event listeners
-  window.addEventListener('online', () => {
-    console.log('App is online');
-    hideOfflineNotification();
-
-    // Show online notification
-    const onlineNotification = document.createElement('div');
-    onlineNotification.style.position = 'fixed';
-    onlineNotification.style.bottom = '20px';
-    onlineNotification.style.left = '20px';
-    onlineNotification.style.padding = '10px 20px';
-    onlineNotification.style.backgroundColor = '#4CAF50';
-    onlineNotification.style.color = 'white';
-    onlineNotification.style.borderRadius = '4px';
-    onlineNotification.style.zIndex = '9999';
-    onlineNotification.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-    onlineNotification.textContent = 'You are back online.';
-
-    document.body.appendChild(onlineNotification);
-
-    // Remove notification after 3 seconds
-    setTimeout(() => {
-      if (onlineNotification.parentNode) {
-        onlineNotification.parentNode.removeChild(onlineNotification);
-      }
-    }, 3000);
-  });
-
-  window.addEventListener('offline', () => {
-    console.log('App is offline');
-    showOfflineNotification();
-
-    // Store current state in localStorage for offline use
-    try {
-      // You can add code here to store any important state
-      // that might be needed when offline
-      localStorage.setItem('jelliculeOfflineTimestamp', new Date().toISOString());
-    } catch (e) {
-      console.error('Error storing offline data:', e);
-    }
-  });
-
-  // Check initial network state
-  if (!navigator.onLine) {
-    console.log('App started offline');
-    showOfflineNotification();
-  }
+  // Initialize modules
+  initTheme();
+  setupThemeToggle();
+  initBuildStatus();
+  initNetworkStatus();
+  initInstallPrompt();
+  registerServiceWorker();
 });
