@@ -13,7 +13,7 @@ The design is data-driven, with generic components for representing common data 
 - Pure web components with no external dependencies
 - Customizable activity bars and panels
 - Responsive design that works across devices
-- Progressive Web App (PWA) capabilities
+- Progressive Web App (PWA) capabilities with offline support
 - WebSocket-based hot-reload development environment
 - Comprehensive documentation and examples
 
@@ -111,6 +111,18 @@ For subsequent releases, use the auto-version script:
 ```
 
 For more details on the release process, see [scripts/README.md](scripts/README.md).
+
+## Offline Capabilities
+
+j e l l i c u l e is designed to work offline, allowing users to continue using the application even without an internet connection:
+
+- **Offline Mode**: The PWA automatically detects when the user is offline and switches to offline mode
+- **Cached Resources**: All essential resources are cached for offline use
+- **Local Storage**: Important data is stored locally for offline access
+- **No Server Dependency**: The PWA service can run locally without attempting to reconnect to a server
+- **Graceful Degradation**: Features that require server connectivity are gracefully disabled when offline
+- **Offline Notifications**: Users are informed when the application is running in offline mode
+- **Automatic Reconnection**: The application automatically reconnects when the internet connection is restored
 
 ## Documentation
 

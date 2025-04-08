@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f0f0f0">
+    <meta name="description" content="j e l l i c u l e - Offline Mode">
+    <title>j e l l i c u l e - Offline</title>
+    <link rel="icon" href="icons/favicon.ico">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #2196F3;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+        }
+        .icon {
+            font-size: 5rem;
+            margin: 2rem 0;
+            color: #2196F3;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: inline-block;
+            background-color: #2196F3;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: #1976D2;
+        }
+        footer {
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            background-color: #eee;
+        }
+        .offline-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #F44336;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>j e l l i c u l e</h1>
+    </header>
+    
+    <main>
+        <div class="icon">📶</div>
+        <h2>You're currently offline</h2>
+        
+        <div class="card">
+            <p>The j e l l i c u l e app is running in offline mode. Some features may be limited, but you can still use the core functionality.</p>
+            <p>Your previously loaded components and resources are available from the cache.</p>
+            
+            <p><span class="offline-indicator"></span> Offline Mode Active</p>
+            
+            <button class="btn" id="reload-btn">Try to Reconnect</button>
+        </div>
+        
+        <div class="card">
+            <h3>Available Offline Features:</h3>
+            <ul style="text-align: left; display: inline-block;">
+                <li>View cached components</li>
+                <li>Use previously loaded UI elements</li>
+                <li>Access locally stored data</li>
+            </ul>
+        </div>
+    </main>
+    
+    <footer>
+        <p>j e l l i c u l e - A modern web component library</p>
+    </footer>
+    
+    <script>
+        // Add event listener to reload button
+        document.getElementById('reload-btn').addEventListener('click', () => {
+            window.location.reload();
+        });
+        
+        // Check if we're back online
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
