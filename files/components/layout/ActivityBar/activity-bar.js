@@ -1,12 +1,12 @@
-export class ActivityBar extends HTMLElement {
+import { BaseComponent } from '../../base-component.js';
+
+export class ActivityBar extends BaseComponent {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
-    this.render();
   }
 
   static get observedAttributes() {
-    return ['orientation'];
+    return ['orientation', 'theme', 'data-expanded'];
   }
 
   get orientation() {
@@ -18,43 +18,87 @@ export class ActivityBar extends HTMLElement {
   }
 
   render() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: flex;
-          background-color: #f0f0f0;
-          border: 1px solid #ddd;
-        }
-        :host([orientation="top"]), :host([orientation="bottom"]) {
-          flex-direction: row;
-          width: 100%;
-          height: 40px;
-        }
-        :host([orientation="left"]), :host([orientation="right"]) {
-          flex-direction: column;
+    const customStyles = `
+      :host {
+        display: flex;
+        background: var(--jc-chrome);
+        border: 1px solid var(--jc-border);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Retro scanlines effect */
+      :host::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+        background-size: 100% 4px;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0.15;
+      }
+
+      :host([orientation="top"]), :host([orientation="bottom"]) {
+        flex-direction: row;
+        width: 100%;
+        height: 48px;
+      }
+
+      :host([orientation="left"]), :host([orientation="right"]) {
+        flex-direction: column;
+        height: 100%;
+        width: 48px;
+      }
+
+      /* Expanded state */
+      :host([data-expanded="true"][orientation="left"]), :host([data-expanded="true"][orientation="right"]) {
+        width: 200px;
+      }
+
+      :host([data-expanded="true"][orientation="top"]), :host([data-expanded="true"][orientation="bottom"]) {
+        height: 200px;
+      }
+
+      .activity-container {
+        display: flex;
+        flex-direction: inherit;
+        flex: 1;
+        padding: 4px;
+        z-index: 1;
+      }
+
+      /* Transition for smooth expansion/collapse */
+      :host {
+        transition: width 0.3s ease, height 0.3s ease;
+      }
+
+      /* Mobile styles */
+      @media (max-width: 768px) {
+        :host([orientation="top"]) {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 80%;
           height: 100%;
-          width: 40px;
+          flex-direction: column;
+          z-index: 99;
         }
-        .activity-container {
-          display: flex;
-          flex-direction: inherit;
-          flex: 1;
-        }
-      </style>
-      <div class="activity-container">
-        <slot></slot>
-      </div>
+      }
     `;
-  }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'orientation' && oldValue !== newValue) {
-      this.render();
-    }
-  }
+    this.shadowRoot.innerHTML = '';
+    this.shadowRoot.appendChild(this.applyStyles(customStyles));
 
-  connectedCallback() {
-    // Initialize any event listeners or additional setup
+    const container = document.createElement('div');
+    container.className = 'activity-container';
+    container.appendChild(document.createElement('slot'));
+
+    this.shadowRoot.appendChild(container);
   }
 }
 

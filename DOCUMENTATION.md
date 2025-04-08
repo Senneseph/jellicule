@@ -6,6 +6,9 @@
 - [Components](#components)
 - [API Reference](#api-reference)
 - [Examples](#examples)
+- [Theming](#theming)
+- [Events](#events)
+- [Offline Support](#offline-support)
 - [Development](#development)
 
 ## Introduction
@@ -20,13 +23,19 @@ Jellicule is built using Web Components, a set of standardized browser APIs that
 
 The project is structured as follows:
 
-- `/components`: Contains the web component definitions
 - `/dist`: Contains the built library files
 - `/files`: Contains the source files for components and styles
-- `/meta`: Contains documentation and specifications
+  - `/components`: Contains the web component definitions
+    - `/forms`: Form-related components
+    - `/interface`: UI components
+    - `/layout`: Layout components
+    - `/text`: Text-related components
 - `/pwa-service`: Contains a Progressive Web App that showcases the components
-- `/service`: Contains server configuration and scripts
-- `/styles`: Contains CSS styles
+  - `/assets`: Static assets
+    - `/icons`: Icon files
+    - `/js`: JavaScript files
+    - `/styles`: CSS files
+- `/server`: Contains server configuration and scripts
 
 ## Components
 
@@ -35,63 +44,95 @@ The project is structured as follows:
 The `ActivityViewport` component provides a container for activities and content.
 
 ```html
-<ActivityViewport>
-  <ActivityBar>
-    <Activity icon="home" selected>Home</Activity>
-    <Activity icon="settings">Settings</Activity>
-  </ActivityBar>
-  <MainContent>
-    <Content>
+<jc-activity-viewport>
+  <jc-activity-bar orientation="top">
+    <jc-activity-resize-button></jc-activity-resize-button>
+    <jc-activity icon="🏠" label="Home" selected></jc-activity>
+    <jc-activity icon="⚙️" label="Settings"></jc-activity>
+  </jc-activity-bar>
+  <jc-main-content>
+    <jc-content width="default">
       <!-- Your content here -->
-    </Content>
-  </MainContent>
-</ActivityViewport>
+    </jc-content>
+  </jc-main-content>
+</jc-activity-viewport>
 ```
+
+**Attributes:**
+- `theme`: Sets the theme ('light' or 'dark')
 
 ### ActivityBar
 
-The `ActivityBar` component provides a sidebar for navigation.
+The `ActivityBar` component provides a navigation bar that can be positioned on any side of the viewport.
 
 ```html
-<ActivityBar>
-  <Activity icon="home" selected>Home</Activity>
-  <Activity icon="settings">Settings</Activity>
-</ActivityBar>
+<jc-activity-bar orientation="left">
+  <jc-activity-resize-button></jc-activity-resize-button>
+  <jc-activity icon="🏠" label="Home" selected></jc-activity>
+  <jc-activity icon="⚙️" label="Settings"></jc-activity>
+</jc-activity-bar>
 ```
+
+**Attributes:**
+- `orientation`: Position of the bar ('top', 'right', 'bottom', 'left')
+- `theme`: Sets the theme ('light' or 'dark')
+- `data-expanded`: Whether the bar is expanded ('true' or 'false')
 
 ### Activity
 
 The `Activity` component represents a navigation item.
 
 ```html
-<Activity icon="home" selected>Home</Activity>
+<jc-activity icon="🏠" label="Home" selected></jc-activity>
 ```
 
-Attributes:
-- `icon`: The icon to display (optional)
-- `selected`: Whether the activity is selected (optional)
+**Attributes:**
+- `icon`: The icon to display
+- `label`: Text label
+- `selected`: Whether the activity is selected
+- `active`: Whether the activity is active
+- `theme`: Sets the theme ('light' or 'dark')
+
+### ActivityResizeButton
+
+The `ActivityResizeButton` component allows resizing of an ActivityBar.
+
+```html
+<jc-activity-resize-button></jc-activity-resize-button>
+```
+
+**Attributes:**
+- `theme`: Sets the theme ('light' or 'dark')
 
 ### MainContent
 
 The `MainContent` component provides a container for the main content.
 
 ```html
-<MainContent>
-  <Content>
+<jc-main-content context="Current context">
+  <jc-content>
     <!-- Your content here -->
-  </Content>
-</MainContent>
+  </jc-content>
+</jc-main-content>
 ```
+
+**Attributes:**
+- `context`: Current context information
+- `theme`: Sets the theme ('light' or 'dark')
 
 ### Content
 
-The `Content` component provides a container for content.
+The `Content` component provides a container for content with various width options.
 
 ```html
-<Content>
+<jc-content width="default">
   <!-- Your content here -->
-</Content>
+</jc-content>
 ```
+
+**Attributes:**
+- `width`: Content width ('narrow', 'default', 'wide', 'full')
+- `theme`: Sets the theme ('light' or 'dark')
 
 ## API Reference
 
@@ -115,6 +156,64 @@ http://localhost:7327/
 ```
 
 This example showcases all components with minimal external JavaScript.
+
+## Theming
+
+j e l l i c u l e supports light and dark themes out of the box. You can set the theme by adding the `data-theme` attribute to the HTML element:
+
+```html
+<html data-theme="dark">
+```
+
+Or toggle it via JavaScript:
+
+```javascript
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
+### CSS Variables
+
+You can customize the appearance by overriding these CSS variables:
+
+```css
+:root {
+  --jc-primary: #f5d76e;
+  --jc-secondary: #4a235a;
+  --jc-bg-light: #f8f9fa;
+  --jc-bg-dark: #121212;
+  --jc-text-light: #212529;
+  --jc-text-dark: #f8f9fa;
+  --jc-grid: #20c20e;
+  --jc-chrome: linear-gradient(135deg, #c0c0c0, #f0f0f0, #c0c0c0);
+}
+```
+
+## Events
+
+Components emit various events that you can listen for:
+
+- `activity-selected`: Fired when an activity is selected
+- `activity-bar-resized`: Fired when an activity bar is resized
+
+Example:
+
+```javascript
+document.addEventListener('activity-selected', (event) => {
+  console.log('Selected activity:', event.detail.activity);
+});
+```
+
+## Offline Support
+
+j e l l i c u l e is designed to work offline, allowing users to continue using the application even without an internet connection:
+
+- **Offline Mode**: The PWA automatically detects when the user is offline and switches to offline mode
+- **Cached Resources**: All essential resources are cached for offline use
+- **Local Storage**: Important data is stored locally for offline access
+- **No Server Dependency**: The PWA service can run locally without attempting to reconnect to a server
+- **Graceful Degradation**: Features that require server connectivity are gracefully disabled when offline
+- **Offline Notifications**: Users are informed when the application is running in offline mode
+- **Automatic Reconnection**: The application automatically reconnects when the internet connection is restored
 
 ## Development
 

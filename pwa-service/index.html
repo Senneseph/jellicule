@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="theme-color" content="#f0f0f0">
+        <meta name="theme-color" content="#f5d76e">
         <meta name="description" content="j e l l i c u l e - A modern web component library">
-        <title>j e l l i c u l e ! ! !</title>
-        <link rel="stylesheet" href="styles/reset.css">
-        <link rel="stylesheet" href="styles/jellicule.css">
+        <title>j e l l i c u l e</title>
+        <link rel="stylesheet" href="assets/styles/reset.css">
+        <link rel="stylesheet" href="assets/styles/jellicule.css">
         <link rel="manifest" href="manifest.json">
-        <link rel="icon" href="icons/favicon.ico">
-        <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+        <link rel="icon" href="assets/icons/favicon.ico">
+        <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+        <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --font-retro: 'VT323', monospace;
+                --font-pixel: 'Press Start 2P', cursive;
+            }
+            body {
+                font-family: var(--font-retro);
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-family: var(--font-pixel);
+            }
+        </style>
         <!-- WebSocket hot-reload and build status script -->
         <script>
             // Check if we're running in offline mode
@@ -200,63 +213,109 @@
                 background-color: #FF9800;
             }
         </style>
-        <!-- Import components directly -->
+        <!-- Import components -->
         <script type="module">
-            // Import all components
-            import './components/layout/ActivityViewport/activity-viewport.js';
-            import './components/layout/ActivityBar/activity-bar.js';
-            import './components/layout/Activity/activity.js';
-            import './components/layout/ActivityResizeButton/activity-resize-button.js';
-            import './components/layout/MainContent/main-content.js';
-            import './components/layout/Content/content.js';
+            // Import component registry
+            import '../files/components/component-registry.js';
         </script>
     </head>
     <body>
-        <div class="nav" style="position: sticky; top: 0; background-color: #fff; padding: 10px 0; border-bottom: 1px solid #eee; margin-bottom: 20px; z-index: 9999;">
-            <a href="/" style="margin-right: 15px; text-decoration: none; color: #333;">Home</a>
-            <a href="/download/" style="margin-right: 15px; text-decoration: none; color: #333;">Download</a>
-            <a href="/documentation/" style="margin-right: 15px; text-decoration: none; color: #333;">Documentation</a>
-        </div>
-
         <div id="build-status" class="build-status">Loading build status...</div>
-        <Viewport>
-            <ActivityBar
-                orientation="top"
-                activityList="['Home', 'Download', 'Documentation']"
-                activityDefault="Home">
-            </ActivityBar>
-            <ActivityBar orientation="right">
-                <ActivityResizeButton></ActivityResizeButton>
-                <Activity>A1</Activity>
-                <Activity>A2</Activity>
-                <Activity selected>A3</Activity>
-                <Activity>A4</Activity>
-            </ActivityBar>
-            <ActivityBar orientation="bottom">
-                <ActivityResizeButton></ActivityResizeButton>
-                <Activity>A3Z</Activity>
-                <Activity>A3Y</Activity>
-                <Activity>A3X</Activity>
-                <Activity selected>A3W</Activity>
-                <Activity>A3V</Activity>
-            </ActivityBar>
-            <ActivityBar orientation="left">
-                <ActivityResizeButton></ActivityResizeButton>
-                <Activity>A13W99</Activity>
-                <Activity>A13W98</Activity>
-                <Activity>A13W97</Activity>
-                <Activity>A13W96</Activity>
-                <Activity selected active>A13W95</Activity>
-            </ActivityBar>
-            <MainContent context="e.g.: $ViewPort.context.current, A13W95"></MainContent>
-        </Viewport>
-        <script src="js/main.js" type="module"></script>
+
+        <jc-activity-viewport>
+            <!-- Top Navigation Bar -->
+            <jc-activity-bar orientation="top">
+                <jc-activity-resize-button></jc-activity-resize-button>
+                <jc-activity icon="🏠" label="Home" selected></jc-activity>
+                <jc-activity icon="⬇️" label="Download"></jc-activity>
+                <jc-activity icon="📚" label="Documentation"></jc-activity>
+                <jc-activity icon="🔌" label="API"></jc-activity>
+                <jc-activity icon="🧩" label="Examples"></jc-activity>
+                <jc-activity icon="ℹ️" label="About"></jc-activity>
+            </jc-activity-bar>
+
+            <!-- Right Tools Bar -->
+            <jc-activity-bar orientation="right">
+                <jc-activity-resize-button></jc-activity-resize-button>
+                <jc-activity icon="🎨" label="Theme"></jc-activity>
+                <jc-activity icon="⚙️" label="Settings"></jc-activity>
+                <jc-activity icon="🔍" label="Search" selected></jc-activity>
+                <jc-activity icon="❓" label="Help"></jc-activity>
+            </jc-activity-bar>
+
+            <!-- Bottom Status Bar -->
+            <jc-activity-bar orientation="bottom">
+                <jc-activity-resize-button></jc-activity-resize-button>
+                <jc-activity icon="✅" label="Status"></jc-activity>
+                <jc-activity icon="🔔" label="Notifications"></jc-activity>
+                <jc-activity icon="📊" label="Statistics" selected></jc-activity>
+                <jc-activity icon="📝" label="Logs"></jc-activity>
+            </jc-activity-bar>
+
+            <!-- Left Navigation Bar -->
+            <jc-activity-bar orientation="left">
+                <jc-activity-resize-button></jc-activity-resize-button>
+                <jc-activity icon="📋" label="Components" selected></jc-activity>
+                <jc-activity icon="🧰" label="Tools"></jc-activity>
+                <jc-activity icon="🔧" label="Utilities"></jc-activity>
+                <jc-activity icon="📦" label="Resources"></jc-activity>
+            </jc-activity-bar>
+
+            <!-- Main Content Area -->
+            <jc-main-content>
+                <jc-content width="default">
+                    <h1 style="margin-bottom: 20px; font-size: 2rem; text-align: center;">j e l l i c u l e</h1>
+                    <h2 style="margin-bottom: 15px; font-size: 1.2rem; text-align: center;">A Retro-Themed Web Component Library</h2>
+
+                    <div style="margin: 30px 0; padding: 20px; border: 1px solid var(--jc-border); border-radius: 4px;">
+                        <h3 style="margin-bottom: 15px;">Component Showcase</h3>
+                        <p style="margin-bottom: 15px;">This page demonstrates the core components of the j e l l i c u l e library. Use the activity bars on each side to navigate through different sections.</p>
+
+                        <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                            <li style="margin-bottom: 10px;">🏠 <strong>Home</strong> - Overview and component showcase</li>
+                            <li style="margin-bottom: 10px;">⬇️ <strong>Download</strong> - Download options and instructions</li>
+                            <li style="margin-bottom: 10px;">📚 <strong>Documentation</strong> - Component documentation</li>
+                            <li style="margin-bottom: 10px;">🔌 <strong>API</strong> - API documentation</li>
+                            <li style="margin-bottom: 10px;">🧩 <strong>Examples</strong> - Usage examples</li>
+                            <li style="margin-bottom: 10px;">ℹ️ <strong>About</strong> - Project information</li>
+                        </ul>
+
+                        <p>Click on the hamburger menu in the top-left corner to expand the activity bars.</p>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; margin-top: 30px;">
+                        <button id="theme-toggle" style="padding: 10px 20px; background: var(--jc-chrome); border: 1px solid var(--jc-border); border-radius: 4px; cursor: pointer; font-family: var(--font-retro); font-size: 1rem;">Toggle Theme</button>
+                    </div>
+                </jc-content>
+            </jc-main-content>
+        </jc-activity-viewport>
+
+        <script src="assets/js/main.js" type="module"></script>
+
+        <!-- Theme Toggle Script -->
+        <script>
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                const html = document.documentElement;
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('jellicule-theme', newTheme);
+            });
+
+            // Check for saved theme preference
+            document.addEventListener('DOMContentLoaded', () => {
+                const savedTheme = localStorage.getItem('jellicule-theme');
+                if (savedTheme) {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                }
+            });
+        </script>
 
         <!-- Service Worker Registration -->
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/service-worker.js')
+                    navigator.serviceWorker.register('./service-worker.js')
                         .then(registration => {
                             console.log('ServiceWorker registration successful with scope: ', registration.scope);
                         })

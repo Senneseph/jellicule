@@ -1,0 +1,126 @@
+# j e l l i c u l e Project Plan
+
+## Overview
+This document serves as the single source of truth for the j e l l i c u l e project, outlining the components, structure, and design principles.
+
+## Directory Structure
+```
+/
+├── dist/                  # Built library files
+├── files/                 # Source files
+│   └── components/        # Web component definitions
+│       ├── forms/         # Form-related components
+│       ├── interface/     # UI components
+│       ├── layout/        # Layout components
+│       └── text/          # Text-related components
+├── pwa-service/           # Progressive Web App
+│   ├── assets/            # Static assets
+│   │   ├── icons/         # Icon files
+│   │   ├── js/            # JavaScript files
+│   │   └── styles/        # CSS files
+│   └── index.html         # Main entry point
+└── service/               # Server configuration
+```
+
+## Components Inventory
+
+### Layout Components
+- ActivityViewport: Main container for the application
+- ActivityBar: Navigation bar that can be positioned on any side
+- Activity: Individual navigation item within ActivityBar
+- ActivityResizeButton: Button to resize ActivityBar
+- Content: Container for main content
+- MainContent: Primary content area
+- Header: Page header
+- Footer: Page footer
+- Sidebar: Side navigation or content
+- Viewport: Viewport container
+
+### Interface Components
+- Button: Interactive button element
+- Icon: Iconography component
+- List: List container
+- Outline: Outline/border component
+- Tag: Tag/label component
+
+### Forms Components
+- (To be implemented)
+
+### Text Components
+- (To be implemented)
+
+## Design System
+
+### Theme
+- Retro-80s inspired design
+- Two-tone color scheme: faded yellow and dark purple
+- Wireframe aesthetic with chrome gradients
+- Light (LCD) and dark (OLED) theme options
+
+### Color Palette
+- Primary: #f5d76e (Faded Yellow)
+- Secondary: #4a235a (Dark Purple)
+- Background Light: #f8f9fa (Light Gray)
+- Background Dark: #121212 (Almost Black)
+- Accent: linear-gradient(135deg, #c0c0c0, #f0f0f0, #c0c0c0) (Chrome Gradient)
+- Text Light: #212529 (Dark Gray)
+- Text Dark: #f8f9fa (Light Gray)
+- Grid: #20c20e (Terminal Green)
+
+### Typography
+- Headings: "VT323", monospace (Retro terminal font)
+- Body: "Press Start 2P", cursive (Pixel font)
+- Fallback: monospace
+
+## Implementation Plan
+
+### Phase 1: Core Layout Components
+1. ActivityViewport
+2. ActivityBar
+3. Activity
+4. ActivityResizeButton
+5. MainContent
+6. Content
+
+### Phase 2: Interface Components
+1. Button
+2. Icon
+3. List
+4. Outline
+5. Tag
+
+### Phase 3: Additional Layout Components
+1. Header
+2. Footer
+3. Sidebar
+4. Viewport
+
+### Phase 4: Forms and Text Components
+1. Forms components
+2. Text components
+
+## Navigation Structure
+- Home: Overview and component showcase
+- Download: Download options and instructions
+- Documentation: Component documentation
+- API: API documentation
+- Examples: Usage examples
+- About: Project information
+
+## Component Implementation Guidelines
+1. Each component should have a fallback style for both light and dark themes
+2. Components should accept custom styles via CSS variables
+3. Components should be accessible and keyboard navigable
+4. Components should work without JavaScript when possible
+5. Components should be responsive and mobile-friendly
+
+## Testing Strategy
+1. Visual testing in multiple browsers
+2. Accessibility testing
+3. Responsive design testing
+4. Performance testing
+
+## Deployment Strategy
+1. Build components into a single library file
+2. Deploy PWA for demonstration
+3. Publish documentation
