@@ -1,131 +1,114 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f5d76e">
-    <meta name="description" content="j e l l i c u l e - A modern web component library">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="j e l l i c u l e - a retro-themed web component library">
     <title>j e l l i c u l e</title>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/styles/reset.css">
     <link rel="stylesheet" href="assets/styles/fonts.css">
     <link rel="stylesheet" href="assets/styles/jellicule.css">
-    <link rel="stylesheet" href="assets/styles/showcase.css">
     <link rel="stylesheet" href="assets/styles/build-status.css">
 
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="assets/icons/favicon.ico">
     <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+
+    <!-- Jellicule Library -->
+    <script src="dist/jellicule.min.js"></script>
 </head>
-<body>
+<body class="jc-scanlines">
     <div id="build-status" class="build-status">Loading build status...</div>
 
-    <jc-activity-viewport>
+    <jc-activity-viewport class="jc-wireframe">
         <!-- North Navigation Bar -->
-        <jc-activity-bar orientation="north">
-            <jc-activity-resize-button></jc-activity-resize-button>
-            <jc-activity icon="🏠" label="Home" selected></jc-activity>
-            <jc-activity icon="⬇️" label="Download"></jc-activity>
-            <jc-activity icon="📚" label="Documentation"></jc-activity>
-            <jc-activity icon="🔌" label="API"></jc-activity>
-            <jc-activity icon="🧩" label="Examples"></jc-activity>
-            <jc-activity icon="ℹ️" label="About"></jc-activity>
+        <jc-activity-bar orientation="north" class="jc-wireframe">
+            <jc-activity-resize-button class="jc-glow"></jc-activity-resize-button>
+            <jc-activity icon="🏠" label="Home" selected class="jc-glow"></jc-activity>
+            <jc-activity icon="⬇️" label="Download" class="jc-glow"></jc-activity>
+            <jc-activity icon="📚" label="Documentation" class="jc-glow"></jc-activity>
+            <jc-activity icon="🔌" label="API" class="jc-glow"></jc-activity>
         </jc-activity-bar>
 
         <!-- East Tools Bar -->
-        <jc-activity-bar orientation="east">
-            <jc-activity-resize-button></jc-activity-resize-button>
-            <jc-activity icon="🎨" label="Theme"></jc-activity>
-            <jc-activity icon="⚙️" label="Settings"></jc-activity>
-            <jc-activity icon="🔍" label="Search" selected></jc-activity>
-            <jc-activity icon="❓" label="Help"></jc-activity>
+        <jc-activity-bar orientation="east" class="jc-wireframe">
+            <jc-activity-resize-button class="jc-glow"></jc-activity-resize-button>
+            <jc-activity icon="🎨" label="Theme" class="jc-glow"></jc-activity>
+            <jc-activity icon="⚙️" label="Settings" class="jc-glow"></jc-activity>
         </jc-activity-bar>
 
         <!-- South Status Bar -->
-        <jc-activity-bar orientation="south">
-            <jc-activity-resize-button></jc-activity-resize-button>
-            <jc-activity icon="✅" label="Status"></jc-activity>
-            <jc-activity icon="🔔" label="Notifications"></jc-activity>
-            <jc-activity icon="📊" label="Statistics" selected></jc-activity>
-            <jc-activity icon="📝" label="Logs"></jc-activity>
+        <jc-activity-bar orientation="south" class="jc-wireframe">
+            <jc-activity-resize-button class="jc-glow"></jc-activity-resize-button>
+            <jc-activity icon="✅" label="Status" class="jc-glow"></jc-activity>
+            <jc-activity icon="🔔" label="Notifications" class="jc-glow"></jc-activity>
         </jc-activity-bar>
 
         <!-- West Navigation Bar - Set to expanded by default -->
-        <jc-activity-bar orientation="west" data-expanded="true">
-            <jc-activity-resize-button></jc-activity-resize-button>
-            <jc-activity icon="📋" label="Components" selected></jc-activity>
-            <jc-activity icon="🧰" label="Tools"></jc-activity>
-            <jc-activity icon="🔧" label="Utilities"></jc-activity>
-            <jc-activity icon="📦" label="Resources"></jc-activity>
+        <jc-activity-bar orientation="west" data-expanded="true" class="jc-wireframe">
+            <jc-activity-resize-button class="jc-glow"></jc-activity-resize-button>
+            <jc-activity icon="📋" label="Components" selected class="jc-glow"></jc-activity>
+            <jc-activity icon="🧰" label="Tools" class="jc-glow"></jc-activity>
         </jc-activity-bar>
 
         <!-- Main Content Area -->
         <jc-main-content>
-            <jc-content width="default">
-                <h1 class="showcase-title">j e l l i c u l e</h1>
-                <h2 class="showcase-subtitle">A Retro-Themed Web Component Library</h2>
+            <jc-content width="narrow" class="jc-fade-in">
+                <h1 class="jc-neon-text jc-text-center jc-m-4" style="font-family: var(--font-retro); font-size: 2.5rem;">j e l l i c u l e</h1>
+                <p class="jc-text-center jc-m-3" style="font-family: var(--font-retro);">A retro-themed web component library</p>
 
-                <div class="showcase-container">
-                    <h3 class="showcase-heading">Activity Bars Showcase</h3>
-                    <p class="showcase-description">This page demonstrates the activity bars component of the j e l l i c u l e library. Each activity bar is positioned on one side of the viewport and can be expanded or collapsed.</p>
+                <div class="jc-card jc-m-5 jc-p-4">
+                    <h2 class="jc-text-primary jc-m-2">Component Library</h2>
+                    <p class="jc-m-2">jellicule is a self-bootstrapping, self-building, self-testing, and self-documenting web component library with a retro 80s aesthetic.</p>
 
-                    <div class="showcase-grid">
-                        <div class="showcase-item">
-                            <h4 class="showcase-item-heading">West Activity Bar</h4>
-                            <p>Contains main navigation items:</p>
-                            <ul class="showcase-item-list">
-                                <li class="showcase-item-list-entry">📋 <strong>Components</strong></li>
-                                <li class="showcase-item-list-entry">🧰 <strong>Tools</strong></li>
-                                <li class="showcase-item-list-entry">🔧 <strong>Utilities</strong></li>
-                                <li class="showcase-item-list-entry">📦 <strong>Resources</strong></li>
-                            </ul>
-                            <p class="showcase-item-note"><em>Click the hamburger menu or resize button to toggle.</em></p>
-                        </div>
+                    <div class="jc-divider"></div>
 
-                        <div class="showcase-item">
-                            <h4 class="showcase-item-heading">North Activity Bar</h4>
-                            <p>Contains main sections:</p>
-                            <ul class="showcase-item-list">
-                                <li class="showcase-item-list-entry">🏠 <strong>Home</strong></li>
-                                <li class="showcase-item-list-entry">⬇️ <strong>Download</strong></li>
-                                <li class="showcase-item-list-entry">📚 <strong>Documentation</strong></li>
-                                <li class="showcase-item-list-entry">🔌 <strong>API</strong></li>
-                            </ul>
-                            <p class="showcase-item-note"><em>Click the north triangle button or resize button to toggle.</em></p>
-                        </div>
+                    <h3 class="jc-text-secondary jc-m-2">Features</h3>
+                    <ul class="jc-list jc-m-3">
+                        <li class="jc-list-item">Wireframe, outlined components</li>
+                        <li class="jc-list-item">Neon glow effects</li>
+                        <li class="jc-list-item">Retro 80s color palette</li>
+                        <li class="jc-list-item">Minimal dependencies</li>
+                        <li class="jc-list-item">Fully customizable</li>
+                    </ul>
 
-                        <div class="showcase-item">
-                            <h4 class="showcase-item-heading">East Activity Bar</h4>
-                            <p>Contains tools and settings:</p>
-                            <ul class="showcase-item-list">
-                                <li class="showcase-item-list-entry">🎨 <strong>Theme</strong></li>
-                                <li class="showcase-item-list-entry">⚙️ <strong>Settings</strong></li>
-                                <li class="showcase-item-list-entry">🔍 <strong>Search</strong></li>
-                                <li class="showcase-item-list-entry">❓ <strong>Help</strong></li>
-                            </ul>
-                            <p class="showcase-item-note"><em>Click the east triangle button or resize button to toggle.</em></p>
-                        </div>
-
-                        <div class="showcase-item">
-                            <h4 class="showcase-item-heading">South Activity Bar</h4>
-                            <p>Contains status information:</p>
-                            <ul class="showcase-item-list">
-                                <li class="showcase-item-list-entry">✅ <strong>Status</strong></li>
-                                <li class="showcase-item-list-entry">🔔 <strong>Notifications</strong></li>
-                                <li class="showcase-item-list-entry">📊 <strong>Statistics</strong></li>
-                                <li class="showcase-item-list-entry">📝 <strong>Logs</strong></li>
-                            </ul>
-                            <p class="showcase-item-note"><em>Click the south triangle button or resize button to toggle.</em></p>
-                        </div>
+                    <div class="jc-text-center jc-m-4">
+                        <button id="theme-toggle" class="jc-button jc-glow">Switch to Light Mode</button>
                     </div>
-
-                    <p class="showcase-footer">Each activity bar can be expanded or collapsed independently. When expanded, the activity bar takes up more space in its orientation while maintaining the main content in the center.</p>
                 </div>
 
-                <div class="button-container">
-                    <button id="theme-toggle" class="theme-toggle-button">Switch to Light Mode</button>
+                <div class="jc-grid jc-m-4">
+                    <div class="jc-card jc-p-3">
+                        <h3 class="jc-text-accent">Getting Started</h3>
+                        <p>Include the jellicule library in your project and start using the components right away.</p>
+                    </div>
+
+                    <div class="jc-card jc-p-3">
+                        <h3 class="jc-text-accent">Documentation</h3>
+                        <p>Explore the component API and learn how to customize jellicule to fit your needs.</p>
+                    </div>
+                </div>
+
+                <div class="jc-code jc-m-4">
+                    <jc-activity-viewport>
+                        <jc-activity-bar orientation="north">
+                        <jc-activity icon="🏠" label="Home" />
+                    </jc-activity-bar>
+
+  <jc-main-content>
+    <jc-content>
+      Hello, jellicule!
+    </jc-content>
+  </jc-main-content>
+    <jc-content>
+      Hello, jellicule!
+</jc-content>
+  </jc-main-content>
+                    </jc-activity-viewport>
                 </div>
             </jc-content>
         </jc-main-content>

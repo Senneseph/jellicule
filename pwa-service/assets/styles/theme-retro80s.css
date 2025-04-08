@@ -1,0 +1,733 @@
+/**
+ * jellicule - Retro 80s Theme
+ *
+ * A wireframe, outlined component theme with pastel to neon dropped shadows
+ * and contrasting retro 80s colors.
+ */
+
+/* Base Theme Variables */
+:root {
+  /* Primary Colors - Neon palette */
+  --jc-neon-pink: #ff71ce;
+  --jc-neon-blue: #01cdfe;
+  --jc-neon-green: #05ffa1;
+  --jc-neon-purple: #b967ff;
+  --jc-neon-yellow: #fffb96;
+
+  /* Dark Theme (Default) */
+  --jc-bg: #1a1a2e;
+  --jc-text: #ffffff;
+  --jc-border: #ff71ce;
+  --jc-chrome: #16213e;
+  --jc-primary: #01cdfe;
+  --jc-secondary: #05ffa1;
+  --jc-accent: #b967ff;
+  --jc-hover: rgba(255, 113, 206, 0.2);
+  --jc-selected: rgba(1, 205, 254, 0.3);
+  --jc-active: #ff71ce;
+
+  /* Status Colors */
+  --jc-error: #ff5252;
+  --jc-success: #05ffa1;
+  --jc-warning: #fffb96;
+  --jc-info: #01cdfe;
+
+  /* Grid Effect */
+  --jc-grid-color: rgba(1, 205, 254, 0.1);
+  --jc-grid-size: 20px;
+
+  /* Shadows */
+  --jc-shadow-sm: 0 0 5px rgba(255, 113, 206, 0.5);
+  --jc-shadow-md: 0 0 15px rgba(1, 205, 254, 0.5);
+  --jc-shadow-lg: 0 0 30px rgba(5, 255, 161, 0.5);
+
+  /* Outlines */
+  --jc-outline-width: 1px;
+  --jc-outline-glow: 0 0 10px var(--jc-neon-pink);
+
+  /* Animation - These will be updated by the animation system */
+  --jc-refresh-rate: 60Hz;
+  --jc-animation-duration: 300ms;
+  --jc-transition-step: 50ms;
+  --jc-transition-speed: 0.3s;
+  --jc-transition-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --jc-bg: #f0f0f0;
+  --jc-text: #16213e;
+  --jc-border: #ff71ce;
+  --jc-chrome: #ffffff;
+  --jc-primary: #01cdfe;
+  --jc-secondary: #05ffa1;
+  --jc-accent: #b967ff;
+  --jc-hover: rgba(255, 113, 206, 0.1);
+  --jc-selected: rgba(1, 205, 254, 0.2);
+  --jc-active: #ff71ce;
+
+  /* Grid Effect */
+  --jc-grid-color: rgba(1, 205, 254, 0.05);
+
+  /* Shadows */
+  --jc-shadow-sm: 0 0 5px rgba(255, 113, 206, 0.3);
+  --jc-shadow-md: 0 0 15px rgba(1, 205, 254, 0.3);
+  --jc-shadow-lg: 0 0 30px rgba(5, 255, 161, 0.3);
+}
+
+/* Retro Grid Background Effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--jc-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--jc-grid-color) 1px, transparent 1px);
+  background-size: var(--jc-grid-size) var(--jc-grid-size);
+  opacity: 0.5;
+}
+
+/* Wireframe Outline Effect for Components */
+.jc-wireframe {
+  border: var(--jc-outline-width) solid var(--jc-border);
+  box-shadow: var(--jc-outline-glow);
+  background-color: transparent;
+  transition: all var(--jc-transition-speed) var(--jc-transition-function);
+}
+
+.jc-wireframe:hover {
+  box-shadow: 0 0 15px var(--jc-neon-blue);
+}
+
+/* Neon Text Effect */
+.jc-neon-text {
+  color: var(--jc-text);
+  text-shadow: 0 0 5px var(--jc-primary), 0 0 10px var(--jc-primary);
+}
+
+/* Scanline Effect */
+.jc-scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.15;
+}
+
+/* Glow Effect for Buttons and Interactive Elements */
+.jc-glow {
+  transition: all 0.3s ease;
+  border: 1px solid var(--jc-border);
+  box-shadow: 0 0 5px var(--jc-border);
+}
+
+.jc-glow:hover {
+  box-shadow: 0 0 15px var(--jc-border), 0 0 30px var(--jc-primary);
+}
+
+/* Retro Button Style */
+.jc-button {
+  background-color: var(--jc-chrome);
+  color: var(--jc-text);
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-sm);
+  padding: 8px 16px;
+  font-family: var(--font-retro);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all var(--jc-transition-speed) var(--jc-transition-function);
+  cursor: pointer;
+}
+
+.jc-button:hover {
+  background-color: var(--jc-hover);
+  box-shadow: var(--jc-shadow-md);
+}
+
+.jc-button:active {
+  transform: translateY(2px);
+  box-shadow: var(--jc-shadow-sm);
+}
+
+/* Retro Card Style */
+.jc-card {
+  background-color: var(--jc-chrome);
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-md);
+  padding: 16px;
+  border-radius: 4px;
+  transition: all var(--jc-transition-speed) var(--jc-transition-function);
+}
+
+.jc-card:hover {
+  box-shadow: var(--jc-shadow-lg);
+}
+
+/* Retro Input Style */
+.jc-input {
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-sm);
+  padding: 8px 12px;
+  font-family: var(--font-retro);
+  transition: all var(--jc-transition-speed) var(--jc-transition-function);
+}
+
+.jc-input:focus {
+  outline: none;
+  box-shadow: var(--jc-shadow-md);
+  border-color: var(--jc-primary);
+}
+
+/* Retro Select Style */
+.jc-select {
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-sm);
+  padding: 8px 12px;
+  font-family: var(--font-retro);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff71ce' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.jc-select:focus {
+  outline: none;
+  box-shadow: var(--jc-shadow-md);
+  border-color: var(--jc-primary);
+}
+
+/* Retro Checkbox Style */
+.jc-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--jc-border);
+  background-color: var(--jc-bg);
+  box-shadow: var(--jc-shadow-sm);
+  cursor: pointer;
+  position: relative;
+}
+
+.jc-checkbox:checked::before {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--jc-primary);
+  font-size: 14px;
+}
+
+.jc-checkbox:focus {
+  outline: none;
+  box-shadow: var(--jc-shadow-md);
+}
+
+/* Retro Radio Style */
+.jc-radio {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--jc-border);
+  border-radius: 50%;
+  background-color: var(--jc-bg);
+  box-shadow: var(--jc-shadow-sm);
+  cursor: pointer;
+  position: relative;
+}
+
+.jc-radio:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--jc-primary);
+}
+
+.jc-radio:focus {
+  outline: none;
+  box-shadow: var(--jc-shadow-md);
+}
+
+/* Retro Switch Style */
+.jc-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.jc-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.jc-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--jc-bg);
+  border: 1px solid var(--jc-border);
+  transition: .4s;
+  border-radius: 34px;
+  box-shadow: var(--jc-shadow-sm);
+}
+
+.jc-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--jc-text);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.jc-switch input:checked + .jc-switch-slider {
+  background-color: var(--jc-primary);
+}
+
+.jc-switch input:checked + .jc-switch-slider:before {
+  transform: translateX(26px);
+}
+
+/* Retro Progress Bar */
+.jc-progress {
+  height: 20px;
+  background-color: var(--jc-bg);
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-sm);
+  overflow: hidden;
+}
+
+.jc-progress-bar {
+  height: 100%;
+  background-color: var(--jc-primary);
+  box-shadow: 0 0 10px var(--jc-primary);
+  transition: width 0.3s ease;
+}
+
+/* Retro Alert Styles */
+.jc-alert {
+  padding: 15px;
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-md);
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.jc-alert-success {
+  border-color: var(--jc-success);
+  box-shadow: 0 0 10px var(--jc-success);
+}
+
+.jc-alert-error {
+  border-color: var(--jc-error);
+  box-shadow: 0 0 10px var(--jc-error);
+}
+
+.jc-alert-warning {
+  border-color: var(--jc-warning);
+  box-shadow: 0 0 10px var(--jc-warning);
+}
+
+.jc-alert-info {
+  border-color: var(--jc-info);
+  box-shadow: 0 0 10px var(--jc-info);
+}
+
+/* Retro Badge */
+.jc-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid var(--jc-border);
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  box-shadow: var(--jc-shadow-sm);
+  border-radius: 4px;
+}
+
+/* Retro Tooltip */
+.jc-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.jc-tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--jc-chrome);
+  color: var(--jc-text);
+  text-align: center;
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-md);
+  padding: 5px;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.jc-tooltip:hover .jc-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Retro Modal */
+.jc-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.jc-modal-content {
+  background-color: var(--jc-chrome);
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-lg);
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+.jc-modal-close {
+  color: var(--jc-text);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.jc-modal-close:hover {
+  color: var(--jc-primary);
+}
+
+/* Retro Tabs */
+.jc-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.jc-tab-list {
+  display: flex;
+  border-bottom: 1px solid var(--jc-border);
+}
+
+.jc-tab {
+  padding: 10px 15px;
+  cursor: pointer;
+  background-color: var(--jc-bg);
+  border: 1px solid var(--jc-border);
+  border-bottom: none;
+  margin-right: 5px;
+  box-shadow: var(--jc-shadow-sm);
+}
+
+.jc-tab.active {
+  background-color: var(--jc-chrome);
+  box-shadow: var(--jc-shadow-md);
+}
+
+.jc-tab-panel {
+  padding: 15px;
+  border: 1px solid var(--jc-border);
+  border-top: none;
+  background-color: var(--jc-chrome);
+  box-shadow: var(--jc-shadow-md);
+}
+
+/* Retro Accordion */
+.jc-accordion {
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-md);
+}
+
+.jc-accordion-header {
+  padding: 10px 15px;
+  cursor: pointer;
+  background-color: var(--jc-chrome);
+  border-bottom: 1px solid var(--jc-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.jc-accordion-content {
+  padding: 15px;
+  display: none;
+  background-color: var(--jc-bg);
+}
+
+.jc-accordion-content.active {
+  display: block;
+}
+
+/* Retro Table */
+.jc-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: var(--jc-shadow-md);
+}
+
+.jc-table th,
+.jc-table td {
+  padding: 10px 15px;
+  text-align: left;
+  border: 1px solid var(--jc-border);
+}
+
+.jc-table th {
+  background-color: var(--jc-chrome);
+  font-weight: bold;
+}
+
+.jc-table tr:nth-child(even) {
+  background-color: rgba(1, 205, 254, 0.05);
+}
+
+.jc-table tr:hover {
+  background-color: var(--jc-hover);
+}
+
+/* Retro Loader */
+.jc-loader {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--jc-border);
+  border-radius: 50%;
+  border-top-color: var(--jc-primary);
+  animation: jc-spin 1s linear infinite;
+  box-shadow: 0 0 10px var(--jc-primary);
+}
+
+@keyframes jc-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Retro Divider */
+.jc-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--jc-border),
+    transparent
+  );
+  margin: 20px 0;
+  box-shadow: 0 0 5px var(--jc-border);
+}
+
+/* Retro Code Block */
+.jc-code {
+  font-family: var(--font-retro);
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  padding: 15px;
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-md);
+  overflow-x: auto;
+  border-radius: 4px;
+}
+
+/* Retro Blockquote */
+.jc-blockquote {
+  border-left: 4px solid var(--jc-border);
+  padding: 10px 20px;
+  margin: 15px 0;
+  background-color: var(--jc-bg);
+  box-shadow: var(--jc-shadow-sm);
+}
+
+/* Retro List */
+.jc-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.jc-list-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--jc-border);
+}
+
+.jc-list-item:last-child {
+  border-bottom: none;
+}
+
+/* Retro Navigation */
+.jc-nav {
+  display: flex;
+  background-color: var(--jc-chrome);
+  border: 1px solid var(--jc-border);
+  box-shadow: var(--jc-shadow-md);
+}
+
+.jc-nav-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all var(--jc-transition-speed) var(--jc-transition-function);
+}
+
+.jc-nav-item:hover {
+  background-color: var(--jc-hover);
+}
+
+.jc-nav-item.active {
+  background-color: var(--jc-selected);
+  box-shadow: inset 0 0 5px var(--jc-primary);
+}
+
+/* Retro Card Grid */
+.jc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Retro Flex Container */
+.jc-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Retro Spacing Utilities */
+.jc-m-1 { margin: 4px; }
+.jc-m-2 { margin: 8px; }
+.jc-m-3 { margin: 16px; }
+.jc-m-4 { margin: 24px; }
+.jc-m-5 { margin: 32px; }
+
+.jc-p-1 { padding: 4px; }
+.jc-p-2 { padding: 8px; }
+.jc-p-3 { padding: 16px; }
+.jc-p-4 { padding: 24px; }
+.jc-p-5 { padding: 32px; }
+
+/* Retro Text Utilities */
+.jc-text-center { text-align: center; }
+.jc-text-left { text-align: left; }
+.jc-text-right { text-align: right; }
+
+.jc-text-primary { color: var(--jc-primary); }
+.jc-text-secondary { color: var(--jc-secondary); }
+.jc-text-accent { color: var(--jc-accent); }
+.jc-text-success { color: var(--jc-success); }
+.jc-text-error { color: var(--jc-error); }
+.jc-text-warning { color: var(--jc-warning); }
+.jc-text-info { color: var(--jc-info); }
+
+/* Retro Border Utilities */
+.jc-border { border: 1px solid var(--jc-border); }
+.jc-border-primary { border-color: var(--jc-primary); }
+.jc-border-secondary { border-color: var(--jc-secondary); }
+.jc-border-accent { border-color: var(--jc-accent); }
+
+/* Retro Shadow Utilities */
+.jc-shadow-sm { box-shadow: var(--jc-shadow-sm); }
+.jc-shadow-md { box-shadow: var(--jc-shadow-md); }
+.jc-shadow-lg { box-shadow: var(--jc-shadow-lg); }
+
+/* Retro Background Utilities */
+.jc-bg-primary { background-color: var(--jc-primary); }
+.jc-bg-secondary { background-color: var(--jc-secondary); }
+.jc-bg-accent { background-color: var(--jc-accent); }
+.jc-bg-chrome { background-color: var(--jc-chrome); }
+.jc-bg-transparent { background-color: transparent; }
+
+/* Retro Animation Utilities */
+.jc-pulse {
+  animation: jc-pulse 2s infinite;
+}
+
+@keyframes jc-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 113, 206, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 113, 206, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 113, 206, 0); }
+}
+
+.jc-blink {
+  animation: jc-blink 1s infinite;
+}
+
+@keyframes jc-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.jc-fade-in {
+  animation: jc-fade-in 0.5s ease-in;
+}
+
+@keyframes jc-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Retro Responsive Utilities */
+@media (max-width: 768px) {
+  .jc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jc-hide-sm {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .jc-hide-md {
+    display: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  .jc-hide-lg {
+    display: none;
+  }
+}

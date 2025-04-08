@@ -1,7 +1,7 @@
 // Service Worker for j e l l i c u l e PWA
 
-const CACHE_NAME = 'jcule-ui-v1';
-const DYNAMIC_CACHE_NAME = 'jcule-dynamic-v1';
+const CACHE_NAME = 'jcule-ui-v1'
+const DYNAMIC_CACHE_NAME = 'jcule-dynamic-v1'
 
 // Assets that must be cached for offline use
 const ASSETS_TO_CACHE = [
@@ -12,26 +12,20 @@ const ASSETS_TO_CACHE = [
   '/dist/jellicule.min.js',
   '/js/main.js',
   '/manifest.json',
-  '/icons/favicon.ico',
-  '/icons/icon-72x72.png',
-  '/icons/icon-96x96.png',
-  '/icons/icon-128x128.png',
-  '/icons/icon-144x144.png',
-  '/icons/icon-152x152.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-384x384.png',
-  '/icons/icon-512x512.png',
+  '/assets/icons/favicon.ico',
+  '/assets/icons/icon-72x72.png',
+  '/assets/icons/icon-96x96.png',
+  '/assets/icons/icon-128x128.png',
+  '/assets/icons/icon-144x144.png',
+  '/assets/icons/icon-152x152.png',
+  '/assets/icons/icon-192x192.png',
+  '/assets/icons/icon-384x384.png',
+  '/assets/icons/icon-512x512.png',
   '/offline.html',
-  '/components/layout/ActivityViewport/activity-viewport.js',
-  '/components/layout/ActivityBar/activity-bar.js',
-  '/components/layout/Activity/activity.js',
-  '/components/layout/ActivityResizeButton/activity-resize-button.js',
-  '/components/layout/MainContent/main-content.js',
-  '/components/layout/Content/content.js'
-];
+]
 
 // Create a fallback offline page
-const OFFLINE_URL = '/offline.html';
+const OFFLINE_URL = '/offline.html'
 
 // Install event - cache assets
 self.addEventListener('install', event => {

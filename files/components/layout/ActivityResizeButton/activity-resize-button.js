@@ -114,8 +114,8 @@ export class ActivityResizeButton extends BaseComponent {
     const activityBar = this.closest('activity-bar, jc-activity-bar');
     if (!activityBar) return;
 
-    const orientation = activityBar.getAttribute('orientation') || 'left';
-    const isHorizontal = orientation === 'left' || orientation === 'right';
+    const orientation = activityBar.getAttribute('orientation') || 'west';
+    const isHorizontal = ['west', 'east', 'left', 'right'].includes(orientation);
 
     const startPos = isHorizontal ? event.clientX : event.clientY;
     const startSize = isHorizontal ? activityBar.offsetWidth : activityBar.offsetHeight;
@@ -126,9 +126,13 @@ export class ActivityResizeButton extends BaseComponent {
       const currentPos = isHorizontal ? moveEvent.clientX : moveEvent.clientY;
       const diff = currentPos - startPos;
 
-      const newSize = orientation === 'right' || orientation === 'bottom'
-        ? startSize - diff
-        : startSize + diff;
+      // Calculate new size based on orientation
+      let newSize;
+      if (['east', 'right', 'south', 'bottom'].includes(orientation)) {
+        newSize = startSize - diff;
+      } else {
+        newSize = startSize + diff;
+      }
 
       if (newSize > 40 && newSize < 400) {
         if (isHorizontal) {
@@ -183,8 +187,8 @@ export class ActivityResizeButton extends BaseComponent {
     const activityBar = this.closest('activity-bar, jc-activity-bar');
     if (!activityBar) return;
 
-    const orientation = activityBar.getAttribute('orientation') || 'left';
-    const isHorizontal = orientation === 'left' || orientation === 'right';
+    const orientation = activityBar.getAttribute('orientation') || 'west';
+    const isHorizontal = ['west', 'east', 'left', 'right'].includes(orientation);
 
     const touch = event.touches[0];
     const startPos = isHorizontal ? touch.clientX : touch.clientY;
@@ -197,9 +201,13 @@ export class ActivityResizeButton extends BaseComponent {
       const currentPos = isHorizontal ? touch.clientX : touch.clientY;
       const diff = currentPos - startPos;
 
-      const newSize = orientation === 'right' || orientation === 'bottom'
-        ? startSize - diff
-        : startSize + diff;
+      // Calculate new size based on orientation
+      let newSize;
+      if (['east', 'right', 'south', 'bottom'].includes(orientation)) {
+        newSize = startSize - diff;
+      } else {
+        newSize = startSize + diff;
+      }
 
       if (newSize > 40 && newSize < 400) {
         if (isHorizontal) {
@@ -209,10 +217,32 @@ export class ActivityResizeButton extends BaseComponent {
         }
 
         // Toggle expanded state based on size
-        if (newSize > 100) {
+        const expandedThreshold = isHorizontal ? 100 : 80;
+        if (newSize > expandedThreshold) {
           activityBar.setAttribute('data-expanded', 'true');
         } else {
           activityBar.removeAttribute('data-expanded');
+        }
+
+        // Dispatch resize event with expanded state
+        this.dispatchCustomEvent('activity-bar-resized', {
+          orientation,
+          size: newSize,
+          expanded: newSize > expandedThreshold
+        });
+
+        // Update toggle button states in the viewport
+        const viewport = activityBar.closest('activity-viewport, jc-activity-viewport');
+        if (viewport) {
+          const event = new CustomEvent('activity-bar-state-changed', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              orientation,
+              expanded: newSize > expandedThreshold
+            }
+          });
+          viewport.dispatchEvent(event);
         }
       }
     };

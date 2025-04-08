@@ -51,7 +51,7 @@ export class ActivityBar extends BaseComponent {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: hidden;
-        transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
+        transition: width 0.3s ease-in-out, height 0.3s ease-in-out, transform 0.3s ease-in-out;
       }
 
       /* Retro scanlines effect */

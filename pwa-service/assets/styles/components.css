@@ -1,28 +1,110 @@
-/* Base component styles */
+/**
+ * jellicule - Functional Component Styles
+ *
+ * This file contains only the functional styling necessary for components to work.
+ * No visual styling or theming should be included here.
+ */
 
-/* ActivityViewport */
+/* ActivityViewport - Core layout component */
 jc-activity-viewport {
     --viewport-bg: var(--jc-bg);
     --viewport-text: var(--jc-text);
     --viewport-border: var(--jc-border);
-    --viewport-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    --viewport-shadow: var(--jc-shadow-md);
+
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    grid-template-areas:
+        "north north north"
+        "west main east"
+        "south south south";
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr auto;
 }
 
-/* ActivityBar */
+/* ActivityBar - Navigation and tool bars */
 jc-activity-bar {
     --activity-bar-bg: var(--jc-chrome);
     --activity-bar-text: var(--jc-text);
     --activity-bar-border: var(--jc-border);
     --activity-bar-indicator: var(--jc-primary);
-    --activity-bar-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    --activity-bar-shadow: var(--jc-shadow-sm);
     --activity-bar-width: 48px;
     --activity-bar-height: 48px;
     --activity-bar-expanded-width: 200px;
     --activity-bar-expanded-height: 200px;
-    --activity-bar-transition: 0.3s ease;
+    --activity-bar-transition: var(--jc-animation-duration) var(--jc-transition-function);
+
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    transition: width var(--activity-bar-transition),
+                height var(--activity-bar-transition);
+    will-change: width, height;
 }
 
-/* Activity */
+/* Position the activity bars in their respective grid areas */
+jc-activity-bar[orientation="north"],
+jc-activity-bar[orientation="top"] {
+    grid-area: north;
+    flex-direction: row;
+    width: 100%;
+    height: var(--activity-bar-height);
+    border-bottom: 1px solid var(--activity-bar-border);
+}
+
+jc-activity-bar[orientation="south"],
+jc-activity-bar[orientation="bottom"] {
+    grid-area: south;
+    flex-direction: row;
+    width: 100%;
+    height: var(--activity-bar-height);
+    border-top: 1px solid var(--activity-bar-border);
+}
+
+jc-activity-bar[orientation="east"],
+jc-activity-bar[orientation="right"] {
+    grid-area: east;
+    flex-direction: column;
+    width: var(--activity-bar-width);
+    height: 100%;
+    border-left: 1px solid var(--activity-bar-border);
+}
+
+jc-activity-bar[orientation="west"],
+jc-activity-bar[orientation="left"] {
+    grid-area: west;
+    flex-direction: column;
+    width: var(--activity-bar-width);
+    height: 100%;
+    border-right: 1px solid var(--activity-bar-border);
+}
+
+/* Expanded states */
+jc-activity-bar[orientation="north"][data-expanded="true"],
+jc-activity-bar[orientation="top"][data-expanded="true"] {
+    height: var(--activity-bar-expanded-height);
+}
+
+jc-activity-bar[orientation="south"][data-expanded="true"],
+jc-activity-bar[orientation="bottom"][data-expanded="true"] {
+    height: var(--activity-bar-expanded-height);
+}
+
+jc-activity-bar[orientation="east"][data-expanded="true"],
+jc-activity-bar[orientation="right"][data-expanded="true"] {
+    width: var(--activity-bar-expanded-width);
+}
+
+jc-activity-bar[orientation="west"][data-expanded="true"],
+jc-activity-bar[orientation="left"][data-expanded="true"] {
+    width: var(--activity-bar-expanded-width);
+}
+
+/* Activity - Individual navigation items */
 jc-activity {
     --activity-bg: transparent;
     --activity-hover-bg: var(--jc-hover);
@@ -31,29 +113,88 @@ jc-activity {
     --activity-border: var(--jc-border);
     --activity-icon-size: 24px;
     --activity-padding: 8px;
-    --activity-transition: 0.2s ease;
+    --activity-transition: var(--jc-animation-duration) var(--jc-transition-function);
+
+    display: flex;
+    align-items: center;
+    padding: var(--activity-padding);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--activity-transition),
+                transform var(--jc-transition-step),
+                box-shadow var(--jc-transition-step);
+    position: relative;
+    white-space: nowrap;
+    will-change: background-color, transform, box-shadow;
 }
 
-/* ActivityResizeButton */
+/* ActivityResizeButton - Resize handle for activity bars */
 jc-activity-resize-button {
     --resize-button-bg: var(--jc-chrome);
     --resize-button-hover-bg: var(--jc-hover);
     --resize-button-border: var(--jc-border);
     --resize-button-size: 16px;
-    --resize-button-transition: 0.2s ease;
+    --resize-button-transition: var(--jc-animation-duration) var(--jc-transition-function);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: col-resize;
+    user-select: none;
+    transition: background-color var(--resize-button-transition),
+                transform var(--jc-transition-step);
+    z-index: 10;
+    will-change: background-color, transform;
 }
 
-/* MainContent */
+/* Adjust cursor based on orientation */
+jc-activity-bar[orientation="north"] jc-activity-resize-button,
+jc-activity-bar[orientation="top"] jc-activity-resize-button,
+jc-activity-bar[orientation="south"] jc-activity-resize-button,
+jc-activity-bar[orientation="bottom"] jc-activity-resize-button {
+    cursor: row-resize;
+}
+
+/* MainContent - Main content area */
 jc-main-content {
     --main-content-bg: var(--jc-bg);
     --main-content-text: var(--jc-text);
     --main-content-padding: 20px;
+
+    grid-area: main;
+    overflow: auto;
+    position: relative;
 }
 
-/* Content */
+/* Content - Content container with max width */
 jc-content {
     --content-bg: var(--jc-bg);
     --content-text: var(--jc-text);
     --content-max-width: 1200px;
     --content-padding: 20px;
+
+    margin: 0 auto;
+    padding: var(--content-padding);
+    max-width: var(--content-max-width);
 }
+
+/* Support for different content widths */
+jc-content[width="full"] {
+    max-width: none;
+}
+
+jc-content[width="narrow"] {
+    max-width: 800px;
+}
+
+jc-content[width="wide"] {
+    max-width: 1600px;
+}
+
+/* Legacy component support */
+activity-viewport, ActivityViewport { display: grid; }
+activity-bar, ActivityBar { display: flex; }
+activity, Activity { display: flex; }
+activity-resize-button, ActivityResizeButton { display: flex; }
+main-content, MainContent { overflow: auto; }
+content, Content { margin: 0 auto; }

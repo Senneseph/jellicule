@@ -1,59 +1,15 @@
-/* Jellicule UI Components Stylesheet */
-
-/* Custom properties for theming */
-:root {
-  /* Light theme (default) */
-  --jc-primary: #3498db;
-  --jc-secondary: #2c3e50;
-  --jc-bg: #f5f5f5;
-  --jc-text: #333333;
-  --jc-border: #dddddd;
-  --jc-chrome: #eeeeee;
-  --jc-hover: #e0e0e0;
-  --jc-selected: #d0d0d0;
-  --jc-active: #2980b9;
-  --jc-error: #e74c3c;
-  --jc-success: #2ecc71;
-  --jc-warning: #f39c12;
-  --jc-info: #3498db;
-
-  /* Retro grid effect */
-  --jc-grid-color: rgba(0, 0, 0, 0.05);
-  --jc-grid-size: 20px;
-
-  /* Shadows */
-  --jc-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --jc-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --jc-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark theme */
-[data-theme="dark"] {
-  --jc-primary: #3498db;
-  --jc-secondary: #2c3e50;
-  --jc-bg: #1e1e1e;
-  --jc-text: #f0f0f0;
-  --jc-border: #444444;
-  --jc-chrome: #252525;
-  --jc-hover: #333333;
-  --jc-selected: #3a3a3a;
-  --jc-active: #2980b9;
-  --jc-error: #e74c3c;
-  --jc-success: #2ecc71;
-  --jc-warning: #f39c12;
-  --jc-info: #3498db;
-
-  /* Retro grid effect */
-  --jc-grid-color: rgba(255, 255, 255, 0.05);
-
-  /* Shadows */
-  --jc-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --jc-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --jc-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
-}
+/**
+ * jellicule - Core Component Stylesheet
+ *
+ * This file contains only the functional styling necessary for components to work.
+ * Theme-specific styling is imported separately.
+ */
 
 /* Import component-specific styles */
 @import url('./components.css');
+
+/* Import default theme */
+@import url('./theme-retro80s.css');
 
 /* Global styles for jellicule components */
 /* Support all component naming conventions for backward compatibility */
@@ -72,7 +28,7 @@ html, body {
   padding: 0;
   background-color: var(--jc-bg);
   color: var(--jc-text);
-  font-family: var(--font-retro, monospace);
+  font-family: var(--font-retro);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

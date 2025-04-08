@@ -1,5 +1,4 @@
-// Import component registry
-import '../../files/components/component-registry.js';
+// The jellicule library is loaded via script tag in the HTML
 
 // Import utility modules
 import { initBuildStatus } from './build-status.js';
@@ -7,6 +6,7 @@ import { initNetworkStatus } from './offline-notification.js';
 import { initTheme, setupThemeToggle } from './theme-toggle.js';
 import { initInstallPrompt } from './install-prompt.js';
 import { registerServiceWorker } from './service-worker-registration.js';
+import { initAnimationSystem } from './animation-system.js';
 
 // Initialize any global functionality
 document.addEventListener('DOMContentLoaded', () => {
@@ -137,4 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initNetworkStatus();
   initInstallPrompt();
   registerServiceWorker();
+
+  // Initialize animation system
+  initAnimationSystem().then(refreshRate => {
+    console.log(`Animation system initialized with ${refreshRate}Hz refresh rate`);
+  });
 });
